@@ -13,6 +13,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    Color mygreen = Color(0xFFB8D432);
     late TabController _tabController = TabController(length: 4, vsync: this);
     return Scaffold(
       body: Padding(
@@ -31,7 +32,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                 ),
               ),
             ),
-            SizedBox(height: 38),
+            SizedBox(height: 25),
 
             // Campo de búsqueda
             Container(
@@ -75,7 +76,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                 ],
               ),
             ), // boton de buscar
-            SizedBox(height: 38),
+            SizedBox(height: 25),
 
             //tabbar
             Container(
@@ -104,8 +105,11 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                 indicatorColor: Colors.green,
               ),
             ),
+
+            SizedBox(height: 25),
+            //cuadro noticias
             Container(
-              height: 300,
+              height: 250,
               width: double.maxFinite,
               child: TabBarView(controller: _tabController, children: [
                 ListView.builder(
@@ -113,25 +117,87 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, int index) {
                     return Container(
-                      margin: EdgeInsets.only(right:  10, top: 10),
+                      margin: EdgeInsets.only(right: 10, top: 10),
                       width: 231,
                       height: 164,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         color: Colors.white,
                       ),
-                      child: Padding(
-                          padding: EdgeInsets.fromLTRB(12, 12, 12, 128),
+                      child: Stack(children: [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(12, 12, 12, 90),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(20),
                             child: Image.asset('assets/noticia1.png'),
-                            
                           ),
-                          
-                          
+                        ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Container(
+                            margin: EdgeInsets.only(
+                                left: 20,
+                                top:
+                                    100), // Ajusta este valor para desplazar hacia abajo
+                            child: Text(
+                              'La Policia Mejora La Seguridad',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400),
+                            ),
                           ),
-                          
-                          
+                        ),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Container(
+                            margin: EdgeInsets.only(top: 200),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Image.asset(
+                                  'assets/logo.jpg',
+                                  width: 50,
+                                  height: 50,
+                                ),
+                                SizedBox(width: 5),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "City Hall of Zipaquirá",
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    Text(
+                                      "Sep 9, 2023",
+                                      style: TextStyle(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.grey),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(width: 35),
+                                IconButton(
+                                  alignment: Alignment.topRight,
+                                  onPressed: () {
+                                    // Lógica para compartir aquí
+                                  },
+                                  icon: Transform.rotate(
+                                      angle: -30 *
+                                          3.14159265359 /
+                                          180, // 30 grados en radianes
+                                      child: Icon(Icons.send,
+                                          color: Colors.green, size: 20)),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ]),
                     );
                   },
                 ),
@@ -139,7 +205,50 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                 Text('Trafico'),
                 Text('Musica')
               ]),
-            )
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Turismo para ti',
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black),
+                  ),
+                  Text(
+                    'Ver todo',
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: mygreen),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+
+            Container(
+              margin: EdgeInsets.only(left: 10),
+              child: ListView.builder(
+                itemCount: 2,
+                itemBuilder: (_, index) {
+                return Row(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(right: 10,),
+                    )
+
+                  ],
+                );
+              }),
+            ),
           ],
         ),
       ),
