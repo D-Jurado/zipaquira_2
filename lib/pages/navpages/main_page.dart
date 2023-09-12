@@ -9,7 +9,6 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   TextEditingController _searchController = TextEditingController();
-  // Aquí puedes definir una lista de resultados de búsqueda si es necesario.
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +20,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            //logo inicial
+            // Logo inicial
             Container(
               child: Center(
                 child: Image.asset(
@@ -75,10 +74,10 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                   ),
                 ],
               ),
-            ), // boton de buscar
+            ), // Boton de buscar
             SizedBox(height: 25),
 
-            //tabbar
+            // Tabbar
             Container(
               child: TabBar(
                 controller: _tabController,
@@ -107,7 +106,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
             ),
 
             SizedBox(height: 25),
-            //cuadro noticias
+
+            // Cuadro noticias
             Container(
               height: 250,
               width: double.maxFinite,
@@ -137,8 +137,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                           child: Container(
                             margin: EdgeInsets.only(
                                 left: 20,
-                                top:
-                                    100), // Ajusta este valor para desplazar hacia abajo
+                                top: 100), 
                             child: Text(
                               'La Policia Mejora La Seguridad',
                               style: TextStyle(
@@ -189,7 +188,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                   icon: Transform.rotate(
                                       angle: -30 *
                                           3.14159265359 /
-                                          180, // 30 grados en radianes
+                                          180,
                                       child: Icon(Icons.send,
                                           color: Colors.green, size: 20)),
                                 ),
@@ -206,9 +205,9 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                 Text('Musica')
               ]),
             ),
-            SizedBox(
-              height: 30,
-            ),
+
+            SizedBox(height: 30),
+
             Container(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -230,24 +229,64 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                 ],
               ),
             ),
-            SizedBox(
-              height: 20,
-            ),
 
+            SizedBox(height: 30),
+
+            // Tarjetas horizontales
+Container(
+  height: 42,
+  width: double.maxFinite, 
+  child: ListView.builder(
+    itemCount: 4, // Número de tarjetas
+    scrollDirection: Axis.horizontal,
+    itemBuilder: (BuildContext context, int index) {
+      return Container(
+        width: 200,
+        height: 100, 
+        
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: Colors.white,
+        ),
+        child: Row(
+          children: [
             Container(
-              margin: EdgeInsets.only(left: 10),
-              child: ListView.builder(
-                itemCount: 2,
-                itemBuilder: (_, index) {
-                return Row(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(right: 10,),
-                    )
-
-                  ],
-                );
-              }),
+ child: ClipRRect(
+    borderRadius: BorderRadius.circular(10),
+    child: Image.asset(
+    'assets/welcome.jpg',)
+    
+  ),
+            ),
+            
+            SizedBox(width: 5), 
+            
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Titulo noticia',
+                  style: TextStyle(
+                    fontSize: 13,
+                    
+                  ),
+                ),
+                SizedBox(height: 5), 
+                Text(
+                  'Fecha de la Noticia',
+                  style: TextStyle(
+                    fontSize: 8,
+                    color: Colors.grey,
+                  ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
             ),
           ],
         ),
@@ -255,3 +294,4 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     );
   }
 }
+
