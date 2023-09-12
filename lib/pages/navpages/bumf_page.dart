@@ -6,6 +6,7 @@ class BumfPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color colorbumf = Color.fromARGB(255, 2, 77, 6);
+    const double borderRadiusValue = 10.0;
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.fromLTRB(32, 71, 32, 42),
@@ -31,116 +32,54 @@ class BumfPage extends StatelessWidget {
             ),
             SizedBox(height: 38),
             // text  icons
-            Padding(
-              padding: const EdgeInsets.only(left: 30, right: 30),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20)
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Procedimientos',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w600,
-                        color: colorbumf,
-                      ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.rectangle,
-                        color: colorbumf
-                      ),
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.document_scanner,
-                          color: Colors.white,
-                          size: 30,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+            _buildButton('Procedimientos', Icons.document_scanner, colorbumf, borderRadiusValue),
+            SizedBox(height: 38),
+            _buildButton('PQRS', Icons.feedback, colorbumf, borderRadiusValue),
+            SizedBox(height: 38),
+            _buildButton('Contingencias', Icons.crisis_alert, colorbumf, borderRadiusValue),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildButton(String text, IconData iconData, Color color, double borderRadius) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 30, right: 30),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(borderRadius),
+            bottomLeft: Radius.circular(borderRadius),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              text,
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w600,
+                color: color,
               ),
             ),
-            SizedBox(height: 38), 
-
-            Padding(
-              padding: const EdgeInsets.only(left: 30, right: 30),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20)
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'PQRS',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w600,
-                        color: colorbumf,
-                      ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.rectangle,
-                        color: colorbumf
-                      ),
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.feedback,
-                          color: Colors.white,
-                          size: 30,
-                        ),
-                      ),
-                    ),
-                  ],
+            Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.rectangle,
+                color: color,
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(borderRadius),
+                  bottomRight: Radius.circular(borderRadius),
                 ),
               ),
-            ),
-            SizedBox(height: 38), 
-
-            Padding(
-              padding: const EdgeInsets.only(left: 30, right: 30),
-              child: Container(
-                decoration: BoxDecoration(
+              child: IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  iconData,
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(20)
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Contingencias',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w600,
-                        color: colorbumf,
-                      ),
-                    ),
-
-                    Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.rectangle,
-                        color: colorbumf
-                      ),
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.crisis_alert,
-                          color: Colors.white,
-                          size: 30,
-                        ),
-                      ),
-                    ),
-                  ],
+                  size: 30,
                 ),
               ),
             ),
@@ -150,4 +89,5 @@ class BumfPage extends StatelessWidget {
     );
   }
 }
+
 
