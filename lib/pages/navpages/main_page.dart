@@ -74,7 +74,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                   ),
                 ],
               ),
-            ), // Boton de buscar
+            ), 
             SizedBox(height: 25),
 
             // Tabbar
