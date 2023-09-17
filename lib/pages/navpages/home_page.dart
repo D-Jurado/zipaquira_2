@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:zipaquira_2/pages/navpages/Profile_page.dart';
+import 'package:zipaquira_2/pages/navpages/profile_page.dart';
 import 'package:zipaquira_2/pages/navpages/bumf_page.dart';
 import 'package:zipaquira_2/pages/navpages/main_page.dart';
 import 'package:zipaquira_2/pages/navpages/notifications_page.dart';
@@ -23,6 +23,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       body: pages[currentIndex],
       bottomNavigationBar: BottomNavigationBar(

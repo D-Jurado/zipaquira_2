@@ -15,6 +15,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     Color mygreen = Color(0xFFB8D432);
     late TabController _tabController = TabController(length: 4, vsync: this);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 71),
         child: Column(
@@ -113,7 +114,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
               width: double.maxFinite,
               child: TabBarView(controller: _tabController, children: [
                 ListView.builder(
-                  itemCount: 3,
+                  itemCount: 5,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, int index) {
                     return Container(

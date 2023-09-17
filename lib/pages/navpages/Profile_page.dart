@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
-import 'package:zipaquira_2/pages/navpages/profile_pages/sign_up_page.dart';
+import 'package:zipaquira_2/pages/profile_pages/forgot_password/forgot_password.dart';
+import 'package:zipaquira_2/pages/profile_pages/signup_pages/sign_up_document_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -13,6 +14,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -63,7 +65,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             onPressed: () {
                                Navigator.push(
                                context,
-                            MaterialPageRoute(builder: (context) => SignUpPage()),
+                            MaterialPageRoute(builder: (context) => SignUpPageID()),
                                );
                             },
                             style: ButtonStyle(backgroundColor: null),
@@ -138,7 +140,13 @@ class _ProfilePageState extends State<ProfilePage> {
                         alignment: Alignment.centerRight,
                         child: TextButton(
                           onPressed: () {
-                            // Agregar la lógica para el olvido de contraseña aquí.
+                           Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return ForgotPasswordPage();
+                            },
+                          ),
+                        );
                           },
                           child: Text(
                             'Olvidé mi contraseña',
