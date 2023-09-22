@@ -1,4 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:zipaquira_2/domain/entities/news_post.dart';
+import 'package:zipaquira_2/shared/data/news_local_post.dart';
+
+
+
+
+
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -8,6 +15,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
+  
   TextEditingController _searchController = TextEditingController();
 
   @override
@@ -117,6 +125,13 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                   itemCount: 5,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, int index) {
+                    var text = Text(
+                                      "City Hall of Zipaquirá",
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    );
                     return Container(
                       margin: EdgeInsets.only(right: 10, top: 10),
                       width: 231,
@@ -164,13 +179,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      "City Hall of Zipaquirá",
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
+                                    text,
                                     Text(
                                       "Sep 9, 2023",
                                       style: TextStyle(
