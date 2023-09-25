@@ -1,32 +1,26 @@
-import 'package:zipaquira_2/domain/entities/news_post.dart';
-
 class LocalNewsModel {
-  final String type;
-  final String title;
-  final String imageUrl;
-  final String city;
-  final String date;
+  String? type;
+  String? title;
+  String? imageUrl;
+  String? city;
+  String? date;
 
-  LocalNewsModel(
-      {required this.type,
-      required this.title,
-      required this.imageUrl,
-      required this.city,
-      required this.date});
+  LocalNewsModel({this.type, this.title, this.imageUrl, this.city, this.date});
+  LocalNewsModel.fromJson(Map<String, dynamic> json) {
+    type = json['type'];
+    title = json['title'];
+    imageUrl = json['imageUrl'];
+    city = json['city'];
+    date = json['date'];
+  }
 
-  factory LocalNewsModel.fromJson(Map<String, dynamic> json) => LocalNewsModel(
-        type: json['type'],
-        title: json['title'],
-        imageUrl: json['imageUrl'],
-        city: json['city'],
-        date: json['date'],
-      );
-
-  NewsPost toNewsPostEntity() => NewsPost(
-        type: type,
-        title: title,
-        imageUrl: imageUrl,
-        city: city,
-        date: date
-      );
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['type'] = this.type;
+    data['title'] = this.title;
+    data['imageUrl'] = this.imageUrl;
+    data['city'] = this.city;
+    data['date'] = this.date;
+    return data;
+  }
 }

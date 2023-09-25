@@ -1,11 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:zipaquira_2/domain/entities/news_post.dart';
+import 'package:zipaquira_2/infrastructure/models/local_news_model.dart';
 import 'package:zipaquira_2/shared/data/news_local_post.dart';
-
-
-
-
-
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -15,8 +13,16 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
-  
   TextEditingController _searchController = TextEditingController();
+
+  late List newsObjectJson = jsonDecode(newsLocalPost) as List;
+  late List<LocalNewsModel> newsList = newsObjectJson
+      .map((newJson) => LocalNewsModel.fromJson(newJson))
+      .toList();
+  
+    
+  
+  
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +89,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                   ),
                 ],
               ),
-            ), 
+            ),
             SizedBox(height: 25),
 
             // Tabbar
@@ -122,16 +128,16 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
               width: double.maxFinite,
               child: TabBarView(controller: _tabController, children: [
                 ListView.builder(
-                  itemCount: 5,
+                  itemCount: newsList.length,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, int index) {
                     var text = Text(
-                                      "City Hall of Zipaquirá",
-                                      style: TextStyle(
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    );
+                      newsList[index].city!,
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    );
                     return Container(
                       margin: EdgeInsets.only(right: 10, top: 10),
                       width: 231,
@@ -145,17 +151,15 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                           padding: EdgeInsets.fromLTRB(12, 12, 12, 90),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(20),
-                            child: Image.asset('assets/noticia1.png'),
+                            child: Image.asset(newsList[index].imageUrl!),
                           ),
                         ),
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Container(
-                            margin: EdgeInsets.only(
-                                left: 20,
-                                top: 100), 
+                            margin: EdgeInsets.only(left: 20, top: 100),
                             child: Text(
-                              'La Policia Mejora La Seguridad',
+                              newsList[index].title!,
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 14,
@@ -171,7 +175,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Image.asset(
-                                  'assets/logo.jpg',
+                                  "assets/logo.jpg",
                                   width: 50,
                                   height: 50,
                                 ),
@@ -181,7 +185,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                   children: [
                                     text,
                                     Text(
-                                      "Sep 9, 2023",
+                                      newsList[index].date!,
                                       style: TextStyle(
                                           fontSize: 10,
                                           fontWeight: FontWeight.w400,
@@ -196,9 +200,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                     // Lógica para compartir aquí
                                   },
                                   icon: Transform.rotate(
-                                      angle: -30 *
-                                          3.14159265359 /
-                                          180,
+                                      angle: -30 * 3.14159265359 / 180,
                                       child: Icon(Icons.send,
                                           color: Colors.green, size: 20)),
                                 ),
@@ -243,52 +245,47 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
             SizedBox(height: 30),
 
             // Tarjetas horizontales
-Container(
-  height: 42,
-  width: double.maxFinite, 
-  child: ListView.builder(
-    itemCount: 4, // Número de tarjetas
-    scrollDirection: Axis.horizontal,
-    itemBuilder: (BuildContext context, int index) {
-      return Container(
-        width: 200,
-        height: 100, 
-        
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
-          color: Colors.white,
-        ),
-        child: Row(
-          children: [
             Container(
- child: ClipRRect(
-    borderRadius: BorderRadius.circular(10),
-    child: Image.asset(
-    'assets/welcome.jpg',)
-    
-  ),
-            ),
-            
-            SizedBox(width: 5), 
-            
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Titulo noticia',
-                  style: TextStyle(
-                    fontSize: 13,
-                    
-                  ),
-                ),
-                SizedBox(height: 5), 
-                Text(
-                  'Fecha de la Noticia',
-                  style: TextStyle(
-                    fontSize: 8,
-                    color: Colors.grey,
-                  ),
+              height: 42,
+              width: double.maxFinite,
+              child: ListView.builder(
+                itemCount: 4, // Número de tarjetas
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (BuildContext context, int index) {
+                  return Container(
+                    width: 200,
+                    height: 100,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      color: Colors.white,
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.asset(
+                                'assets/welcome.jpg',
+                              )),
+                        ),
+                        SizedBox(width: 5),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Titulo noticia',
+                              style: TextStyle(
+                                fontSize: 13,
+                              ),
+                            ),
+                            SizedBox(height: 5),
+                            Text(
+                              'Fecha de la Noticia',
+                              style: TextStyle(
+                                fontSize: 8,
+                                color: Colors.grey,
+                              ),
                             ),
                           ],
                         ),
@@ -304,4 +301,3 @@ Container(
     );
   }
 }
-
