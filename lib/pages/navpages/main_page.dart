@@ -19,13 +19,42 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       .map((newJson) => LocalNewsModel.fromJson(newJson))
       .toList();
 
-  
     
 
   late List newsObjectTourismJson = jsonDecode(newsTourismLocalPost) as List;
   late List<LocalNewsModel> newsListTourism = newsObjectTourismJson
       .map((newJson) => LocalNewsModel.fromJson(newJson))
       .toList();
+
+
+   List<LocalNewsModel> musicList = [];
+  List<LocalNewsModel> sportList = [];
+  List<LocalNewsModel> tourismList = [];
+  List<LocalNewsModel> trafficList = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Convierte la cadena JSON en una lista de elementos
+    List<dynamic> listaNoticias = jsonDecode(newsLocalPost);
+
+    for (var noticiaJson in listaNoticias) {
+      LocalNewsModel news = LocalNewsModel.fromJson(noticiaJson as Map<String, dynamic>);
+
+      // Filtra las noticias en las listas correspondientes
+      if (news.type == "music") {
+        musicList.add(news);
+      } else if (news.type == "sport") {
+        sportList.add(news);
+      } else if (news.type == "tourism") {
+        tourismList.add(news);
+      } else if (news.type == "traffic") {
+        trafficList.add(news);
+      }
+    }
+  }
+
 
 
     
