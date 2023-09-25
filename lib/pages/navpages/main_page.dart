@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:zipaquira_2/infrastructure/models/local_news_model.dart';
+import 'package:zipaquira_2/pages/news/full_news.dart';
 import 'package:zipaquira_2/shared/data/news_local_post.dart';
 import 'package:zipaquira_2/shared/data/news_tourism_local_post.dart';
 
@@ -19,15 +20,12 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       .map((newJson) => LocalNewsModel.fromJson(newJson))
       .toList();
 
-    
-
   late List newsObjectTourismJson = jsonDecode(newsTourismLocalPost) as List;
   late List<LocalNewsModel> newsListTourism = newsObjectTourismJson
       .map((newJson) => LocalNewsModel.fromJson(newJson))
       .toList();
 
-
-   List<LocalNewsModel> musicList = [];
+  List<LocalNewsModel> musicList = [];
   List<LocalNewsModel> sportList = [];
   List<LocalNewsModel> tourismList = [];
   List<LocalNewsModel> trafficList = [];
@@ -40,7 +38,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     List<dynamic> listaNoticias = jsonDecode(newsLocalPost);
 
     for (var noticiaJson in listaNoticias) {
-      LocalNewsModel news = LocalNewsModel.fromJson(noticiaJson as Map<String, dynamic>);
+      LocalNewsModel news =
+          LocalNewsModel.fromJson(noticiaJson as Map<String, dynamic>);
 
       // Filtra las noticias en las listas correspondientes
       if (news.type == "music") {
@@ -55,15 +54,10 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     }
   }
 
-
-
-    
-
   @override
   Widget build(BuildContext context) {
     Color mygreen = Color(0xFFB8D432);
-    late TabController _tabController =
-        TabController(length: 4, vsync: this);
+    late TabController _tabController = TabController(length: 4, vsync: this);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Padding(
@@ -134,7 +128,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                 controller: _tabController,
                 labelColor: Colors.grey,
                 unselectedLabelColor: Colors.grey.withOpacity(0.8),
-                tabs: [
+                tabs: const [
                   Tab(
                     text: '#Turismo',
                   ),
@@ -174,6 +168,106 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                         fontWeight: FontWeight.w400,
                       ),
                     );
+                    return InkWell(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => FullNews()),
+                        );
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(right: 10, top: 10),
+                        width: 231,
+                        height: 164,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.white,
+                        ),
+                        child: Stack(children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(12, 12, 12, 90),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: Image.asset(
+                                newsList[index].imageUrl!,
+                                width: double.infinity,
+                                height: double.infinity,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Container(
+                              margin: const EdgeInsets.only(left: 20, top: 100),
+                              child: Text(
+                                newsList[index].title!,
+                                style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Container(
+                              margin: const EdgeInsets.only(top: 200),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Image.asset(
+                                    "assets/logo.jpg",
+                                    width: 50,
+                                    height: 50,
+                                  ),
+                                  SizedBox(width: 5),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      text,
+                                      Text(
+                                        newsList[index].date!,
+                                        style: TextStyle(
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w400,
+                                            color: Colors.grey),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(width: 35),
+                                  IconButton(
+                                    alignment: Alignment.topRight,
+                                    onPressed: () {
+                                      // Lógica para compartir aquí
+                                    },
+                                    icon: Transform.rotate(
+                                        angle: -30 * 3.14159265359 / 180,
+                                        child: Icon(Icons.send,
+                                            color: Colors.green, size: 20)),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ]),
+                      ),
+                    );
+                  },
+                ),
+                //  deportes
+
+                ListView.builder(
+                  itemCount: newsList.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (BuildContext context, int index) {
+                    var text = Text(
+                      sportList[index].city!,
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    );
                     return Container(
                       margin: const EdgeInsets.only(right: 10, top: 10),
                       width: 231,
@@ -188,7 +282,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(20),
                             child: Image.asset(
-                              newsList[index].imageUrl!,
+                              sportList[index].imageUrl!,
                               width: double.infinity,
                               height: double.infinity,
                               fit: BoxFit.cover,
@@ -200,7 +294,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                           child: Container(
                             margin: const EdgeInsets.only(left: 20, top: 100),
                             child: Text(
-                              newsList[index].title!,
+                              sportList[index].title!,
                               style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 14,
@@ -226,7 +320,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                   children: [
                                     text,
                                     Text(
-                                      newsList[index].date!,
+                                      sportList[index].date!,
                                       style: TextStyle(
                                           fontSize: 10,
                                           fontWeight: FontWeight.w400,
@@ -253,9 +347,190 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                     );
                   },
                 ),
-                Text('Deportes'),
-                Text('Trafico'),
-                Text('Musica')
+                //  trafico
+
+                ListView.builder(
+                  itemCount: newsList.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (BuildContext context, int index) {
+                    var text = Text(
+                      trafficList[index].city!,
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    );
+                    return Container(
+                      margin: const EdgeInsets.only(right: 10, top: 10),
+                      width: 231,
+                      height: 164,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.white,
+                      ),
+                      child: Stack(children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(12, 12, 12, 90),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Image.asset(
+                              trafficList[index].imageUrl!,
+                              width: double.infinity,
+                              height: double.infinity,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Container(
+                            margin: const EdgeInsets.only(left: 20, top: 100),
+                            child: Text(
+                              trafficList[index].title!,
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Container(
+                            margin: const EdgeInsets.only(top: 200),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Image.asset(
+                                  "assets/logo.jpg",
+                                  width: 50,
+                                  height: 50,
+                                ),
+                                SizedBox(width: 5),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    text,
+                                    Text(
+                                      trafficList[index].date!,
+                                      style: TextStyle(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.grey),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(width: 35),
+                                IconButton(
+                                  alignment: Alignment.topRight,
+                                  onPressed: () {
+                                    // Lógica para compartir aquí
+                                  },
+                                  icon: Transform.rotate(
+                                      angle: -30 * 3.14159265359 / 180,
+                                      child: Icon(Icons.send,
+                                          color: Colors.green, size: 20)),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ]),
+                    );
+                  },
+                ),
+                // Musica
+
+                ListView.builder(
+                  itemCount: newsList.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (BuildContext context, int index) {
+                    var text = Text(
+                      musicList[index].city!,
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    );
+                    return Container(
+                      margin: const EdgeInsets.only(right: 10, top: 10),
+                      width: 231,
+                      height: 164,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: Colors.white,
+                      ),
+                      child: Stack(children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(12, 12, 12, 90),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Image.asset(
+                              musicList[index].imageUrl!,
+                              width: double.infinity,
+                              height: double.infinity,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Container(
+                            margin: const EdgeInsets.only(left: 20, top: 100),
+                            child: Text(
+                              musicList[index].title!,
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.topLeft,
+                          child: Container(
+                            margin: const EdgeInsets.only(top: 200),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Image.asset(
+                                  "assets/logo.jpg",
+                                  width: 50,
+                                  height: 50,
+                                ),
+                                SizedBox(width: 5),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    text,
+                                    Text(
+                                      musicList[index].date!,
+                                      style: TextStyle(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w400,
+                                          color: Colors.grey),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(width: 35),
+                                IconButton(
+                                  alignment: Alignment.topRight,
+                                  onPressed: () {
+                                    // Lógica para compartir aquí
+                                  },
+                                  icon: Transform.rotate(
+                                      angle: -30 * 3.14159265359 / 180,
+                                      child: Icon(Icons.send,
+                                          color: Colors.green, size: 20)),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ]),
+                    );
+                  },
+                ),
               ]),
             ),
 
@@ -296,7 +571,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                   return Container(
                     width: 220,
                     height: 105,
-                    margin: EdgeInsets.only(right: 10), // Espacio entre elementos
+                    margin:
+                        EdgeInsets.only(right: 10), // Espacio entre elementos
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       color: Colors.white,

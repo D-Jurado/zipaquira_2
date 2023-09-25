@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart'; // Importa el paquete para lanzar URLs
 
 class BumfPage extends StatelessWidget {
   const BumfPage({Key? key});
@@ -31,63 +33,66 @@ class BumfPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 38),
-            // text  icons
-            _buildButton('Procedimientos', Icons.document_scanner, colorbumf, borderRadiusValue),
+            // Botones con URLs
+            _buildButtonWithUrl('Procedimientos', Icons.document_scanner, colorbumf, borderRadiusValue, 'https://www.zipaquira-cundinamarca.gov.co/tema/tramites-y-servicios'),
             SizedBox(height: 38),
-            _buildButton('PQRS', Icons.feedback, colorbumf, borderRadiusValue),
+            _buildButtonWithUrl('PQRS', Icons.feedback, colorbumf, borderRadiusValue, 'https://www.zipaquira-cundinamarca.gov.co/peticiones-quejas-reclamos'),
             SizedBox(height: 38),
-            _buildButton('Contingencias', Icons.crisis_alert, colorbumf, borderRadiusValue),
+            _buildButtonWithUrl('Contingencias', Icons.crisis_alert, colorbumf, borderRadiusValue, 'https://www.zipaquira-cundinamarca.gov.co/tema/noticias'),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildButton(String text, IconData iconData, Color color, double borderRadius) {
+  Widget _buildButtonWithUrl(String text, IconData iconData, Color color, double borderRadius, String url) {
     return Padding(
       padding: const EdgeInsets.only(left: 30, right: 30),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(borderRadius),
-            bottomLeft: Radius.circular(borderRadius),
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              text,
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w600,
-                color: color,
-              ),
+      child: InkWell(
+        onTap: () {
+          launchUrlString(url); // Lanza la URL cuando se toca el botón
+        },
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(borderRadius),
+              bottomLeft: Radius.circular(borderRadius),
             ),
-            Container(
-              decoration: BoxDecoration(
-                shape: BoxShape.rectangle,
-                color: color,
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(borderRadius),
-                  bottomRight: Radius.circular(borderRadius),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                text,
+                style: TextStyle(
+                  fontSize: 25,
+                  fontWeight: FontWeight.w600,
+                  color: color,
                 ),
               ),
-              child: IconButton(
-                onPressed: () {},
-                icon: Icon(
+              Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.rectangle,
+                  color: color,
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(borderRadius),
+                    bottomRight: Radius.circular(borderRadius),
+                  ),
+                ),
+                child: Icon(
                   iconData,
                   color: Colors.white,
-                  size: 30,
+                  size: 40,
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
+
+
+ 
 }
-
-
