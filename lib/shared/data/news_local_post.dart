@@ -1,4 +1,40 @@
 String newsLocalPost = '''[
+  
+  {
+    "type": "music",
+    "title": "Cantante Pedro Molina es un exito en francia",
+    "imageUrl": "assets/news/music/1.jpg",
+    "city": "City Hall of Zipaquirá",
+    "date": "Sep 21, 2023"
+  },
+  {
+    "type": "music",
+    "title": "Nuevos cursos gratis para musica para todas las edades",
+    "imageUrl": "assets/news/music/2.jpg",
+    "city": "City Hall of Zipaquirá",
+    "date": "Sep 21, 2023"
+  },
+  {
+    "type": "music",
+    "title": "La banda folcor se presenta este finde semana",
+    "imageUrl": "assets/news/music/3.jpg",
+    "city": "City Hall of Zipaquirá",
+    "date": "Sep 21, 2023"
+  },
+  {
+    "type": "sport",
+    "title": "Gana equipo de futbol por goleada",
+    "imageUrl": "assets/news/sport/1.jpg",
+    "city": "City Hall of Zipaquirá",
+    "date": "Sep 21, 2023"
+  },
+  {
+    "type": "sport",
+    "title": "Convocatoria para el equipo de baloncesto",
+    "imageUrl": "assets/news/sport/2.jpg",
+    "city": "City Hall of Zipaquirá",
+    "date": "Sep 21, 2023"
+  },
   {
     "type": "tourism",
     "title": "Nuevo hotel Zipaquira es la sensación",
@@ -17,41 +53,6 @@ String newsLocalPost = '''[
     "type": "tourism",
     "title": "Nuevo espacio para el tenis de mesa",
     "imageUrl": "assets/news/tourism/3.jpg",
-    "city": "City Hall of Zipaquirá",
-    "date": "Sep 21, 2023"
-  },
-  {
-    "type": "music",
-    "title": "Cantante Pedro Molina es un exito en francia",
-    "imageUrl": "assets/news/music/1.jpg",
-    "city": "City Hall of Zipaquirá",
-    "date": "Sep 21, 2023"
-  },
-  {
-    "type": "music",
-    "title": "Nuevos cursos gratis para musica",
-    "imageUrl": "assets/news/music/2.jpg",
-    "city": "City Hall of Zipaquirá",
-    "date": "Sep 21, 2023"
-  },
-  {
-    "type": "music",
-    "title": "La banda folcor se presenta este finde semana",
-    "imageUrl": "assets/news/music/3.jpg",
-    "city": "City Hall of Zipaquirá",
-    "date": "Sep 21, 2023"
-  },
-  {
-    "type": "sport",
-    "title": "Gana euipo de futbol por goleada",
-    "imageUrl": "assets/news/sport/1.jpg",
-    "city": "City Hall of Zipaquirá",
-    "date": "Sep 21, 2023"
-  },
-  {
-    "type": "sport",
-    "title": "Convocatoria para el equipo de baloncesto",
-    "imageUrl": "assets/news/sport/2.jpg",
     "city": "City Hall of Zipaquirá",
     "date": "Sep 21, 2023"
   },

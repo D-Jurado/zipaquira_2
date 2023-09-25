@@ -1,9 +1,8 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:zipaquira_2/domain/entities/news_post.dart';
 import 'package:zipaquira_2/infrastructure/models/local_news_model.dart';
 import 'package:zipaquira_2/shared/data/news_local_post.dart';
+import 'package:zipaquira_2/shared/data/news_tourism_local_post.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -19,19 +18,27 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   late List<LocalNewsModel> newsList = newsObjectJson
       .map((newJson) => LocalNewsModel.fromJson(newJson))
       .toList();
+
   
     
-  
-  
+
+  late List newsObjectTourismJson = jsonDecode(newsTourismLocalPost) as List;
+  late List<LocalNewsModel> newsListTourism = newsObjectTourismJson
+      .map((newJson) => LocalNewsModel.fromJson(newJson))
+      .toList();
+
+
+    
 
   @override
   Widget build(BuildContext context) {
     Color mygreen = Color(0xFFB8D432);
-    late TabController _tabController = TabController(length: 4, vsync: this);
+    late TabController _tabController =
+        TabController(length: 4, vsync: this);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 71),
+        padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 51),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -139,7 +146,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                       ),
                     );
                     return Container(
-                      margin: EdgeInsets.only(right: 10, top: 10),
+                      margin: const EdgeInsets.only(right: 10, top: 10),
                       width: 231,
                       height: 164,
                       decoration: BoxDecoration(
@@ -148,19 +155,24 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                       ),
                       child: Stack(children: [
                         Padding(
-                          padding: EdgeInsets.fromLTRB(12, 12, 12, 90),
+                          padding: const EdgeInsets.fromLTRB(12, 12, 12, 90),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(20),
-                            child: Image.asset(newsList[index].imageUrl!),
+                            child: Image.asset(
+                              newsList[index].imageUrl!,
+                              width: double.infinity,
+                              height: double.infinity,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Container(
-                            margin: EdgeInsets.only(left: 20, top: 100),
+                            margin: const EdgeInsets.only(left: 20, top: 100),
                             child: Text(
                               newsList[index].title!,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w400),
@@ -170,7 +182,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                         Align(
                           alignment: Alignment.topLeft,
                           child: Container(
-                            margin: EdgeInsets.only(top: 200),
+                            margin: const EdgeInsets.only(top: 200),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -246,15 +258,16 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
             // Tarjetas horizontales
             Container(
-              height: 42,
+              height: 70,
               width: double.maxFinite,
               child: ListView.builder(
-                itemCount: 4, // Número de tarjetas
+                itemCount: newsListTourism.length, // Número de tarjetas
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (BuildContext context, int index) {
                   return Container(
-                    width: 200,
-                    height: 100,
+                    width: 220,
+                    height: 105,
+                    margin: EdgeInsets.only(right: 10), // Espacio entre elementos
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       color: Colors.white,
@@ -263,31 +276,34 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                       children: [
                         Container(
                           child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Image.asset(
-                                'assets/welcome.jpg',
-                              )),
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.asset(
+                              newsListTourism[index].imageUrl!,
+                            ),
+                          ),
                         ),
                         SizedBox(width: 5),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Titulo noticia',
-                              style: TextStyle(
-                                fontSize: 13,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                newsListTourism[index].title!,
+                                style: TextStyle(
+                                  fontSize: 13,
+                                ),
                               ),
-                            ),
-                            SizedBox(height: 5),
-                            Text(
-                              'Fecha de la Noticia',
-                              style: TextStyle(
-                                fontSize: 8,
-                                color: Colors.grey,
+                              SizedBox(height: 5),
+                              Text(
+                                newsListTourism[index].date!,
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  color: Colors.grey,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ],
                     ),
