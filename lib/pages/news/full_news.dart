@@ -19,7 +19,7 @@ class _FullNewsState extends State<FullNews> {
             top: 0,
             left: 0,
             right: 0,
-            height: 380,
+            height: 420,
             child: Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
@@ -31,7 +31,7 @@ class _FullNewsState extends State<FullNews> {
           ),
           // Contenedor blanco con detalles de la noticia (60% inferior)
           Positioned(
-            top: 350,
+            top: 330,
             left: 0,
             right: 0,
             bottom: 0,
@@ -50,21 +50,26 @@ class _FullNewsState extends State<FullNews> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       // Título de la noticia
-                      Text(
-                        'Policía aumenta seguridad',
-                        style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
+                      Padding(
+                        padding: const EdgeInsets.only(left: 80, right: 40),
+                        child: Text(
+                          'Policía aumenta seguridad',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: 20),
                       // Rectángulo con logo, ciudad y fecha
                       Container(
-                        padding: EdgeInsets.all(10),
+                        width: 280,
+                        padding: EdgeInsets.symmetric(horizontal: 5),
                         decoration: BoxDecoration(
                           border: Border.all(
                             color: Colors.grey,
-                            width: 1,
+                            width: 0.2,
                           ),
                           borderRadius: BorderRadius.circular(30),
                         ),
@@ -73,7 +78,7 @@ class _FullNewsState extends State<FullNews> {
                             // Logo pequeño
                             Image.asset(
                               "assets/logo.jpg",
-                              width: 30,
+                              width: 40,
                               height: 30,
                             ),
                             SizedBox(width: 10),
@@ -88,16 +93,16 @@ class _FullNewsState extends State<FullNews> {
                                     color: Colors.grey,
                                   ),
                                 ),
-                                SizedBox(width: 10),
-                                Align(
-                                  alignment: Alignment.topRight,
-                                  child: Text(
-                                    "Sep 21",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                      color: Colors.grey,
-                                    ),
+                                SizedBox(
+                                  width: 40,
+                                ),
+                                Text(
+                                  "Sep 21",
+                                  textAlign: TextAlign.right,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.grey,
                                   ),
                                 ),
                               ],
@@ -108,17 +113,46 @@ class _FullNewsState extends State<FullNews> {
                       SizedBox(height: 20),
                       // Texto de la noticia con margen
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 32, vertical: 15), // Margen alrededor del texto
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 32,
+                            vertical: 15), // Margen alrededor del texto
                         child: Text(
                           // Aquí debes agregar el texto de la noticia
                           loremIpsum(),
                           style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w400
-                          ),
+                              fontSize: 20, fontWeight: FontWeight.w400),
                         ),
                       ),
                     ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          // Floating Action Button en la esquina superior izquierda con bordes blancos
+          Positioned(
+            top: 0,
+            left: 0,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: Colors.white,
+                    width: 0.4,
+                  ),
+                ),
+                child: FloatingActionButton(
+                  backgroundColor: Colors.transparent,
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Icon(
+                    Icons.arrow_back_ios_new_rounded,
+                    color: Colors.white,
+                    size: 20
+                    // Color del ícono
                   ),
                 ),
               ),
