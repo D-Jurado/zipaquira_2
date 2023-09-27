@@ -51,7 +51,7 @@ String newsLocalPost = '''[
   },
   {
     "type": "tourism",
-    "title": "Nuevo espacio para el tenis de mesa",
+    "title": "Hermosos paisajes se ven desde la montaña",
     "imageUrl": "assets/news/tourism/3.jpg",
     "city": "City Hall of Zipaquirá",
     "date": "Sep 21, 2023"
