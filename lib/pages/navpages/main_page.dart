@@ -5,9 +5,7 @@ import 'package:zipaquira_2/pages/news/full_news.dart';
 import 'package:zipaquira_2/pages/news/full_news_tourism.dart';
 import 'package:zipaquira_2/shared/data/news_local_post.dart';
 import 'package:zipaquira_2/shared/data/news_tourism_local_post.dart';
-
-
-
+import 'package:http/http.dart' as http;
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -33,29 +31,59 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   List<LocalNewsModel> sportList = [];
   List<LocalNewsModel> tourismList = [];
   List<LocalNewsModel> trafficList = [];
+  List<dynamic> itemList = [];
+  
+  List<LocalNewsModel> resultList = [];
+  List<dynamic> listaNoticias = [];
+
+  Future<List<dynamic>> fetchData() async {
+    var url = Uri.parse("http://192.168.1.5:8000/api/v2/news/?descendant_of=4");
+    var response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> jsonData = json.decode(response.body);
+
+      if (jsonData.containsKey('items')) {
+        return jsonData['items'];
+        /* itemList = jsonData['items']; */
+      } else {
+        print('Error en la solicitud HTTP: ${response.statusCode}');
+      }
+    }
+    return List.empty();
+  }
 
   @override
   void initState() {
     super.initState();
 
     // Convierte la cadena JSON en una lista de elementos
-    List<dynamic> listaNoticias = jsonDecode(newsLocalPost);
+    
+    fetchData().then((value) {
+      setState(() {});
+      listaNoticias = value;
+      newsList =
+          value.map((newJson) => LocalNewsModel.fromJson(newJson)).toList();
+      resultList =
+          newsList.where((element) => element.meta?.type == "noticias.Noticia").toList();
+      
+    });
 
-    for (var noticiaJson in listaNoticias) {
+    /* for (var noticiaJson in listaNoticias) {
       LocalNewsModel news =
           LocalNewsModel.fromJson(noticiaJson as Map<String, dynamic>);
 
       // Filtra las noticias en las listas correspondientes
-      if (news.type == "music") {
-        musicList.add(news);
-      } else if (news.type == "sport") {
-        sportList.add(news);
-      } else if (news.type == "tourism") {
-        tourismList.add(news);
-      } else if (news.type == "traffic") {
+      /* if (news.type == "music") { */
+      musicList.add(news);
+      /* } else if (news.type == "sport") {
+        sportList.add(news); */
+      /*  } else if (news.type == "tourism") { */
+      tourismList.add(news);
+      /* } else if (news.type == "traffic") {
         trafficList.add(news);
-      }
-    }
+      }*/
+    } */
   }
 
   @override
@@ -166,7 +194,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, int index) {
                     var text = Text(
-                      newsList[index].city!,
+                      'newsList[index].city!',
                       style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.w400,
@@ -192,7 +220,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(20),
                               child: Image.asset(
-                                newsList[index].imageUrl!,
+                                'assets/noticia1.png',
                                 width: double.infinity,
                                 height: double.infinity,
                                 fit: BoxFit.cover,
@@ -204,7 +232,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                             child: Container(
                               margin: const EdgeInsets.only(left: 20, top: 100),
                               child: Text(
-                                newsList[index].title!,
+                                resultList[index].title!,
                                 style: const TextStyle(
                                     color: Colors.black,
                                     fontSize: 14,
@@ -231,7 +259,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                     children: [
                                       text,
                                       Text(
-                                        newsList[index].date!,
+                                        'newsList[index].date!',
                                         style: TextStyle(
                                             fontSize: 10,
                                             fontWeight: FontWeight.w400,
@@ -266,13 +294,13 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, int index) {
                     var text = Text(
-                      sportList[index].city!,
+                      'sportList[index].city!',
                       style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.w400,
                       ),
                     );
-                    
+
                     return InkWell(
                       onTap: () {
                         Navigator.of(context).push(
@@ -293,7 +321,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(20),
                               child: Image.asset(
-                                sportList[index].imageUrl!,
+                                'assets/noticia1.png',
                                 width: double.infinity,
                                 height: double.infinity,
                                 fit: BoxFit.cover,
@@ -327,11 +355,12 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                   ),
                                   SizedBox(width: 5),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       text,
                                       Text(
-                                        sportList[index].date!,
+                                        'sportList[index].date!',
                                         style: TextStyle(
                                             fontSize: 10,
                                             fontWeight: FontWeight.w400,
@@ -366,7 +395,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, int index) {
                     var text = Text(
-                      trafficList[index].city!,
+                      'trafficList[index].city!',
                       style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.w400,
@@ -392,7 +421,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(20),
                               child: Image.asset(
-                                trafficList[index].imageUrl!,
+                                'assets/noticia1.png',
                                 width: double.infinity,
                                 height: double.infinity,
                                 fit: BoxFit.cover,
@@ -426,11 +455,12 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                   ),
                                   SizedBox(width: 5),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       text,
                                       Text(
-                                        trafficList[index].date!,
+                                        'trafficList[index].date!',
                                         style: TextStyle(
                                             fontSize: 10,
                                             fontWeight: FontWeight.w400,
@@ -465,7 +495,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (BuildContext context, int index) {
                     var text = Text(
-                      musicList[index].city!,
+                      'musicList[index].city!',
                       style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.w400,
@@ -491,7 +521,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(20),
                               child: Image.asset(
-                                musicList[index].imageUrl!,
+                                'assets/noticia1.png',
                                 width: double.infinity,
                                 height: double.infinity,
                                 fit: BoxFit.cover,
@@ -525,11 +555,12 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                   ),
                                   SizedBox(width: 5),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       text,
                                       Text(
-                                        musicList[index].date!,
+                                        'musicList[index].date!',
                                         style: TextStyle(
                                             fontSize: 10,
                                             fontWeight: FontWeight.w400,
@@ -587,68 +618,68 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
             SizedBox(height: 30),
 
             // Tarjetas horizontales
-           Container(
-  height: 70,
-  width: double.maxFinite,
-  child: ListView.builder(
-    itemCount: newsListTourism.length, // Número de tarjetas
-    scrollDirection: Axis.horizontal,
-    itemBuilder: (BuildContext context, int index) {
-      return GestureDetector(
-        onTap: () {
-          // Navegar a la pantalla FullNewsTourism cuando se toca la imagen
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => FullNewsTourim(),
-            ),
-          );
-        },
-        child: Container(
-          width: 220,
-          height: 105,
-          margin: EdgeInsets.only(right: 10), // Espacio entre elementos
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
-            color: Colors.white,
-          ),
-          child: Row(
-            children: [
-              Container(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
-                  child: Image.asset(
-                    newsListTourism[index].imageUrl!,
-                  ),
-                ),
-              ),
-              SizedBox(width: 5),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      newsListTourism[index].title!,
-                      style: TextStyle(
-                        fontSize: 13,
-                      ),
-                    ),
-                    SizedBox(height: 5),
-                    Text(
-                      newsListTourism[index].date!,
-                      style: TextStyle(
-                        fontSize: 10,
-                        color: Colors.grey,
+            Container(
+              height: 70,
+              width: double.maxFinite,
+              child: ListView.builder(
+                itemCount: newsListTourism.length, // Número de tarjetas
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (BuildContext context, int index) {
+                  return GestureDetector(
+                      onTap: () {
+                        // Navegar a la pantalla FullNewsTourism cuando se toca la imagen
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => FullNewsTourim(),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        width: 220,
+                        height: 105,
+                        margin: EdgeInsets.only(
+                            right: 10), // Espacio entre elementos
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: Colors.white,
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: Image.asset(
+                                  'assets/noticia1.png',
                                 ),
                               ),
-                            ],
-                          ),
+                            ),
+                            SizedBox(width: 5),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'newsListTourism[index].title!',
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                  SizedBox(height: 5),
+                                  Text(
+                                    'newsListTourism[index].date!',
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    )
-                  );
+                      ));
                 },
               ),
             ),
