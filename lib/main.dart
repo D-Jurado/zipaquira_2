@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:zipaquira_2/pages/navpages/home_page.dart';
+import 'package:zipaquira_2/provider/news_provider.dart';
 
 
 
@@ -17,17 +18,25 @@ class MyApp extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-        
-          useMaterial3: true,
-          primaryColor: Colors.green
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          lazy: false,
+          create: (element) => NewsProvider()..fetchData() 
+          ),
+      ],
+      child: MaterialApp(
+          title: 'Flutter Demo',
+          theme: ThemeData(
           
-        ),
-        
-        debugShowCheckedModeBanner: false,
-       home: HomePage(),
-        );
+            useMaterial3: true,
+            primaryColor: Colors.green
+            
+          ),
+          
+          debugShowCheckedModeBanner: false,
+         home: HomePage(),
+          ),
+    );
   }
 }
