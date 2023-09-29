@@ -546,7 +546,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (BuildContext context, int index) {
                             var text = Text(
-                              'trafficList[index].city!',
+                              "City Hall of Zipaquirá",
                               style: TextStyle(
                                 fontSize: 10,
                                 fontWeight: FontWeight.w400,
@@ -617,7 +617,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                             children: [
                                               text,
                                               Text(
-                                                'trafficList[index].date!',
+                                                trafficList[index].getFormattedDate(),
                                                 style: TextStyle(
                                                     fontSize: 10,
                                                     fontWeight: FontWeight.w400,
