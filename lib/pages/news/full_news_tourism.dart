@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:lorem_ipsum/lorem_ipsum.dart';
-import 'package:zipaquira_2/infrastructure/models/local_news_model.dart';
 
-
-class FullNews extends StatefulWidget {
-  final LocalNewsModel? localNewsInformation;
-
-  const FullNews(this.localNewsInformation);
+class FullNewsTourim extends StatefulWidget {
+  const FullNewsTourim({Key? key});
 
   @override
-  State<FullNews> createState() => _FullNewsState();
+  State<FullNewsTourim> createState() => _FullNewsTourimState();
 }
 
-class _FullNewsState extends State<FullNews> {
+class _FullNewsTourimState extends State<FullNewsTourim> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,7 +23,7 @@ class _FullNewsState extends State<FullNews> {
             child: Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/noticia1.png'),
+                  image: AssetImage('assets/news/tourism/1.jpg'),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -42,8 +38,8 @@ class _FullNewsState extends State<FullNews> {
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(55),
-                  topRight: Radius.circular(55),
+                  topLeft: Radius.circular(40),
+                  topRight: Radius.circular(40),
                 ),
                 color: Colors.white,
               ),
@@ -55,9 +51,9 @@ class _FullNewsState extends State<FullNews> {
                     children: [
                       // Título de la noticia
                       Padding(
-                        padding: const EdgeInsets.only(left: 40, right: 40),
+                        padding: const EdgeInsets.only(left: 80, right: 40),
                         child: Text(
-                          widget.localNewsInformation!.title!,
+                          'Nuevo hotel Zipaquirá es la sensacion',
                           textAlign: TextAlign.start,
                           style: TextStyle(
                             fontSize: 28,
@@ -68,7 +64,7 @@ class _FullNewsState extends State<FullNews> {
                       SizedBox(height: 20),
                       // Rectángulo con logo, ciudad y fecha
                       Container(
-                        width: 320,
+                        width: 280,
                         padding: EdgeInsets.symmetric(horizontal: 5),
                         decoration: BoxDecoration(
                           border: Border.all(
@@ -101,8 +97,7 @@ class _FullNewsState extends State<FullNews> {
                                   width: 40,
                                 ),
                                 Text(
-                                  widget.localNewsInformation!
-                                      .getFormattedDate(),
+                                  "Sep 21",
                                   textAlign: TextAlign.right,
                                   style: TextStyle(
                                     fontSize: 14,
@@ -122,12 +117,12 @@ class _FullNewsState extends State<FullNews> {
                             horizontal: 32,
                             vertical: 15), // Margen alrededor del texto
                         child: Text(
-                            // Aquí debes agregar el texto de la noticia
-                            loremIpsum(),
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w400),
-                              ),
-                                                  ),
+                          // Aquí debes agregar el texto de la noticia
+                          loremIpsum(),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.w400),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -153,10 +148,12 @@ class _FullNewsState extends State<FullNews> {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Icon(Icons.arrow_back_ios_new_rounded,
-                      color: Colors.white, size: 20
-                      // Color del ícono
-                      ),
+                  child: Icon(
+                    Icons.arrow_back_ios_new_rounded,
+                    color: Colors.white,
+                    size: 20
+                    // Color del ícono
+                  ),
                 ),
               ),
             ),
