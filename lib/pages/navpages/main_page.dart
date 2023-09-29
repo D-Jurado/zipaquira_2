@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:zipaquira_2/infrastructure/models/local_news_model.dart';
 import 'package:zipaquira_2/pages/news/full_news.dart';
-import 'package:zipaquira_2/pages/news/full_news_tourism.dart';
+
 import 'package:zipaquira_2/shared/data/news_local_post.dart';
 import 'package:zipaquira_2/shared/data/news_tourism_local_post.dart';
 import 'package:http/http.dart' as http;
@@ -53,8 +53,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   }
 
   Future<List<dynamic>> fetchData() async {
-    var url =
-        Uri.parse("http://192.168.1.5:8000/api/v2/news/?descendant_of=4");
+    var url = Uri.parse("http://192.168.1.5:8000/api/v2/news/?descendant_of=4");
     var response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -89,14 +88,14 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       fetchDetails().then((value) {
         setState(() {});
 
-      culturalList = resultList.where((element) => element.type == "CULTURAL") 
-                            .toList();
-      sportList = resultList.where((element) => element.type == "DEPORTE") 
-                            .toList();
-      tourismList = resultList.where((element) => element.type == "TURISMO") 
-                            .toList();                          
-      trafficList = resultList.where((element) => element.type == "TRAFICO") 
-                            .toList();        
+        culturalList =
+            resultList.where((element) => element.type == "CULTURAL").toList();
+        sportList =
+            resultList.where((element) => element.type == "DEPORTE").toList();
+        tourismList =
+            resultList.where((element) => element.type == "TURISMO").toList();
+        trafficList =
+            resultList.where((element) => element.type == "TRAFICO").toList();
 
         isLoading = false;
       });
@@ -143,7 +142,6 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                           Expanded(
                             child: TextField(
                               controller: _searchController,
-
                               decoration: InputDecoration(
                                 hintText: 'Buscar...',
                                 border: InputBorder.none,
@@ -210,11 +208,6 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
                     SizedBox(height: 25),
 
-
-                  
-
-
-
                     // Todas las noticias
                     Container(
                       height: 250,
@@ -235,7 +228,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                               onTap: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                      builder: (context) => FullNews(resultList[index])),
+                                      builder: (context) =>
+                                          FullNews(resultList[index])),
                                 );
                               },
                               child: Container(
@@ -343,7 +337,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                               onTap: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                      builder: (context) => FullNews(tourismList[index])),
+                                      builder: (context) =>
+                                          FullNews(tourismList[index])),
                                 );
                               },
                               child: Container(
@@ -453,7 +448,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                               onTap: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                      builder: (context) => FullNews(sportList[index])),
+                                      builder: (context) =>
+                                          FullNews(sportList[index])),
                                 );
                               },
                               child: Container(
@@ -560,7 +556,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                               onTap: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                      builder: (context) => FullNews(trafficList[index])),
+                                      builder: (context) =>
+                                          FullNews(trafficList[index])),
                                 );
                               },
                               child: Container(
@@ -667,7 +664,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                               onTap: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                      builder: (context) => FullNews(culturalList[index])),
+                                      builder: (context) =>
+                                          FullNews(culturalList[index])),
                                 );
                               },
                               child: Container(
@@ -727,7 +725,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                             children: [
                                               text,
                                               Text(
-                                                culturalList[index].getFormattedDate(),
+                                                culturalList[index]
+                                                    .getFormattedDate(),
                                                 style: TextStyle(
                                                     fontSize: 10,
                                                     fontWeight: FontWeight.w400,
@@ -800,8 +799,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => FullNewsTourim(),
-                                  ),
+                                      builder: (context) =>
+                                          FullNews(sportList[index])),
                                 );
                               },
                               child: Container(
@@ -839,7 +838,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                           ),
                                           SizedBox(height: 5),
                                           Text(
-                                            tourismList[index].getFormattedDate(),
+                                            tourismList[index]
+                                                .getFormattedDate(),
                                             style: TextStyle(
                                               fontSize: 10,
                                               color: Colors.grey,
