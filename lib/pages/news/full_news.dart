@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lorem_ipsum/lorem_ipsum.dart';
 import 'package:zipaquira_2/infrastructure/models/local_news_model.dart';
 
+
 class FullNews extends StatefulWidget {
   final LocalNewsModel? localNewsInformation;
 
@@ -41,8 +42,8 @@ class _FullNewsState extends State<FullNews> {
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(40),
-                  topRight: Radius.circular(40),
+                  topLeft: Radius.circular(55),
+                  topRight: Radius.circular(55),
                 ),
                 color: Colors.white,
               ),
@@ -54,7 +55,7 @@ class _FullNewsState extends State<FullNews> {
                     children: [
                       // Título de la noticia
                       Padding(
-                        padding: const EdgeInsets.only(left: 80, right: 40),
+                        padding: const EdgeInsets.only(left: 40, right: 40),
                         child: Text(
                           widget.localNewsInformation!.title!,
                           textAlign: TextAlign.start,
@@ -67,7 +68,7 @@ class _FullNewsState extends State<FullNews> {
                       SizedBox(height: 20),
                       // Rectángulo con logo, ciudad y fecha
                       Container(
-                        width: 280,
+                        width: 320,
                         padding: EdgeInsets.symmetric(horizontal: 5),
                         decoration: BoxDecoration(
                           border: Border.all(
@@ -100,7 +101,8 @@ class _FullNewsState extends State<FullNews> {
                                   width: 40,
                                 ),
                                 Text(
-                                  "Sep 21",
+                                  widget.localNewsInformation!
+                                      .getFormattedDate(),
                                   textAlign: TextAlign.right,
                                   style: TextStyle(
                                     fontSize: 14,
@@ -120,12 +122,12 @@ class _FullNewsState extends State<FullNews> {
                             horizontal: 32,
                             vertical: 15), // Margen alrededor del texto
                         child: Text(
-                          // Aquí debes agregar el texto de la noticia
-                          loremIpsum(),
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.w400),
-                        ),
-                      ),
+                            // Aquí debes agregar el texto de la noticia
+                            loremIpsum(),
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.w400),
+                              ),
+                                                  ),
                     ],
                   ),
                 ),

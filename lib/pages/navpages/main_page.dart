@@ -106,7 +106,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     Color mygreen = Color(0xFFB8D432);
-    late TabController _tabController = TabController(length: 4, vsync: this);
+    late TabController _tabController = TabController(length: 5, vsync: this);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Center(
@@ -143,6 +143,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                           Expanded(
                             child: TextField(
                               controller: _searchController,
+
                               decoration: InputDecoration(
                                 hintText: 'Buscar...',
                                 border: InputBorder.none,
@@ -178,6 +179,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                     // Tabbar
                     Container(
                       child: TabBar(
+                        isScrollable: true,
                         controller: _tabController,
                         labelColor: Colors.grey,
                         unselectedLabelColor: Colors.grey.withOpacity(0.8),
@@ -213,11 +215,119 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
 
 
-                    // Cuadro noticias
+                    // Todas las noticias
                     Container(
                       height: 250,
                       width: double.maxFinite,
                       child: TabBarView(controller: _tabController, children: [
+                        ListView.builder(
+                          itemCount: resultList.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (BuildContext context, int index) {
+                            var text = Text(
+                              "City Hall of Zipaquirá",
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            );
+                            return InkWell(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) => FullNews(resultList[index])),
+                                );
+                              },
+                              child: Container(
+                                margin:
+                                    const EdgeInsets.only(right: 10, top: 10),
+                                width: 231,
+                                height: 164,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  color: Colors.white,
+                                ),
+                                child: Stack(children: [
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        12, 12, 12, 90),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(20),
+                                      child: Image.asset(
+                                        'assets/noticia1.png',
+                                        width: double.infinity,
+                                        height: double.infinity,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Container(
+                                      margin: const EdgeInsets.only(
+                                          left: 20, top: 100),
+                                      child: Text(
+                                        resultList[index].title!,
+                                        style: const TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.topLeft,
+                                    child: Container(
+                                      margin: const EdgeInsets.only(top: 200),
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Image.asset(
+                                            "assets/logo.jpg",
+                                            width: 50,
+                                            height: 50,
+                                          ),
+                                          SizedBox(width: 5),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              text,
+                                              Text(
+                                                resultList[index]
+                                                    .getFormattedDate(),
+                                                style: TextStyle(
+                                                    fontSize: 10,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Colors.grey),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(width: 35),
+                                          IconButton(
+                                            alignment: Alignment.topRight,
+                                            onPressed: () {
+                                              // Lógica para compartir aquí
+                                            },
+                                            icon: Transform.rotate(
+                                                angle:
+                                                    -30 * 3.14159265359 / 180,
+                                                child: Icon(Icons.send,
+                                                    color: Colors.green,
+                                                    size: 20)),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ]),
+                              ),
+                            );
+                          },
+                        ),
+
+                        //Turismo
                         ListView.builder(
                           itemCount: tourismList.length,
                           scrollDirection: Axis.horizontal,
@@ -324,6 +434,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                             );
                           },
                         ),
+
                         //  deportes
 
                         ListView.builder(
