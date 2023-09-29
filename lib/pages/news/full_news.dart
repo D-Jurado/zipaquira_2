@@ -3,6 +3,7 @@ import 'package:lorem_ipsum/lorem_ipsum.dart';
 import 'package:zipaquira_2/infrastructure/models/local_news_model.dart';
 
 
+
 class FullNews extends StatefulWidget {
   final LocalNewsModel? localNewsInformation;
 
