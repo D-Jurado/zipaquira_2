@@ -26,7 +26,7 @@ class BumfPage extends StatelessWidget {
 
             // Título
             Text(
-              'Bumf',
+              'Reportes',
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.w600,

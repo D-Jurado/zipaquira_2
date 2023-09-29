@@ -37,10 +37,10 @@ class _HomePageState extends State<HomePage> {
           showSelectedLabels: true,
           showUnselectedLabels: true,
           items: const [
-            BottomNavigationBarItem(label: 'Home', icon: Icon(Icons.home)),
-            BottomNavigationBarItem(label: "Bumf", icon: Icon(Icons.date_range_sharp)),
-            BottomNavigationBarItem(label: "Notifications",icon: Icon(Icons.notification_add_rounded)),
-            BottomNavigationBarItem(label: "Profile", icon: Icon(Icons.person_2_sharp)),
+            BottomNavigationBarItem(label: 'Inicio', icon: Icon(Icons.home)),
+            BottomNavigationBarItem(label: "Reportes", icon: Icon(Icons.date_range_sharp)),
+            BottomNavigationBarItem(label: "Notificaciones",icon: Icon(Icons.notification_add_rounded)),
+            BottomNavigationBarItem(label: "Perfil", icon: Icon(Icons.person_2_sharp)),
           ]),
     );
   }

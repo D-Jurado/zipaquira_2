@@ -509,7 +509,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                             children: [
                                               text,
                                               Text(
-                                                'sportList[index].date!',
+                                                sportList[index].getFormattedDate(),
                                                 style: TextStyle(
                                                     fontSize: 10,
                                                     fontWeight: FontWeight.w400,
@@ -800,7 +800,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          FullNews(sportList[index])),
+                                          FullNews(tourismList[index])),
                                 );
                               },
                               child: Container(
