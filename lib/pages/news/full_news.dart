@@ -123,7 +123,7 @@ class _FullNewsState extends State<FullNews> {
                             vertical: 15), // Margen alrededor del texto
                         child: Text(
                             // Aquí debes agregar el texto de la noticia
-                            loremIpsum(),
+                            widget.localNewsInformation!.body!,
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.w400),
                               ),
