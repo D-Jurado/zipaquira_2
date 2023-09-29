@@ -1,18 +1,22 @@
-import 'package:flutter/material.dart';
-import 'package:lorem_ipsum/lorem_ipsum.dart';
-import 'package:zipaquira_2/infrastructure/models/local_news_model.dart';
+import 'dart:convert';
 
+import 'package:flutter/material.dart';
+
+import 'package:zipaquira_2/infrastructure/models/local_news_model.dart';
 
 class FullNews extends StatefulWidget {
   final LocalNewsModel? localNewsInformation;
-
+   
   const FullNews(this.localNewsInformation);
+  
 
   @override
   State<FullNews> createState() => _FullNewsState();
 }
 
 class _FullNewsState extends State<FullNews> {
+
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -117,17 +121,19 @@ class _FullNewsState extends State<FullNews> {
                       ),
                       SizedBox(height: 20),
                       // Texto de la noticia con margen
+                      // Texto de la noticia con margen
                       Padding(
                         padding: EdgeInsets.symmetric(
-                            horizontal: 32,
-                            vertical: 15), // Margen alrededor del texto
+                          horizontal: 32,
+                          vertical: 15,
+                        ),
                         child: Text(
-                            // Aquí debes agregar el texto de la noticia
-                            loremIpsum(),
+                         // Aquí debes agregar el texto de la noticia
+                            widget.localNewsInformation!.body!,
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.w400),
-                              ),
-                                                  ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
