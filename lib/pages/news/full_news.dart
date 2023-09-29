@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:lorem_ipsum/lorem_ipsum.dart';
+import 'package:zipaquira_2/infrastructure/models/local_news_model.dart';
 
 class FullNews extends StatefulWidget {
-  const FullNews({Key? key});
+  final LocalNewsModel? localNewsInformation;
+
+  const FullNews(this.localNewsInformation);
 
   @override
   State<FullNews> createState() => _FullNewsState();
@@ -53,7 +56,7 @@ class _FullNewsState extends State<FullNews> {
                       Padding(
                         padding: const EdgeInsets.only(left: 80, right: 40),
                         child: Text(
-                          'Policía aumenta seguridad',
+                          widget.localNewsInformation!.title!,
                           textAlign: TextAlign.start,
                           style: TextStyle(
                             fontSize: 28,
@@ -148,12 +151,10 @@ class _FullNewsState extends State<FullNews> {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Icon(
-                    Icons.arrow_back_ios_new_rounded,
-                    color: Colors.white,
-                    size: 20
-                    // Color del ícono
-                  ),
+                  child: Icon(Icons.arrow_back_ios_new_rounded,
+                      color: Colors.white, size: 20
+                      // Color del ícono
+                      ),
                 ),
               ),
             ),

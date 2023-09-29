@@ -1,7 +1,14 @@
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
+
 class LocalNewsModel {
   int? id;
   Meta? meta;
   String? title;
+  String? type;
+  String? description;
+  String? body;
+  String? author;
 
   LocalNewsModel({this.id, this.meta, this.title});
 
@@ -9,6 +16,18 @@ class LocalNewsModel {
     id = json['id'];
     meta = json['meta'] != null ? new Meta.fromJson(json['meta']) : null;
     title = json['title'];
+  }
+
+  String getFormattedDate() {
+    initializeDateFormatting('es');
+
+    if (meta != null && meta!.firstPublishedAt != null) {
+      DateTime firstPublishedDate = DateTime.parse(meta!.firstPublishedAt!);
+      var formatter = DateFormat("MMM d, y", 'es');
+      return formatter.format(firstPublishedDate);
+    } else {
+      return ''; // Otra cadena o valor predeterminado en caso de que firstPublishedAt sea nulo
+    }
   }
 
   Map<String, dynamic> toJson() {
