@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:lorem_ipsum/lorem_ipsum.dart';
 import 'package:zipaquira_2/infrastructure/models/local_news_model.dart';
-
-
+import 'package:flutter_html/flutter_html.dart';
 
 class FullNews extends StatefulWidget {
   final LocalNewsModel? localNewsInformation;
@@ -119,16 +117,16 @@ class _FullNewsState extends State<FullNews> {
                       SizedBox(height: 20),
                       // Texto de la noticia con margen
                       Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 32,
-                            vertical: 15),
-                        child: Text(
-                            
-                            widget.localNewsInformation!.body!,
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 32, vertical: 15),
+                          child: Html(
+                            data: widget.localNewsInformation!.body!,
+                            tagsList: Html.tags,
+                            /* widget.localNewsInformation!.body!,
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.w400),
-                              ),
-                                                  ),
+                              ), */
+                          )),
                     ],
                   ),
                 ),
