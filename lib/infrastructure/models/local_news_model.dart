@@ -9,14 +9,18 @@ class LocalNewsModel {
   String? description;
   String? body;
   String? author;
+  String? imageUrl; // Nueva propiedad para la URL de la imagen
 
   LocalNewsModel({this.id, this.meta, this.title});
 
   LocalNewsModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    meta = json['meta'] != null ? new Meta.fromJson(json['meta']) : null;
+    meta = json['meta'] != null ? Meta.fromJson(json['meta']) : null;
     title = json['title'];
+    imageUrl = json['image_url']; // Agrega la propiedad imageUrl si existe en tu JSON
   }
+
+  set imageData(List<int> imageData) {}
 
   String getFormattedDate() {
     initializeDateFormatting('es');
@@ -37,6 +41,7 @@ class LocalNewsModel {
       data['meta'] = this.meta!.toJson();
     }
     data['title'] = this.title;
+    data['image_url'] = this.imageUrl; // Agrega la propiedad imageUrl al JSON
     return data;
   }
 }

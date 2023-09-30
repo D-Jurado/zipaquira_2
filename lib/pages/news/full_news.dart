@@ -28,7 +28,7 @@ class _FullNewsState extends State<FullNews> {
             child: Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/noticia1.png'),
+                  image: NetworkImage(widget.localNewsInformation!.imageUrl!),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -121,9 +121,9 @@ class _FullNewsState extends State<FullNews> {
                       Padding(
                         padding: EdgeInsets.symmetric(
                             horizontal: 32,
-                            vertical: 15), // Margen alrededor del texto
+                            vertical: 15),
                         child: Text(
-                            // Aquí debes agregar el texto de la noticia
+                            
                             widget.localNewsInformation!.body!,
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.w400),
