@@ -37,56 +37,54 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   List<dynamic> listaNoticias = [];
 
   Future<List<LocalNewsModel>> fetchDetails() async {
-  for (int i = 0; i < resultList.length; i++) {
-    var url =
-        Uri.parse("http://192.168.1.10:8000/api/v2/news/${resultList[i].id}");
-    var response = await http.get(url);
-    if (response.statusCode == 200) {
-      Map<String, dynamic> jsonData = json.decode(response.body);
-      resultList[i].type = jsonData['meta']['parent']['title'];
-      resultList[i].description = jsonData['description'];
-      resultList[i].body = jsonData['body'];
-      resultList[i].author = jsonData['author'];
+    for (int i = 0; i < resultList.length; i++) {
+      var url =
+          Uri.parse("http://192.168.1.10:8000/api/v2/news/${resultList[i].id}");
+      var response = await http.get(url);
+      if (response.statusCode == 200) {
+        Map<String, dynamic> jsonData = json.decode(response.body);
+        resultList[i].type = jsonData['meta']['parent']['title'];
+        resultList[i].description = jsonData['description'];
+        resultList[i].body = jsonData['body'];
+        resultList[i].author = jsonData['author'];
 
-      String imageId = extractImageIdFromHtml(jsonData['body']);
+        String imageId = extractImageIdFromHtml(jsonData['body']);
 
-      
+        // Concatena la URL base con el ID de la imagen para obtener la URL completa
+        String baseUrl = "http://192.168.1.10:8000";
+        String imageUrlApi = "/api/v2/images/$imageId";
+        String fullImageUrl = baseUrl + imageUrlApi;
 
-      // Concatena la URL base con el ID de la imagen para obtener la URL completa
-      String baseUrl = "http://192.168.1.10:8000";
-      String imageUrlApi = "/api/v2/images/$imageId";
-      String fullImageUrl = baseUrl + imageUrlApi;
+        var imageUrlResponse = await http.get(Uri.parse(fullImageUrl));
+        if (imageUrlResponse.statusCode == 200) {
+          Map<String, dynamic> imageJsonData =
+              json.decode(imageUrlResponse.body);
+          String imageUrl = baseUrl + imageJsonData['meta']['download_url'];
 
-      var imageUrlResponse = await http.get(Uri.parse(fullImageUrl));
-      if (imageUrlResponse.statusCode == 200) {
-        Map<String, dynamic> imageJsonData =
-            json.decode(imageUrlResponse.body);
-        String imageUrl = baseUrl + imageJsonData['meta']['download_url'];
-
-        resultList[i].imageUrl = imageUrl;
+          resultList[i].imageUrl = imageUrl;
+        }
       }
     }
+    return resultList;
   }
-  return resultList;
-}
 
 // Método para extraer el ID de la imagen del contenido HTML
   String extractImageIdFromHtml(String htmlContent) {
-  RegExp regex = RegExp(r'id="(\d+)"'); 
+    RegExp regex = RegExp(r'id="(\d+)"');
 
-  
-  Match? match = regex.firstMatch(htmlContent);
+    Match? match = regex.firstMatch(htmlContent);
 
-  if (match != null) {
-    String id = match.group(1) ?? ''; 
-    return id;
-  } else {
-    return '14'; 
+    if (match != null) {
+      String id = match.group(1) ?? '';
+      return id;
+    } else {
+      return '14';
+    }
   }
-}
 
   Future<List<dynamic>> fetchData() async {
-    var url = Uri.parse("http://192.168.1.10:8000/api/v2/news/?descendant_of=4");
+    var url =
+        Uri.parse("http://192.168.1.10:8000/api/v2/news/?descendant_of=4");
     var response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -94,7 +92,6 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
       if (jsonData.containsKey('items')) {
         return jsonData['items'];
-        
       } else {
         print('Error en la solicitud HTTP: ${response.statusCode}');
       }
@@ -282,8 +279,6 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                       borderRadius: BorderRadius.circular(20),
                                       child: Image.network(
                                         resultList[index].imageUrl!,
-                                        /* "http://192.168.1.10:8000/media/original_images/3_KK0QXuU.jpg", */
-                                        
                                         width: double.infinity,
                                         height: double.infinity,
                                         fit: BoxFit.cover,
@@ -855,8 +850,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(10),
                                         child: Image.network(
-                                          tourismList[index].imageUrl!
-                                        ),
+                                            tourismList[index].imageUrl!),
                                       ),
                                     ),
                                     SizedBox(width: 5),

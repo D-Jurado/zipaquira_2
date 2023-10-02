@@ -1,9 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:zipaquira_2/pages/profile_pages/signup_pages/sign_up_name_page.dart';
 import 'package:zipaquira_2/pages/profile_pages/signup_pages/sign_up_success_page.dart';
+import 'package:http/http.dart' as http;
 
 class SignUpPasswordPage extends StatefulWidget {
-  const SignUpPasswordPage({Key? key}) : super(key: key);
+  final String? documentType;
+  final String? documentNumber;
+  final String? firstName;
+  final String? lastName;
+  final String? phone;
+  final String? email;
+
+  const SignUpPasswordPage({
+    Key? key,
+    this.documentType,
+    this.documentNumber,
+    this.firstName,
+    this.lastName,
+    this.phone,
+    this.email,
+  }) : super(key: key);
 
   @override
   State<SignUpPasswordPage> createState() => _SignUpPasswordPageState();
@@ -59,7 +75,6 @@ class _SignUpPasswordPageState extends State<SignUpPasswordPage> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      
                     ],
                   ),
                   SizedBox(
@@ -92,7 +107,8 @@ class _SignUpPasswordPageState extends State<SignUpPasswordPage> {
                           ),
                           onChanged: (value) {
                             setState(() {
-                              password = value; // Asigna el valor del campo de entrada de texto a password
+                              password =
+                                  value; // Asigna el valor del campo de entrada de texto a password
                             });
                           },
                         ),
@@ -128,7 +144,8 @@ class _SignUpPasswordPageState extends State<SignUpPasswordPage> {
                           ),
                           onChanged: (value) {
                             setState(() {
-                              confirmPassword = value; // Asigna el valor del campo de entrada de texto a confirmPassword
+                              confirmPassword =
+                                  value; // Asigna el valor del campo de entrada de texto a confirmPassword
                             });
                           },
                         ),
@@ -139,22 +156,87 @@ class _SignUpPasswordPageState extends State<SignUpPasswordPage> {
                     height: 34,
                   ),
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       // Verificar si se llenaron ambos campos y si las contraseñas coinciden
                       if (password != null &&
                           confirmPassword != null &&
                           password!.isNotEmpty &&
                           password == confirmPassword) {
-                        
-                        Navigator.of(context).pushReplacement  (
-                          MaterialPageRoute(
+                        // Crear un mapa con los datos que deseas enviar a la API
+                        Map<String, dynamic> userData = {
+                          'username': widget.email,
+                          'email': widget.email,
+                          'first_name': widget.firstName,
+                          'last_name': widget.lastName,
+                          'password': password,
+                          'documentType': widget.documentType,
+                          'documentNumber': widget.documentNumber,
+                          'phone': widget.phone,
+                        };
+                        print(userData);
+                        // URL de tu API
+                        String apiUrl =
+                            'http://192.168.1.10:8000/users/register';
+
+                        // Realizar la solicitud HTTP POST a la API
+                        try {
+                          final response = await http.post(
+                            Uri.parse(apiUrl),
+                            body: userData,
+                          );
+                          print(response.statusCode); 
+                          if (response.statusCode == 201) {
+                            // Si la solicitud se completó exitosamente, puedes navegar a la página de éxito
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return SignUpSuccessPage();
+                                },
+                              ),
+                            );
+                          } else {
+                            // Mostrar un mensaje de error si la solicitud falla
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: Text('Error en la solicitud'),
+                                  content: Text(response.body),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text('OK'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          }
+                        } catch (error) {
+                          // Mostrar un mensaje de error si la solicitud falla
+                          showDialog(
+                            context: context,
                             builder: (context) {
-                              return SignUpSuccessPage();
+                              return AlertDialog(
+                                title: Text('Error en la solicitud'),
+                                content: Text(
+                                    'Hubo un problema al registrar el usuario. Por favor, inténtelo de nuevo más tarde.'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text('OK'),
+                                  ),
+                                ],
+                              );
                             },
-                          ),
-                        );
+                          );
+                        }
                       } else {
-                        // Mostrar un mensaje de error o realizar alguna acción si las contraseñas no coinciden
+                        // Mostrar un mensaje de error si las contraseñas no coinciden
                         showDialog(
                           context: context,
                           builder: (context) {
@@ -176,14 +258,11 @@ class _SignUpPasswordPageState extends State<SignUpPasswordPage> {
                       }
                     },
                     style: ButtonStyle(
-                        minimumSize: MaterialStateProperty.all(
-                            Size(250, 48)),
+                        minimumSize: MaterialStateProperty.all(Size(250, 48)),
                         backgroundColor: MaterialStateProperty.all(
                             Color.fromARGB(255, 2, 82, 4)),
-                        shape: MaterialStateProperty.all(
-                            RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.circular(12)))),
+                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)))),
                     child: Text(
                       'Siguiente',
                       style: TextStyle(color: Colors.white),

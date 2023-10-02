@@ -114,19 +114,39 @@ class _FullNewsState extends State<FullNews> {
                           ],
                         ),
                       ),
-                      SizedBox(height: 20),
+                      SizedBox(height: 10),
                       // Texto de la noticia con margen
                       Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 32, vertical: 15),
-                          child: Html(
-                            data: widget.localNewsInformation!.body!,
-                            tagsList: Html.tags,
-                            /* widget.localNewsInformation!.body!,
-                            style: TextStyle(
+  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 5),
+  child: Html(
+    data: widget.localNewsInformation!.body!,
+    
+    style: {
+      "body": Style(
+        fontSize: FontSize(20), fontWeight: FontWeight.w400), // Asegura que las imágenes se muestren correctamente
+      
+    },
+  ),
+)
+                              
+                              /* customRender: (node, children) {
+                                if (node is dom.Element &&
+                                    node.localName == 'embed') {
+                                  // Extrae la URL de la etiqueta <embed>
+                                  final src = node.attributes['src'];
+                                  if (src != null) {
+                                    // Devuelve un widget de imagen para la URL
+                                    return Image.network(src);
+                                  }
+                                  tagsList:
+                                  Html.tags;
+                                }
+                              } */
+                              
+                            /*  style: Style(
                                 fontSize: 20, fontWeight: FontWeight.w400),
-                              ), */
-                          )),
+                              ),  */
+                              
                     ],
                   ),
                 ),
