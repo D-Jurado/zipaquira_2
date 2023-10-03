@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:zipaquira_2/pages/navpages/bumf_page.dart';
+import 'package:zipaquira_2/pages/navpages/home_page.dart';
+import 'package:zipaquira_2/pages/navpages/main_page.dart';
+import 'package:zipaquira_2/pages/navpages/notifications_page.dart';
 import 'package:zipaquira_2/pages/profile_pages/forgot_password/forgot_password.dart';
+import 'package:zipaquira_2/pages/profile_pages/profile_data_page.dart';
 import 'package:zipaquira_2/pages/profile_pages/signup_pages/sign_up_document_page.dart';
 import 'package:http/http.dart' as http;
+
+bool isLoggedIn = false;
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -13,8 +20,6 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-
-  bool isLoggedIn = false; // Variable para controlar si el usuario está conectado
 
   Future<void> login() async {
     final email = emailController.text;
@@ -36,8 +41,7 @@ class _ProfilePageState extends State<ProfilePage> {
         // El inicio de sesión fue exitoso.
         // Puedes agregar lógica adicional aquí si es necesario.
         setState(() {
-          isLoggedIn =
-              true; // Cambia el estado de inicio de sesión a verdadero.
+          isLoggedIn = true; // Cambia el estado de inicio de sesión a verdadero.
         });
       } else {
         // El inicio de sesión falló. Muestra un mensaje de error.
@@ -88,22 +92,40 @@ class _ProfilePageState extends State<ProfilePage> {
     // Si el usuario está conectado, muestra un contenido diferente.
     if (isLoggedIn) {
       return Scaffold(
-        appBar: AppBar(
-          title: Text('Perfil de usuario'),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.logout),
-              onPressed: () {
-                // Implementa la lógica para cerrar sesión aquí
-                setState(() {
-                  isLoggedIn = false;
-                });
-              },
+        body: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.bottomLeft,
+              colors: [
+                Color.fromARGB(255, 2, 54, 4),
+                Color.fromRGBO(184, 212, 50, 1),
+              ],
             ),
-          ],
-        ),
-        body: Center(
-          child: Text('Contenido del perfil de usuario aquí'),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // Imagen
+              Image.asset(
+                'assets/logo_profile.png',
+                width: double.infinity,
+                height: 200,
+              ),
+              SizedBox(
+                height: 40,
+              ),
+              Container(
+                width: 400,
+                height: 520,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(26),
+                  color: Colors.white,
+                ),
+                child: _buildNavigationList(), // Llama a la función para construir la lista de opciones
+              ),
+            ],
+          ),
         ),
       );
     } else {
@@ -272,8 +294,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         login();
                       },
                       style: ButtonStyle(
-                          minimumSize:
-                              MaterialStateProperty.all(Size(250, 48)),
+                          minimumSize: MaterialStateProperty.all(Size(250, 48)),
                           backgroundColor: MaterialStateProperty.all(
                               Color.fromARGB(255, 2, 82, 4)),
                           shape: MaterialStateProperty.all(
@@ -292,5 +313,93 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       );
     }
+  }
+
+  Widget _buildNavigationList() {
+    // Opciones de navegación con íconos y texto
+    final List<Widget> navigationOptions = [
+      _buildNavigationItem(Icons.person, 'Mi perfil', Colors.grey), // Cambia el color del ícono
+      _buildNavigationItem(Icons.article, 'Noticias', Colors.grey), // Cambia el color del ícono
+      _buildNavigationItem(Icons.tour, 'Turismo', Colors.grey), // Cambia el color del ícono
+      _buildNavigationItem(Icons.notifications, 'Notificaciones', Colors.grey), // Cambia el color del ícono
+      _buildNavigationItem(Icons.report, 'Reportes',Colors.grey), // Cambia el color del ícono
+      _buildNavigationItem(Icons.logout, 'Cerrar sesión', Colors.red), // Cambia el color del ícono y texto
+    ];
+
+    return ListView(
+      children: navigationOptions,
+    );
+  }
+
+  Widget _buildNavigationItem(IconData icon, String text, Color iconColor) {
+    return Column(
+      children: [
+        ListTile(
+          contentPadding: EdgeInsets.symmetric(horizontal: 16),
+          leading: Icon(
+            icon,
+            color: iconColor,
+          ),
+          title: Text(
+            text,
+            style: TextStyle(fontSize: 16, color: iconColor),
+          ),
+          trailing: Icon(Icons.arrow_forward_ios, color: iconColor), // Agregar el icono ">" a la derecha
+          onTap: () {
+            // Implementa la lógica para cada opción aquí
+            if (text == 'Cerrar sesión') {
+              // Cierra la sesión y regresa a la pantalla de inicio de sesión
+              setState(() {
+                isLoggedIn = false; // Cierra la sesión
+              });
+            } else if (text == 'Mi perfil') {
+            // Navega a la página ProfileData
+            Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          ProfileData(),)
+                                );
+            } else if (text == 'Noticias') {
+            // Navega a la página ProfileData
+            Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          HomePage(),)
+                                );
+            } else if (text == 'Turismo') {
+            // Navega a la página ProfileData
+            Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          HomePage(),)
+                                );
+            } else if (text == 'Notificaciones') {
+            // Navega a la página ProfileData
+            Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          NotificationsPage(),)
+                                );
+            } else if (text == 'Reportes') {
+            // Navega a la página ProfileData
+            Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          BumfPage(),)
+                                ); 
+            } else {
+              // Implementa acciones específicas según la opción seleccionada
+              // Puedes usar un switch o if para manejar diferentes acciones
+              // ...
+            }
+          },
+        ),
+        Divider(
+          thickness: 1, // Grosor de la línea
+          indent: 16, // Espacio en la izquierda
+          endIndent: 16, // Espacio en la derecha
+        ),
+      ],
+    );
   }
 }
