@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:zipaquira_2/pages/navpages/profile_page.dart';
 import 'package:zipaquira_2/pages/profile_pages/forgot_password/forgot_success_page.dart';
 
@@ -12,6 +15,40 @@ class ForgotPasswordPage extends StatefulWidget {
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   String? emailAddress;
   String? message = ''; // Mensaje de éxito o error
+
+  Future<void> sendPasswordResetEmail() async {
+    final url = Uri.parse('http://192.168.1.5:8000/users/reset-password');
+
+    try {
+      final response = await http.post(
+        url,
+        body: json.encode({'email': emailAddress}),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        // Éxito: el correo se ha enviado con éxito
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ForgotSuccessPage(),
+          ),
+        );
+      } else if(response.statusCode == 404) {
+        // Error en la solicitud HTTP, muestra un mensaje de error.
+        setState(() {
+          message = 'Correo electronico no encontrado';
+        });
+      };
+    } catch (error) {
+      // Error en la solicitud HTTP, muestra un mensaje de error.
+      setState(() {
+        message = 'Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde.';
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,21 +143,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     children: [
                       ElevatedButton(
                         onPressed: () {
-                          // Agregar lógica para enviar el correo de restablecimiento de contraseña aquí
-                          if (emailAddress != null &&
-                              emailAddress!.isNotEmpty) {
-                            // Envía el correo y navega a la página de éxito
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ForgotSuccessPage(),
-                              ),
-                            );
+                          // Verifica que el correo no esté vacío antes de enviar la solicitud
+                          if (emailAddress != null && emailAddress!.isNotEmpty) {
+                            sendPasswordResetEmail();
                           } else {
-                            // Muestra un mensaje de error si el campo de correo está vacío
                             setState(() {
-                              message =
-                                  'Por favor, ingresa tu dirección de correo electrónico antes de continuar.';
+                              message = 'Por favor, ingresa tu dirección de correo electrónico antes de continuar.';
                             });
                           }
                         },
@@ -146,13 +174,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   ElevatedButton(
                     onPressed: () {
                       // Navegar de regreso a la página de inicio de sesión
-                      Navigator.of(context).pop(
-                        MaterialPageRoute(builder: (context) {
-                          return ForgotSuccessPage();
-                        }, 
-                        )
-                      );
-                      
+                      Navigator.of(context).pop();
                     },
                     style: ButtonStyle(
                       minimumSize:
@@ -171,6 +193,14 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     ),
                   ),
                   SizedBox(height: 20,),
+                  // Mensaje de éxito o error
+                  if (message != null && message!.isNotEmpty)
+                    Text(
+                      message!,
+                      style: TextStyle(
+                        color: Colors.red,
+                      ),
+                    ),
                 ],
               ),
             ),
