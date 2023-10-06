@@ -3,6 +3,7 @@ import 'package:zipaquira_2/pages/navpages/bumf_page.dart';
 import 'package:zipaquira_2/pages/navpages/home_page.dart';
 import 'package:zipaquira_2/pages/navpages/main_page.dart';
 import 'package:zipaquira_2/pages/navpages/notifications_page.dart';
+import 'package:zipaquira_2/pages/profile_pages/forgot_password/change_password.dart';
 import 'package:zipaquira_2/pages/profile_pages/forgot_password/forgot_password.dart';
 import 'package:zipaquira_2/pages/profile_pages/profile_data_page.dart';
 import 'package:zipaquira_2/pages/profile_pages/signup_pages/sign_up_document_page.dart';
@@ -113,11 +114,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 height: 200,
               ),
               SizedBox(
-                height: 40,
+                height: 20,
               ),
               Container(
                 width: 400,
-                height: 520,
+                height: 540,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(26),
                   color: Colors.white,
@@ -316,14 +317,15 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _buildNavigationList() {
-    // Opciones de navegación con íconos y texto
+    
     final List<Widget> navigationOptions = [
-      _buildNavigationItem(Icons.person, 'Mi perfil', Colors.grey), // Cambia el color del ícono
-      _buildNavigationItem(Icons.article, 'Noticias', Colors.grey), // Cambia el color del ícono
-      _buildNavigationItem(Icons.tour, 'Turismo', Colors.grey), // Cambia el color del ícono
-      _buildNavigationItem(Icons.notifications, 'Notificaciones', Colors.grey), // Cambia el color del ícono
-      _buildNavigationItem(Icons.report, 'Reportes',Colors.grey), // Cambia el color del ícono
-      _buildNavigationItem(Icons.logout, 'Cerrar sesión', Colors.red), // Cambia el color del ícono y texto
+      _buildNavigationItem(Icons.person, 'Mi perfil', Colors.grey),
+      _buildNavigationItem(Icons.lock, 'Cambiar contraseña', Colors.grey), 
+      _buildNavigationItem(Icons.article, 'Noticias', Colors.grey), 
+      _buildNavigationItem(Icons.tour, 'Turismo', Colors.grey), 
+      _buildNavigationItem(Icons.notifications, 'Notificaciones', Colors.grey), 
+      _buildNavigationItem(Icons.report, 'Reportes',Colors.grey), 
+      _buildNavigationItem(Icons.logout, 'Cerrar sesión', Colors.red), 
     ];
 
     return ListView(
@@ -344,44 +346,51 @@ class _ProfilePageState extends State<ProfilePage> {
             text,
             style: TextStyle(fontSize: 16, color: iconColor),
           ),
-          trailing: Icon(Icons.arrow_forward_ios, color: iconColor), // Agregar el icono ">" a la derecha
+          trailing: Icon(Icons.arrow_forward_ios, color: iconColor), 
           onTap: () {
-            // Implementa la lógica para cada opción aquí
+           
             if (text == 'Cerrar sesión') {
-              // Cierra la sesión y regresa a la pantalla de inicio de sesión
+              
               setState(() {
                 isLoggedIn = false; // Cierra la sesión
               });
             } else if (text == 'Mi perfil') {
-            // Navega a la página ProfileData
+            
             Navigator.of(context).push(
                                   MaterialPageRoute(
                                       builder: (context) =>
                                           ProfileData(),)
                                 );
+            } else if (text == 'Cambiar contraseña') {
+            
+            Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          ChangePassword(),)
+                                );                    
             } else if (text == 'Noticias') {
-            // Navega a la página ProfileData
+            
             Navigator.of(context).push(
                                   MaterialPageRoute(
                                       builder: (context) =>
                                           HomePage(),)
                                 );
             } else if (text == 'Turismo') {
-            // Navega a la página ProfileData
+            
             Navigator.of(context).push(
                                   MaterialPageRoute(
                                       builder: (context) =>
                                           HomePage(),)
                                 );
             } else if (text == 'Notificaciones') {
-            // Navega a la página ProfileData
+            
             Navigator.of(context).push(
                                   MaterialPageRoute(
                                       builder: (context) =>
                                           NotificationsPage(),)
                                 );
             } else if (text == 'Reportes') {
-            // Navega a la página ProfileData
+            
             Navigator.of(context).push(
                                   MaterialPageRoute(
                                       builder: (context) =>
@@ -395,9 +404,9 @@ class _ProfilePageState extends State<ProfilePage> {
           },
         ),
         Divider(
-          thickness: 1, // Grosor de la línea
-          indent: 16, // Espacio en la izquierda
-          endIndent: 16, // Espacio en la derecha
+          thickness: 1, 
+          indent: 14, 
+          endIndent: 14, 
         ),
       ],
     );
