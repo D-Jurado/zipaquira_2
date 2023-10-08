@@ -227,7 +227,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           child: TextField(
                             controller: emailController,
                             decoration: InputDecoration(
-                              hintText: '    Correo electrónico',
+                              hintText: 'Correo electrónico',
                               border: InputBorder.none,
                               contentPadding: EdgeInsets.all(11)
                             ),
@@ -260,7 +260,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           child: TextField(
                             controller: passwordController,
                             decoration: InputDecoration(
-                              hintText: '    Contraseña',
+                              hintText: 'Contraseña',
                               border: InputBorder.none,
                               contentPadding: EdgeInsets.all(11)
                             ),

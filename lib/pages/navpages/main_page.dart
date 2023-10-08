@@ -140,7 +140,26 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       resizeToAvoidBottomInset: false,
       body: Center(
         child: isLoading
-            ? CircularProgressIndicator()
+            ? Container(
+  decoration: BoxDecoration(
+    gradient: LinearGradient(
+      begin: Alignment.topRight,
+      end: Alignment.bottomLeft,
+      colors: [
+        Color.fromARGB(255, 2, 54, 4),
+        Color.fromRGBO(184, 212, 50, 1),
+      ],
+    ),
+  ),
+  child: Center(
+    child: Image.asset(
+      'assets/logo_profile.png', 
+      width: double.infinity, 
+      height: MediaQuery.of(context).size.height / 2, 
+       
+    ),
+  ),
+)
             : Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 32, vertical: 51),
