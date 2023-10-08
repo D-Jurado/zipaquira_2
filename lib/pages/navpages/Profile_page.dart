@@ -27,7 +27,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final password = passwordController.text;
 
     final url = Uri.parse(
-        'http://192.168.1.5:8000/login'); // Reemplaza con la URL de tu API de inicio de sesión
+        'http://192.168.1.5:8000/login'); 
 
     try {
       final response = await http.post(
@@ -229,6 +229,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             decoration: InputDecoration(
                               hintText: '    Correo electrónico',
                               border: InputBorder.none,
+                              contentPadding: EdgeInsets.all(11)
                             ),
                           ),
                         ),
@@ -261,6 +262,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             decoration: InputDecoration(
                               hintText: '    Contraseña',
                               border: InputBorder.none,
+                              contentPadding: EdgeInsets.all(11)
                             ),
                             obscureText: true,
                           ),
