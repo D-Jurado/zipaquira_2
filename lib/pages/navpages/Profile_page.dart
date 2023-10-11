@@ -8,8 +8,11 @@ import 'package:zipaquira_2/pages/profile_pages/forgot_password/forgot_password.
 import 'package:zipaquira_2/pages/profile_pages/profile_data_page.dart';
 import 'package:zipaquira_2/pages/profile_pages/signup_pages/sign_up_document_page.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:zipaquira_2/widgetargument.dart';
 
 bool isLoggedIn = false;
+String token = "";
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -26,8 +29,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final email = emailController.text;
     final password = passwordController.text;
 
-    final url = Uri.parse(
-        'http://192.168.1.5:8000/login'); 
+    final url = Uri.parse('http://192.168.1.5:8000/login');
 
     try {
       final response = await http.post(
@@ -39,11 +41,19 @@ class _ProfilePageState extends State<ProfilePage> {
       );
 
       if (response.statusCode == 200) {
-        // El inicio de sesión fue exitoso.
-        // Puedes agregar lógica adicional aquí si es necesario.
+        final responseBody = json.decode(response.body);
+         token = responseBody["refresh"];
+
+        print(token);
+
         setState(() {
-          isLoggedIn = true; // Cambia el estado de inicio de sesión a verdadero.
+          isLoggedIn =
+              true; // Cambia el estado de inicio de sesión a verdadero.
         });
+
+        /* Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => ChangePassword(token: token,),
+              )); */
       } else {
         // El inicio de sesión falló. Muestra un mensaje de error.
         showDialog(
@@ -123,7 +133,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   borderRadius: BorderRadius.circular(26),
                   color: Colors.white,
                 ),
-                child: _buildNavigationList(), // Llama a la función para construir la lista de opciones
+                child:
+                    _buildNavigationList(), // Llama a la función para construir la lista de opciones
               ),
             ],
           ),
@@ -227,10 +238,9 @@ class _ProfilePageState extends State<ProfilePage> {
                           child: TextField(
                             controller: emailController,
                             decoration: InputDecoration(
-                              hintText: 'Correo electrónico',
-                              border: InputBorder.none,
-                              contentPadding: EdgeInsets.all(11)
-                            ),
+                                hintText: 'Correo electrónico',
+                                border: InputBorder.none,
+                                contentPadding: EdgeInsets.all(11)),
                           ),
                         ),
                       ],
@@ -260,10 +270,9 @@ class _ProfilePageState extends State<ProfilePage> {
                           child: TextField(
                             controller: passwordController,
                             decoration: InputDecoration(
-                              hintText: 'Contraseña',
-                              border: InputBorder.none,
-                              contentPadding: EdgeInsets.all(11)
-                            ),
+                                hintText: 'Contraseña',
+                                border: InputBorder.none,
+                                contentPadding: EdgeInsets.all(11)),
                             obscureText: true,
                           ),
                         ),
@@ -319,15 +328,15 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _buildNavigationList() {
-    
     final List<Widget> navigationOptions = [
       _buildNavigationItem(Icons.person, 'Mi perfil', Colors.grey),
-      _buildNavigationItem(Icons.lock, 'Cambiar contraseña', Colors.grey), 
-      _buildNavigationItem(Icons.article, 'Noticias', Colors.grey), 
-      _buildNavigationItem(Icons.tour, 'Turismo', Colors.grey), 
-      _buildNavigationItem(Icons.notifications, 'Notificaciones', Colors.grey), 
-      _buildNavigationItem(Icons.report, 'Reportes',Colors.grey), 
-      _buildNavigationItem(Icons.logout, 'Cerrar sesión', Colors.red), 
+      _buildNavigationItem(
+          Icons.lock, 'Cambiar contraseña', Colors.grey),
+      _buildNavigationItem(Icons.article, 'Noticias', Colors.grey),
+      _buildNavigationItem(Icons.tour, 'Turismo', Colors.grey),
+      _buildNavigationItem(Icons.notifications, 'Notificaciones', Colors.grey),
+      _buildNavigationItem(Icons.report, 'Reportes', Colors.grey ),
+      _buildNavigationItem(Icons.logout, 'Cerrar sesión', Colors.red ),
     ];
 
     return ListView(
@@ -335,7 +344,9 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildNavigationItem(IconData icon, String text, Color iconColor) {
+  Widget _buildNavigationItem(
+      IconData icon, String text, Color iconColor) {
+    print("linea 347 $token");
     return Column(
       children: [
         ListTile(
@@ -348,56 +359,38 @@ class _ProfilePageState extends State<ProfilePage> {
             text,
             style: TextStyle(fontSize: 16, color: iconColor),
           ),
-          trailing: Icon(Icons.arrow_forward_ios, color: iconColor), 
+          trailing: Icon(Icons.arrow_forward_ios, color: iconColor),
           onTap: () {
-           
             if (text == 'Cerrar sesión') {
-              
               setState(() {
                 isLoggedIn = false; // Cierra la sesión
               });
             } else if (text == 'Mi perfil') {
-            
-            Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          ProfileData(),)
-                                );
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => ProfileData(),
+              ));
             } else if (text == 'Cambiar contraseña') {
-            
-            Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          ChangePassword(),)
-                                );                    
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => ChangePassword(
+                  token: token,
+                ),
+              ));
             } else if (text == 'Noticias') {
-            
-            Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          HomePage(),)
-                                );
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => HomePage(),
+              ));
             } else if (text == 'Turismo') {
-            
-            Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          HomePage(),)
-                                );
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => HomePage(),
+              ));
             } else if (text == 'Notificaciones') {
-            
-            Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          NotificationsPage(),)
-                                );
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => NotificationsPage(),
+              ));
             } else if (text == 'Reportes') {
-            
-            Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          BumfPage(),)
-                                ); 
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => BumfPage(),
+              ));
             } else {
               // Implementa acciones específicas según la opción seleccionada
               // Puedes usar un switch o if para manejar diferentes acciones
@@ -406,9 +399,9 @@ class _ProfilePageState extends State<ProfilePage> {
           },
         ),
         Divider(
-          thickness: 1, 
-          indent: 14, 
-          endIndent: 14, 
+          thickness: 1,
+          indent: 14,
+          endIndent: 14,
         ),
       ],
     );

@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:zipaquira_2/pages/navpages/Profile_page.dart';
 import 'package:zipaquira_2/pages/profile_pages/signup_pages/sign_up_name_page.dart';
 import 'package:zipaquira_2/pages/profile_pages/signup_pages/sign_up_success_page.dart';
 import 'package:http/http.dart' as http;
+import 'package:zipaquira_2/widgetargument.dart';
 
 class ChangePassword extends StatefulWidget {
+  final String token;
+
   const ChangePassword({
     Key? key,
+    required this.token,
   }) : super(key: key);
 
   @override
@@ -13,11 +18,14 @@ class ChangePassword extends StatefulWidget {
 }
 
 class _ChangePasswordState extends State<ChangePassword> {
-  String? password;
-  String? newPassword;
-
   @override
   Widget build(BuildContext context) {
+    token = widget.token;
+
+    String? password;
+    String? newPassword;
+
+    print(token);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
@@ -147,8 +155,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       // Verificar si se llenaron ambos campos y si las contraseñas coinciden
                       if (password != null &&
                           newPassword != null &&
-                          password!.isNotEmpty 
-                          ) {
+                          password!.isNotEmpty) {
                         // Crear un mapa con los datos que deseas enviar a la API
                         Map<String, dynamic> updatePassword = {
                           'current_password': password,
@@ -164,7 +171,12 @@ class _ChangePasswordState extends State<ChangePassword> {
                           final response = await http.post(
                             Uri.parse(apiUrl),
                             body: updatePassword,
+                            headers: {
+                              'Content-Type': 'application/json',
+                              'Authorization':'Bearer $token', // Agrega el token en el encabezado
+                            },
                           );
+                          print("linea 180  $token");
                           print(response.statusCode);
                           if (response.statusCode == 200) {
                             showDialog(
