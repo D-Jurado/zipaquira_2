@@ -1,9 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:zipaquira_2/pages/navpages/Profile_page.dart';
 import 'package:zipaquira_2/pages/profile_pages/signup_pages/sign_up_name_page.dart';
 import 'package:zipaquira_2/pages/profile_pages/signup_pages/sign_up_success_page.dart';
 import 'package:http/http.dart' as http;
-import 'package:zipaquira_2/widgetargument.dart';
 
 class ChangePassword extends StatefulWidget {
   final String token;
@@ -18,14 +19,106 @@ class ChangePassword extends StatefulWidget {
 }
 
 class _ChangePasswordState extends State<ChangePassword> {
+  String? password;
+  String? newPassword;
+
+  Future<void> changePassword(
+      String token, String? password, String? newPassword) async {
+    final token = widget.token;
+
+    if (password != null && newPassword != null && password.isNotEmpty) {
+      // Crear un mapa con los datos que deseas enviar a la API
+      Map<String, dynamic> updatePassword = {
+        'current_password': password,
+        'new_password': newPassword,
+      };
+
+      Map<String, String> headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+        /* 'Accept': 'application/json' */ // Agrega el token en el encabezado
+      };
+
+      // URL de tu API
+      String apiUrl = 'http://192.168.1.5:8000/users/update-password';
+
+      try {
+        /* final token = await widget.token; */
+        final response = await http.put(
+          Uri.parse(apiUrl),
+          body: jsonEncode(updatePassword),
+          headers:(headers) 
+        );
+        print('Token : $token');
+        print(response);
+        print(response.statusCode);
+        if (response.statusCode == 200) {
+          // Muestra un cuadro de diálogo con un mensaje de éxito
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text('Cambio exitoso'),
+                content: Text('Tu contraseña se ha cambiado con éxito.'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context)
+                          .pop(); // Cierra el cuadro de diálogo de éxito
+                      Navigator.of(context)
+                          .pop(); // Cierra la página actual para regresar a la página anterior
+                    },
+                    child: Text('Cerrar'),
+                  ),
+                ],
+              );
+            },
+          );
+        } else {
+          // Mostrar un mensaje de error si la solicitud falla
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text('Error en la solicitud'),
+                content: Text(response.body),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      } catch (error) {
+        // Mostrar un mensaje de error si la solicitud falla
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Error en la solicitud'),
+              content: Text('Contraseña actual no es correcta'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    token = widget.token;
-
-    String? password;
-    String? newPassword;
-
-    print(token);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
@@ -82,7 +175,9 @@ class _ChangePasswordState extends State<ChangePassword> {
                       Text(
                         'Ingrese su contraseña',
                         style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w500),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                       SizedBox(height: 10),
                       Container(
@@ -119,7 +214,9 @@ class _ChangePasswordState extends State<ChangePassword> {
                       Text(
                         'Nueva contraseña',
                         style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w500),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                       SizedBox(height: 10),
                       Container(
@@ -151,124 +248,19 @@ class _ChangePasswordState extends State<ChangePassword> {
                     height: 34,
                   ),
                   ElevatedButton(
-                    onPressed: () async {
-                      // Verificar si se llenaron ambos campos y si las contraseñas coinciden
-                      if (password != null &&
-                          newPassword != null &&
-                          password!.isNotEmpty) {
-                        // Crear un mapa con los datos que deseas enviar a la API
-                        Map<String, dynamic> updatePassword = {
-                          'current_password': password,
-                          'new_password': newPassword,
-                        };
-
-                        // URL de tu API
-                        String apiUrl =
-                            'http://192.168.1.5:8000/users/update-password';
-
-                        // Realizar la solicitud HTTP POST a la API
-                        try {
-                          final response = await http.post(
-                            Uri.parse(apiUrl),
-                            body: updatePassword,
-                            headers: {
-                              'Content-Type': 'application/json',
-                              'Authorization':'Bearer $token', // Agrega el token en el encabezado
-                            },
-                          );
-                          print("linea 180  $token");
-                          print(response.statusCode);
-                          if (response.statusCode == 200) {
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  title: Text('Cambio exitoso'),
-                                  content: Text(
-                                      'Tu contraseña se ha cambiado con éxito.'),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context)
-                                            .pop(); // Cierra el cuadro de diálogo de éxito
-                                        Navigator.of(context)
-                                            .pop(); // Cierra la página actual para regresar a la página anterior
-                                      },
-                                      child: Text('Cerrar'),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          } else {
-                            // Mostrar un mensaje de error si la solicitud falla
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  title: Text('Error en la solicitud'),
-                                  content: Text(response.body),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                      child: Text('OK'),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          }
-                        } catch (error) {
-                          // Mostrar un mensaje de error si la solicitud falla
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: Text('Error en la solicitud'),
-                                content:
-                                    Text('Contraseña actual no es correcta'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: Text('OK'),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        }
-                      } else {
-                        // Mostrar un mensaje de error si las contraseñas no coinciden
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: Text('Error de contraseña'),
-                              content: Text(
-                                  'Las contraseñas no coinciden. Por favor, verifique e intente de nuevo.'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Text('OK'),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      }
+                    onPressed: () {
+                      changePassword(token, password,
+                          newPassword); // Llama a la función para manejar la solicitud HTTP
                     },
                     style: ButtonStyle(
-                        minimumSize: MaterialStateProperty.all(Size(250, 48)),
-                        backgroundColor: MaterialStateProperty.all(
-                            Color.fromARGB(255, 2, 82, 4)),
-                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12)))),
+                      minimumSize: MaterialStateProperty.all(Size(250, 48)),
+                      backgroundColor: MaterialStateProperty.all(
+                        Color.fromARGB(255, 2, 82, 4),
+                      ),
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      )),
+                    ),
                     child: Text(
                       'Confirmar',
                       style: TextStyle(color: Colors.white),

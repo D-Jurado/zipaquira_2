@@ -9,7 +9,7 @@ import 'package:zipaquira_2/pages/profile_pages/profile_data_page.dart';
 import 'package:zipaquira_2/pages/profile_pages/signup_pages/sign_up_document_page.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:zipaquira_2/widgetargument.dart';
+
 
 bool isLoggedIn = false;
 String token = "";
@@ -42,7 +42,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);
-         token = responseBody["refresh"];
+         token = responseBody["access"];
 
         print(token);
 
