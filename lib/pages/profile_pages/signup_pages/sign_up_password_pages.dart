@@ -176,7 +176,7 @@ class _SignUpPasswordPageState extends State<SignUpPasswordPage> {
                         print(userData);
                         // URL de tu API
                         String apiUrl =
-                            'http://192.168.1.5:8000/users/register';
+                            'http://ec2-3-18-225-15.us-east-2.compute.amazonaws.com/users/register';
 
                         // Realizar la solicitud HTTP POST a la API
                         try {

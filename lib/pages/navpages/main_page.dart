@@ -38,8 +38,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
   Future<List<LocalNewsModel>> fetchDetails() async {
     for (int i = 0; i < resultList.length; i++) {
-      var url =
-          Uri.parse("http://192.168.1.5:8000/api/v2/news/${resultList[i].id}");
+      var url = Uri.parse(
+          "http://ec2-3-18-225-15.us-east-2.compute.amazonaws.com/api/v2/news/${resultList[i].id}");
       var response = await http.get(url);
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonData = json.decode(response.body);
@@ -51,7 +51,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         String imageId = extractImageIdFromHtml(jsonData['body']);
 
         // Concatena la URL base con el ID de la imagen para obtener la URL completa
-        String baseUrl = "http://192.168.1.5:8000";
+        String baseUrl =
+            "http://ec2-3-18-225-15.us-east-2.compute.amazonaws.com";
         String imageUrlApi = "/api/v2/images/$imageId";
         String fullImageUrl = baseUrl + imageUrlApi;
 
@@ -78,13 +79,13 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       String id = match.group(1) ?? '';
       return id;
     } else {
-      return '14';
+      return '13';
     }
   }
 
   Future<List<dynamic>> fetchData() async {
-    var url =
-        Uri.parse("http://192.168.1.5:8000/api/v2/news/?descendant_of=4");
+    var url = Uri.parse(
+        "http://ec2-3-18-225-15.us-east-2.compute.amazonaws.com/api/v2/news/?descendant_of=2");
     var response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -130,6 +131,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         isLoading = false;
       });
     });
+    print(resultList);
   }
 
   @override
@@ -141,25 +143,24 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       body: Center(
         child: isLoading
             ? Container(
-  decoration: BoxDecoration(
-    gradient: LinearGradient(
-      begin: Alignment.topRight,
-      end: Alignment.bottomLeft,
-      colors: [
-        Color.fromARGB(255, 2, 54, 4),
-        Color.fromRGBO(184, 212, 50, 1),
-      ],
-    ),
-  ),
-  child: Center(
-    child: Image.asset(
-      'assets/logo_profile.png', 
-      width: double.infinity, 
-      height: MediaQuery.of(context).size.height / 2, 
-       
-    ),
-  ),
-)
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topRight,
+                    end: Alignment.bottomLeft,
+                    colors: [
+                      Color.fromARGB(255, 2, 54, 4),
+                      Color.fromRGBO(184, 212, 50, 1),
+                    ],
+                  ),
+                ),
+                child: Center(
+                  child: Image.asset(
+                    'assets/logo_profile.png',
+                    width: double.infinity,
+                    height: MediaQuery.of(context).size.height / 2,
+                  ),
+                ),
+              )
             : Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 32, vertical: 51),
