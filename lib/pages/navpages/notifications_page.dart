@@ -11,7 +11,7 @@ class NotificationsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
           title: context
-              .select((NotificationsBloc bloc) => Text('Notificaciones')),
+              .select((NotificationsBloc bloc) => Text('${ bloc.state.status }')),
           actions: [
             IconButton(
                 onPressed: () {
