@@ -17,7 +17,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   String? message = ''; // Mensaje de éxito o error
 
   Future<void> sendPasswordResetEmail() async {
-    final url = Uri.parse('http://ec2-3-18-225-15.us-east-2.compute.amazonaws.com/users/reset-password');
+    final url = Uri.parse('http://192.168.1.6:8000/users/reset-password');
 
     try {
       final response = await http.post(
@@ -36,16 +36,18 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             builder: (context) => ForgotSuccessPage(),
           ),
         );
-      } else if(response.statusCode == 404) {
+      } else if (response.statusCode == 404) {
         // Error en la solicitud HTTP, muestra un mensaje de error.
         setState(() {
           message = 'Correo electronico no encontrado';
         });
-      };
+      }
+      ;
     } catch (error) {
       // Error en la solicitud HTTP, muestra un mensaje de error.
       setState(() {
-        message = 'Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde.';
+        message =
+            'Ha ocurrido un error inesperado. Inténtalo de nuevo más tarde.';
       });
     }
   }
@@ -144,19 +146,20 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       ElevatedButton(
                         onPressed: () {
                           // Verifica que el correo no esté vacío antes de enviar la solicitud
-                          if (emailAddress != null && emailAddress!.isNotEmpty) {
+                          if (emailAddress != null &&
+                              emailAddress!.isNotEmpty) {
                             sendPasswordResetEmail();
                           } else {
                             setState(() {
-                              message = 'Por favor, ingresa tu dirección de correo electrónico antes de continuar.';
+                              message =
+                                  'Por favor, ingresa tu dirección de correo electrónico antes de continuar.';
                             });
                           }
                         },
                         style: ButtonStyle(
-                          minimumSize:
-                              MaterialStateProperty.all(Size(200, 48)),
-                          backgroundColor:
-                              MaterialStateProperty.all(Color.fromARGB(255, 2, 82, 4)),
+                          minimumSize: MaterialStateProperty.all(Size(200, 48)),
+                          backgroundColor: MaterialStateProperty.all(
+                              Color.fromARGB(255, 2, 82, 4)),
                           shape: MaterialStateProperty.all(
                             RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -170,17 +173,18 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 20,),
+                  SizedBox(
+                    height: 20,
+                  ),
                   ElevatedButton(
                     onPressed: () {
                       // Navegar de regreso a la página de inicio de sesión
                       Navigator.of(context).pop();
                     },
                     style: ButtonStyle(
-                      minimumSize:
-                          MaterialStateProperty.all(Size(200, 48)),
-                      backgroundColor:
-                          MaterialStateProperty.all(Color.fromARGB(255, 2, 82, 4)),
+                      minimumSize: MaterialStateProperty.all(Size(200, 48)),
+                      backgroundColor: MaterialStateProperty.all(
+                          Color.fromARGB(255, 2, 82, 4)),
                       shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -192,7 +196,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
-                  SizedBox(height: 20,),
+                  SizedBox(
+                    height: 20,
+                  ),
                   // Mensaje de éxito o error
                   if (message != null && message!.isNotEmpty)
                     Text(

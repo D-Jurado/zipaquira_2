@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "84969607265",
+    "project_id": "zipaquira-app-ec6e6",
+    "storage_bucket": "zipaquira-app-ec6e6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:84969607265:android:24ec2815c3cebf5e2e1a20",
+        "android_client_info": {
+          "package_name": "com.example.zipaquira_2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDpCjIF3l4dQmok6FAYCeqDQP3T4uEn4w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

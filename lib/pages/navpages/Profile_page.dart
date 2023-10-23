@@ -10,9 +10,11 @@ import 'package:zipaquira_2/pages/profile_pages/signup_pages/sign_up_document_pa
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-
 bool isLoggedIn = false;
 String token = "";
+String first_name = "";
+String last_name = "";
+String correo = "";
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -29,7 +31,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final email = emailController.text;
     final password = passwordController.text;
 
-    final url = Uri.parse('http://ec2-3-18-225-15.us-east-2.compute.amazonaws.com/login');
+    final url = Uri.parse('http://192.168.1.6:8000/login');
 
     try {
       final response = await http.post(
@@ -39,12 +41,13 @@ class _ProfilePageState extends State<ProfilePage> {
           'password': password,
         },
       );
-
+      print("linea 44 ${response.statusCode}");
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);
-         token = responseBody["access"];
-
-        print(token);
+        token = responseBody["access"];
+        first_name = responseBody["first_name"];
+        last_name = responseBody["last_name"];
+        correo = responseBody["email"];
 
         setState(() {
           isLoggedIn =
@@ -330,13 +333,12 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget _buildNavigationList() {
     final List<Widget> navigationOptions = [
       _buildNavigationItem(Icons.person, 'Mi perfil', Colors.grey),
-      _buildNavigationItem(
-          Icons.lock, 'Cambiar contraseña', Colors.grey),
+      _buildNavigationItem(Icons.lock, 'Cambiar contraseña', Colors.grey),
       _buildNavigationItem(Icons.article, 'Noticias', Colors.grey),
       _buildNavigationItem(Icons.tour, 'Turismo', Colors.grey),
       _buildNavigationItem(Icons.notifications, 'Notificaciones', Colors.grey),
-      _buildNavigationItem(Icons.report, 'Reportes', Colors.grey ),
-      _buildNavigationItem(Icons.logout, 'Cerrar sesión', Colors.red ),
+      _buildNavigationItem(Icons.report, 'Reportes', Colors.grey),
+      _buildNavigationItem(Icons.logout, 'Cerrar sesión', Colors.red),
     ];
 
     return ListView(
@@ -344,8 +346,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildNavigationItem(
-      IconData icon, String text, Color iconColor) {
+  Widget _buildNavigationItem(IconData icon, String text, Color iconColor) {
     print("linea 347 $token");
     return Column(
       children: [
@@ -367,7 +368,11 @@ class _ProfilePageState extends State<ProfilePage> {
               });
             } else if (text == 'Mi perfil') {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ProfileData(),
+                builder: (context) => ProfileData(
+                  correo: correo,
+                  first_name: first_name,
+                  last_name: last_name,
+                ),
               ));
             } else if (text == 'Cambiar contraseña') {
               Navigator.of(context).push(MaterialPageRoute(

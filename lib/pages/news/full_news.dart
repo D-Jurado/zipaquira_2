@@ -27,7 +27,7 @@ class _FullNewsState extends State<FullNews> {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: NetworkImage(widget.localNewsInformation!.imageUrl!),
-                  fit: BoxFit.cover,
+                  fit: BoxFit.scaleDown,
                 ),
               ),
             ),
@@ -59,7 +59,7 @@ class _FullNewsState extends State<FullNews> {
                           widget.localNewsInformation!.title!,
                           textAlign: TextAlign.start,
                           style: TextStyle(
-                            fontSize: 28,
+                            fontSize: 20,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -117,19 +117,20 @@ class _FullNewsState extends State<FullNews> {
                       SizedBox(height: 10),
                       // Texto de la noticia con margen
                       Padding(
-  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 5),
-  child: Html(
-    data: widget.localNewsInformation!.body!,
-    
-    style: {
-      "body": Style(
-        fontSize: FontSize(20), fontWeight: FontWeight.w400), // Asegura que las imágenes se muestren correctamente
-      
-    },
-  ),
-)
-                              
-                              /* customRender: (node, children) {
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 32, vertical: 5),
+                        child: Html(
+                          data: widget.localNewsInformation!.body!,
+                          style: {
+                            "body": Style(
+                                fontSize: FontSize(20),
+                                fontWeight: FontWeight
+                                    .w400), // Asegura que las imágenes se muestren correctamente
+                          },
+                        ),
+                      )
+
+                      /* customRender: (node, children) {
                                 if (node is dom.Element &&
                                     node.localName == 'embed') {
                                   // Extrae la URL de la etiqueta <embed>
@@ -142,11 +143,10 @@ class _FullNewsState extends State<FullNews> {
                                   Html.tags;
                                 }
                               } */
-                              
-                            /*  style: Style(
+
+                      /*  style: Style(
                                 fontSize: 20, fontWeight: FontWeight.w400),
                               ),  */
-                              
                     ],
                   ),
                 ),

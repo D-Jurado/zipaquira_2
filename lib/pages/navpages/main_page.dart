@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:zipaquira_2/infrastructure/models/local_news_model.dart';
 import 'package:zipaquira_2/pages/news/full_news.dart';
+import 'package:html_unescape/html_unescape.dart';
 
 import 'package:zipaquira_2/shared/data/news_local_post.dart';
 import 'package:zipaquira_2/shared/data/news_tourism_local_post.dart';
@@ -38,8 +39,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
   Future<List<LocalNewsModel>> fetchDetails() async {
     for (int i = 0; i < resultList.length; i++) {
-      var url = Uri.parse(
-          "http://ec2-3-18-225-15.us-east-2.compute.amazonaws.com/api/v2/news/${resultList[i].id}");
+      var url =
+          Uri.parse("http://192.168.1.6:8000/api/v2/news/${resultList[i].id}");
       var response = await http.get(url);
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonData = json.decode(response.body);
@@ -51,8 +52,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         String imageId = extractImageIdFromHtml(jsonData['body']);
 
         // Concatena la URL base con el ID de la imagen para obtener la URL completa
-        String baseUrl =
-            "http://ec2-3-18-225-15.us-east-2.compute.amazonaws.com";
+        String baseUrl = "http://192.168.1.6:8000";
         String imageUrlApi = "/api/v2/images/$imageId";
         String fullImageUrl = baseUrl + imageUrlApi;
 
@@ -84,8 +84,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   }
 
   Future<List<dynamic>> fetchData() async {
-    var url = Uri.parse(
-        "http://ec2-3-18-225-15.us-east-2.compute.amazonaws.com/api/v2/news/?descendant_of=2");
+    var url = Uri.parse("http://192.168.1.6:8000/api/v2/news/?descendant_of=4");
     var response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -128,7 +127,13 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         trafficList =
             resultList.where((element) => element.type == "TRAFICO").toList();
 
-        isLoading = false;
+        Future.delayed(Duration(seconds: 0), () {
+          if (mounted) {
+            setState(() {
+              isLoading = false;
+            });
+          }
+        });
       });
     });
     print(resultList);
@@ -268,9 +273,9 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (BuildContext context, int index) {
                             var text = Text(
-                              "City Hall of Zipaquirá",
+                              resultList[index].author!,
                               style: TextStyle(
-                                fontSize: 10,
+                                fontSize: 11,
                                 fontWeight: FontWeight.w400,
                               ),
                             );
@@ -285,8 +290,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                               child: Container(
                                 margin:
                                     const EdgeInsets.only(right: 10, top: 10),
-                                width: 231,
-                                height: 164,
+                                width: 251,
+                                height: 240,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),
                                   color: Colors.white,
@@ -301,7 +306,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                         resultList[index].imageUrl!,
                                         width: double.infinity,
                                         height: double.infinity,
-                                        fit: BoxFit.cover,
+                                        fit: BoxFit.scaleDown,
                                       ),
                                     ),
                                   ),
@@ -314,8 +319,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                         resultList[index].title!,
                                         style: const TextStyle(
                                             color: Colors.black,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w400),
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w500),
                                       ),
                                     ),
                                   ),
@@ -329,7 +334,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                         children: [
                                           Image.asset(
                                             "assets/logo.jpg",
-                                            width: 50,
+                                            width: 60,
                                             height: 50,
                                           ),
                                           SizedBox(width: 5),
@@ -342,13 +347,13 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                                 resultList[index]
                                                     .getFormattedDate(),
                                                 style: TextStyle(
-                                                    fontSize: 10,
+                                                    fontSize: 11,
                                                     fontWeight: FontWeight.w400,
                                                     color: Colors.grey),
                                               ),
                                             ],
                                           ),
-                                          SizedBox(width: 35),
+                                          /*  SizedBox(width: 35),
                                           IconButton(
                                             alignment: Alignment.topRight,
                                             onPressed: () {
@@ -360,7 +365,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                                 child: Icon(Icons.send,
                                                     color: Colors.green,
                                                     size: 20)),
-                                          ),
+                                          ), */
                                         ],
                                       ),
                                     ),
@@ -377,9 +382,9 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (BuildContext context, int index) {
                             var text = Text(
-                              "City Hall of Zipaquirá",
+                              tourismList[index].author!,
                               style: TextStyle(
-                                fontSize: 10,
+                                fontSize: 11,
                                 fontWeight: FontWeight.w400,
                               ),
                             );
@@ -394,8 +399,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                               child: Container(
                                 margin:
                                     const EdgeInsets.only(right: 10, top: 10),
-                                width: 231,
-                                height: 164,
+                                width: 251,
+                                height: 240,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),
                                   color: Colors.white,
@@ -410,7 +415,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                         tourismList[index].imageUrl!,
                                         width: double.infinity,
                                         height: double.infinity,
-                                        fit: BoxFit.cover,
+                                        fit: BoxFit.scaleDown,
                                       ),
                                     ),
                                   ),
@@ -420,7 +425,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                       margin: const EdgeInsets.only(
                                           left: 20, top: 100),
                                       child: Text(
-                                        tourismList[index].title!,
+                                        utf8.decode(utf8
+                                            .encode(resultList[index].title!)),
                                         style: const TextStyle(
                                             color: Colors.black,
                                             fontSize: 14,
@@ -438,7 +444,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                         children: [
                                           Image.asset(
                                             "assets/logo.jpg",
-                                            width: 50,
+                                            width: 60,
                                             height: 50,
                                           ),
                                           SizedBox(width: 5),
@@ -451,13 +457,13 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                                 tourismList[index]
                                                     .getFormattedDate(),
                                                 style: TextStyle(
-                                                    fontSize: 10,
+                                                    fontSize: 11,
                                                     fontWeight: FontWeight.w400,
                                                     color: Colors.grey),
                                               ),
                                             ],
                                           ),
-                                          SizedBox(width: 35),
+                                          /* SizedBox(width: 35),
                                           IconButton(
                                             alignment: Alignment.topRight,
                                             onPressed: () {
@@ -469,7 +475,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                                 child: Icon(Icons.send,
                                                     color: Colors.green,
                                                     size: 20)),
-                                          ),
+                                          ), */
                                         ],
                                       ),
                                     ),
@@ -487,9 +493,9 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (BuildContext context, int index) {
                             var text = Text(
-                              "City Hall of Zipaquirá",
+                              sportList[index].author!,
                               style: TextStyle(
-                                fontSize: 10,
+                                fontSize: 11,
                                 fontWeight: FontWeight.w400,
                               ),
                             );
@@ -505,8 +511,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                               child: Container(
                                 margin:
                                     const EdgeInsets.only(right: 10, top: 10),
-                                width: 231,
-                                height: 164,
+                                width: 250,
+                                height: 240,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),
                                   color: Colors.white,
@@ -534,7 +540,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                         sportList[index].title!,
                                         style: const TextStyle(
                                             color: Colors.black,
-                                            fontSize: 14,
+                                            fontSize: 10,
                                             fontWeight: FontWeight.w400),
                                       ),
                                     ),
@@ -549,7 +555,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                         children: [
                                           Image.asset(
                                             "assets/logo.jpg",
-                                            width: 50,
+                                            width: 60,
                                             height: 50,
                                           ),
                                           SizedBox(width: 5),
@@ -562,13 +568,13 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                                 sportList[index]
                                                     .getFormattedDate(),
                                                 style: TextStyle(
-                                                    fontSize: 10,
+                                                    fontSize: 11,
                                                     fontWeight: FontWeight.w400,
                                                     color: Colors.grey),
                                               ),
                                             ],
                                           ),
-                                          SizedBox(width: 35),
+                                         /*  SizedBox(width: 35),
                                           IconButton(
                                             alignment: Alignment.topRight,
                                             onPressed: () {
@@ -580,7 +586,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                                 child: Icon(Icons.send,
                                                     color: Colors.green,
                                                     size: 20)),
-                                          ),
+                                          ), */
                                         ],
                                       ),
                                     ),
@@ -597,9 +603,9 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (BuildContext context, int index) {
                             var text = Text(
-                              "City Hall of Zipaquirá",
+                              trafficList[index].author!,
                               style: TextStyle(
-                                fontSize: 10,
+                                fontSize: 11,
                                 fontWeight: FontWeight.w400,
                               ),
                             );
@@ -614,8 +620,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                               child: Container(
                                 margin:
                                     const EdgeInsets.only(right: 10, top: 10),
-                                width: 231,
-                                height: 164,
+                                width: 250,
+                                height: 240,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),
                                   color: Colors.white,
@@ -643,8 +649,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                         trafficList[index].title!,
                                         style: const TextStyle(
                                             color: Colors.black,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w400),
+                                            fontSize: 11,
+                                            fontWeight: FontWeight.w600),
                                       ),
                                     ),
                                   ),
@@ -658,7 +664,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                         children: [
                                           Image.asset(
                                             "assets/logo.jpg",
-                                            width: 50,
+                                            width: 60,
                                             height: 50,
                                           ),
                                           SizedBox(width: 5),
@@ -671,13 +677,13 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                                 trafficList[index]
                                                     .getFormattedDate(),
                                                 style: TextStyle(
-                                                    fontSize: 10,
+                                                    fontSize: 11,
                                                     fontWeight: FontWeight.w400,
                                                     color: Colors.grey),
                                               ),
                                             ],
                                           ),
-                                          SizedBox(width: 35),
+                                          /* SizedBox(width: 35),
                                           IconButton(
                                             alignment: Alignment.topRight,
                                             onPressed: () {
@@ -689,7 +695,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                                 child: Icon(Icons.send,
                                                     color: Colors.green,
                                                     size: 20)),
-                                          ),
+                                          ), */
                                         ],
                                       ),
                                     ),
@@ -706,9 +712,9 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (BuildContext context, int index) {
                             var text = Text(
-                              "City Hall of Zipaquirá",
+                              culturalList[index].author!,
                               style: TextStyle(
-                                fontSize: 10,
+                                fontSize: 11,
                                 fontWeight: FontWeight.w400,
                               ),
                             );
@@ -723,8 +729,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                               child: Container(
                                 margin:
                                     const EdgeInsets.only(right: 10, top: 10),
-                                width: 231,
-                                height: 164,
+                                width: 250,
+                                height: 240,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),
                                   color: Colors.white,
@@ -739,7 +745,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                         culturalList[index].imageUrl!,
                                         width: double.infinity,
                                         height: double.infinity,
-                                        fit: BoxFit.cover,
+                                        fit: BoxFit.scaleDown,
                                       ),
                                     ),
                                   ),
@@ -752,8 +758,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                         culturalList[index].title!,
                                         style: const TextStyle(
                                             color: Colors.black,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w400),
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w600),
                                       ),
                                     ),
                                   ),
@@ -767,7 +773,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                         children: [
                                           Image.asset(
                                             "assets/logo.jpg",
-                                            width: 50,
+                                            width: 60,
                                             height: 50,
                                           ),
                                           SizedBox(width: 5),
@@ -780,13 +786,13 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                                 culturalList[index]
                                                     .getFormattedDate(),
                                                 style: TextStyle(
-                                                    fontSize: 10,
+                                                    fontSize: 11,
                                                     fontWeight: FontWeight.w400,
                                                     color: Colors.grey),
                                               ),
                                             ],
                                           ),
-                                          SizedBox(width: 35),
+                                          /* SizedBox(width: 35),
                                           IconButton(
                                             alignment: Alignment.topRight,
                                             onPressed: () {
@@ -798,7 +804,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                                 child: Icon(Icons.send,
                                                     color: Colors.green,
                                                     size: 20)),
-                                          ),
+                                          ), */
                                         ],
                                       ),
                                     ),
@@ -824,13 +830,13 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                 fontWeight: FontWeight.w600,
                                 color: Colors.black),
                           ),
-                          Text(
+                          /* Text(
                             'Ver todo',
                             style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w400,
                                 color: mygreen),
-                          ),
+                          ), */
                         ],
                       ),
                     ),
@@ -884,7 +890,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                           Text(
                                             tourismList[index].title!,
                                             style: TextStyle(
-                                              fontSize: 13,
+                                              fontSize: 10,
                                             ),
                                           ),
                                           SizedBox(height: 5),
@@ -892,7 +898,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                             tourismList[index]
                                                 .getFormattedDate(),
                                             style: TextStyle(
-                                              fontSize: 10,
+                                              fontSize: 9,
                                               color: Colors.grey,
                                             ),
                                           ),

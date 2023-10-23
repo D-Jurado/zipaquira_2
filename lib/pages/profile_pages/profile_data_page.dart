@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 class ProfileData extends StatelessWidget {
-  const ProfileData({Key? key}) : super(key: key);
+  final String first_name;
+  final String last_name;
+  final String correo;
+
+  const ProfileData({Key? key, required this.first_name, required this.last_name, required this.correo}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     // Crear una instancia de User con datos ficticios (reemplaza con los datos reales)
-    final user = User(
-      nombre: 'Nombre del usuario',
-      apellido: 'Apellido del usuario',
-      correo: 'correo@ejemplo.com',
-    );
+   
 
     return Scaffold(
       body: Container(
@@ -47,9 +47,9 @@ class ProfileData extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildUserField("Nombre", user.nombre),
-                  _buildUserField("Apellido", user.apellido),
-                  _buildUserField("Correo", user.correo),
+                  _buildUserField("Nombre", first_name),
+                  _buildUserField("Apellido", last_name),
+                  _buildUserField("Correo", correo),
                 ],
               ),
             ),
@@ -70,7 +70,7 @@ class ProfileData extends StatelessWidget {
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
-              color: Colors.black, 
+              color: Colors.black,
             ),
           ),
           SizedBox(height: 6),
@@ -80,7 +80,6 @@ class ProfileData extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.grey[200],
               borderRadius: BorderRadius.circular(12),
-              
             ),
             child: Text(
               value,
@@ -96,15 +95,5 @@ class ProfileData extends StatelessWidget {
   }
 }
 
-// Clase User para representar los datos del usuario
-class User {
-  final String nombre;
-  final String apellido;
-  final String correo;
 
-  User({
-    required this.nombre,
-    required this.apellido,
-    required this.correo,
-  });
-}
+
