@@ -29,6 +29,22 @@ class _SignUpPasswordPageState extends State<SignUpPasswordPage> {
   String? password;
   String? confirmPassword;
 
+  bool isStrongPassword(String password) {
+    if (password.length < 8) {
+      return false;
+    }
+    if (!RegExp(r'[A-Z]').hasMatch(password)) {
+      return false; // No hay al menos una letra mayúscula.
+    }
+    if (!RegExp(r'[0-9]').hasMatch(password)) {
+      return false; // No hay al menos un número.
+    }
+    if (!RegExp(r'[!@#\$%^&*.()_+{}|:<>?]').hasMatch(password)) {
+      return false; // No hay al menos un símbolo.
+    }
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -162,46 +178,68 @@ class _SignUpPasswordPageState extends State<SignUpPasswordPage> {
                           confirmPassword != null &&
                           password!.isNotEmpty &&
                           password == confirmPassword) {
-                        // Crear un mapa con los datos que deseas enviar a la API
-                        Map<String, dynamic> userData = {
-                          'username': widget.email,
-                          'email': widget.email,
-                          'first_name': widget.firstName,
-                          'last_name': widget.lastName,
-                          'password': password,
-                          'documentType': widget.documentType,
-                          'documentNumber': widget.documentNumber,
-                          'phone': widget.phone,
-                        };
-                        print(userData);
-                        // URL de tu API
-                        String apiUrl =
-                            'http://192.168.1.6:8000/users/register';
+                        if (isStrongPassword(password!)) {
+                          // Crear un mapa con los datos que deseas enviar a la API
+                          Map<String, dynamic> userData = {
+                            'username': widget.email,
+                            'email': widget.email,
+                            'first_name': widget.firstName,
+                            'last_name': widget.lastName,
+                            'password': password,
+                            'documentType': widget.documentType,
+                            'documentNumber': widget.documentNumber,
+                            'phone': widget.phone,
+                          };
+                          print(userData);
+                          // URL de tu API
+                          String apiUrl =
+                              'http://192.168.1.6:8000/users/register';
 
-                        // Realizar la solicitud HTTP POST a la API
-                        try {
-                          final response = await http.post(
-                            Uri.parse(apiUrl),
-                            body: userData,
-                          );
-                          print(response.statusCode);
-                          if (response.statusCode == 201) {
-                            // Si la solicitud se completó exitosamente, puedes navegar a la página de éxito
-                            Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return SignUpSuccessPage();
-                                },
-                              ),
+                          // Realizar la solicitud HTTP POST a la API
+                          try {
+                            final response = await http.post(
+                              Uri.parse(apiUrl),
+                              body: userData,
                             );
-                          } else {
+                            print(response.statusCode);
+                            if (response.statusCode == 201) {
+                              // Si la solicitud se completó exitosamente, puedes navegar a la página de éxito
+                              Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return SignUpSuccessPage();
+                                  },
+                                ),
+                              );
+                            } else {
+                              // Mostrar un mensaje de error si la solicitud falla
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: Text('Error en la solicitud'),
+                                    content: Text(response.body),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Text('OK'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            }
+                          } catch (error) {
                             // Mostrar un mensaje de error si la solicitud falla
                             showDialog(
                               context: context,
                               builder: (context) {
                                 return AlertDialog(
                                   title: Text('Error en la solicitud'),
-                                  content: Text(response.body),
+                                  content: Text(
+                                      'Hubo un problema al registrar el usuario. Por favor, inténtelo de nuevo más tarde.'),
                                   actions: [
                                     TextButton(
                                       onPressed: () {
@@ -214,15 +252,16 @@ class _SignUpPasswordPageState extends State<SignUpPasswordPage> {
                               },
                             );
                           }
-                        } catch (error) {
-                          // Mostrar un mensaje de error si la solicitud falla
+                        } else {
+                          // Mostrar un mensaje de error si la contraseña no cumple con los requisitos
                           showDialog(
                             context: context,
                             builder: (context) {
                               return AlertDialog(
-                                title: Text('Error en la solicitud'),
+                                title: Text('Error de contraseña'),
                                 content: Text(
-                                    'Hubo un problema al registrar el usuario. Por favor, inténtelo de nuevo más tarde.'),
+                                  'La contraseña debe tener al menos 8 caracteres, un símbolo, una mayúscula y un número.',
+                                ),
                                 actions: [
                                   TextButton(
                                     onPressed: () {
@@ -243,7 +282,8 @@ class _SignUpPasswordPageState extends State<SignUpPasswordPage> {
                             return AlertDialog(
                               title: Text('Error de contraseña'),
                               content: Text(
-                                  'Las contraseñas no coinciden. Por favor, verifique e intente de nuevo.'),
+                                'Las contraseñas no coinciden. Por favor, verifique e intente de nuevo.',
+                              ),
                               actions: [
                                 TextButton(
                                   onPressed: () {
@@ -258,11 +298,13 @@ class _SignUpPasswordPageState extends State<SignUpPasswordPage> {
                       }
                     },
                     style: ButtonStyle(
-                        minimumSize: MaterialStateProperty.all(Size(250, 48)),
-                        backgroundColor: MaterialStateProperty.all(
-                            Color.fromARGB(255, 2, 82, 4)),
-                        shape: MaterialStateProperty.all(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12)))),
+                      minimumSize: MaterialStateProperty.all(Size(250, 48)),
+                      backgroundColor:
+                          MaterialStateProperty.all(Color.fromARGB(255, 2, 82, 4)),
+                      shape: MaterialStateProperty.all(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      )),
+                    ),
                     child: Text(
                       'Siguiente',
                       style: TextStyle(color: Colors.white),

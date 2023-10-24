@@ -44,9 +44,9 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       var response = await http.get(url);
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonData = json.decode(response.body);
-        resultList[i].type = jsonData['meta']['parent']['title'];
+        resultList[i].type =  jsonData['meta']['parent']['title'];
         resultList[i].description = jsonData['description'];
-        resultList[i].body = jsonData['body'];
+        resultList[i].body = utf8.decode(jsonData['body'].codeUnits);
         resultList[i].author = jsonData['author'];
 
         String imageId = extractImageIdFromHtml(jsonData['body']);

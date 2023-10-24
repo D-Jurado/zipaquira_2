@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -16,7 +18,7 @@ class LocalNewsModel {
   LocalNewsModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     meta = json['meta'] != null ? Meta.fromJson(json['meta']) : null;
-    title = json['title'];
+    title = utf8.decode(json['title'].codeUnits);
     imageUrl = json['image_url']; // Agrega la propiedad imageUrl si existe en tu JSON
   }
 
