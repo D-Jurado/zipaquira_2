@@ -1,4 +1,4 @@
-package com.zipaquiranoticias.zipaquira_app.
+package com.zipaquiranoticias.zipaquira_app
 
 import io.flutter.embedding.android.FlutterActivity
 
