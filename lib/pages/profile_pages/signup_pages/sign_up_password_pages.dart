@@ -193,7 +193,7 @@ class _SignUpPasswordPageState extends State<SignUpPasswordPage> {
                           print(userData);
                           // URL de tu API
                           String apiUrl =
-                              'http://192.168.1.6:8000/users/register';
+                              'http://192.168.1.2:8000/users/register';
 
                           // Realizar la solicitud HTTP POST a la API
                           try {
@@ -299,8 +299,8 @@ class _SignUpPasswordPageState extends State<SignUpPasswordPage> {
                     },
                     style: ButtonStyle(
                       minimumSize: MaterialStateProperty.all(Size(250, 48)),
-                      backgroundColor:
-                          MaterialStateProperty.all(Color.fromARGB(255, 2, 82, 4)),
+                      backgroundColor: MaterialStateProperty.all(
+                          Color.fromARGB(255, 2, 82, 4)),
                       shape: MaterialStateProperty.all(RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       )),

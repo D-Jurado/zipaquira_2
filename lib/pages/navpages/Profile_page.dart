@@ -31,7 +31,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final email = emailController.text;
     final password = passwordController.text;
 
-    final url = Uri.parse('http://192.168.1.6:8000/login');
+    final url = Uri.parse('http://192.168.1.2:8000/login');
 
     try {
       final response = await http.post(
@@ -336,8 +336,8 @@ class _ProfilePageState extends State<ProfilePage> {
       _buildNavigationItem(Icons.lock, 'Cambiar contraseña', Colors.grey),
       _buildNavigationItem(Icons.article, 'Noticias', Colors.grey),
       _buildNavigationItem(Icons.tour, 'Turismo', Colors.grey),
-      _buildNavigationItem(Icons.notifications, 'Notificaciones', Colors.grey),
-      _buildNavigationItem(Icons.report, 'Reportes', Colors.grey),
+      _buildNavigationItem(Icons.notifications, 'Reportes', Colors.grey),
+      _buildNavigationItem(Icons.report, 'Enlaces', Colors.grey),
       _buildNavigationItem(Icons.logout, 'Cerrar sesión', Colors.red),
     ];
 
@@ -388,11 +388,11 @@ class _ProfilePageState extends State<ProfilePage> {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => HomePage(),
               ));
-            } else if (text == 'Notificaciones') {
+            } else if (text == 'Reportes') {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => NotificationsPage(),
               ));
-            } else if (text == 'Reportes') {
+            } else if (text == 'Enlaces') {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => BumfPage(),
               ));

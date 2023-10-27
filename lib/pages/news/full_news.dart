@@ -89,7 +89,7 @@ class _FullNewsState extends State<FullNews> {
                             Row(
                               children: [
                                 Text(
-                                  "City Hall of Zipaquirá",
+                                  widget.localNewsInformation!.author!,
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:zipaquira_2/infrastructure/models/local_news_model.dart';
 import 'package:zipaquira_2/pages/news/full_news.dart';
 import 'package:html_unescape/html_unescape.dart';
+import 'package:zipaquira_2/presentation/blocs/notifications/delegates/search_news_delegate.dart';
 
 import 'package:zipaquira_2/shared/data/news_local_post.dart';
 import 'package:zipaquira_2/shared/data/news_tourism_local_post.dart';
@@ -40,11 +41,11 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   Future<List<LocalNewsModel>> fetchDetails() async {
     for (int i = 0; i < resultList.length; i++) {
       var url =
-          Uri.parse("http://192.168.1.6:8000/api/v2/news/${resultList[i].id}");
+          Uri.parse("http://192.168.1.2:8000/api/v2/news/${resultList[i].id}");
       var response = await http.get(url);
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonData = json.decode(response.body);
-        resultList[i].type =  jsonData['meta']['parent']['title'];
+        resultList[i].type = jsonData['meta']['parent']['title'];
         resultList[i].description = jsonData['description'];
         resultList[i].body = utf8.decode(jsonData['body'].codeUnits);
         resultList[i].author = jsonData['author'];
@@ -52,7 +53,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         String imageId = extractImageIdFromHtml(jsonData['body']);
 
         // Concatena la URL base con el ID de la imagen para obtener la URL completa
-        String baseUrl = "http://192.168.1.6:8000";
+        String baseUrl = "http://192.168.1.2:8000";
         String imageUrlApi = "/api/v2/images/$imageId";
         String fullImageUrl = baseUrl + imageUrlApi;
 
@@ -84,7 +85,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   }
 
   Future<List<dynamic>> fetchData() async {
-    var url = Uri.parse("http://192.168.1.6:8000/api/v2/news/?descendant_of=4");
+    var url = Uri.parse("http://192.168.1.2:8000/api/v2/news/?descendant_of=4");
     var response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -209,7 +210,11 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                           ),
                           InkWell(
                             onTap: () {
-                              // Maneja la acción de búsqueda aquí
+                             
+                              showSearch(
+                                context: context, 
+                                delegate: SearchNewsDelegate( resultList),
+                              );
                             },
                             child: Container(
                               padding: EdgeInsets.all(8),
@@ -574,7 +579,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                               ),
                                             ],
                                           ),
-                                         /*  SizedBox(width: 35),
+                                          /*  SizedBox(width: 35),
                                           IconButton(
                                             alignment: Alignment.topRight,
                                             onPressed: () {

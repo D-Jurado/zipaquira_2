@@ -101,9 +101,9 @@ class _HomePageState extends State<HomePage> {
         items: const [
           BottomNavigationBarItem(label: 'Inicio', icon: Icon(Icons.home)),
           BottomNavigationBarItem(
-              label: "Reportes", icon: Icon(Icons.date_range_sharp)),
+              label: "Enlaces", icon: Icon(Icons.date_range_sharp)),
           BottomNavigationBarItem(
-              label: "Notificaciones",
+              label: "Reportes",
               icon: Icon(Icons.notification_add_rounded)),
           BottomNavigationBarItem(
               label: "Perfil", icon: Icon(Icons.person_2_sharp)),
