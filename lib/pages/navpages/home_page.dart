@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:zipaquira_2/pages/navpages/profile_page.dart';
 import 'package:zipaquira_2/pages/navpages/bumf_page.dart';
 import 'package:zipaquira_2/pages/navpages/main_page.dart';
-import 'package:zipaquira_2/pages/navpages/notifications_page.dart';
+import 'package:zipaquira_2/pages/navpages/reports_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zipaquira_2/presentation/blocs/notifications/notifications_bloc.dart';
 
@@ -15,7 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List pages = [MainPage(), BumfPage(), NotificationsPage(), ProfilePage()];
+  List pages = [MainPage(), BumfPage(), ReportsPage(), ProfilePage()];
   int currentIndex = 0;
 
   @override
@@ -103,8 +103,7 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(
               label: "Enlaces", icon: Icon(Icons.date_range_sharp)),
           BottomNavigationBarItem(
-              label: "Reportes",
-              icon: Icon(Icons.notification_add_rounded)),
+              label: "Reportes", icon: Icon(Icons.notification_add_rounded)),
           BottomNavigationBarItem(
               label: "Perfil", icon: Icon(Icons.person_2_sharp)),
         ],

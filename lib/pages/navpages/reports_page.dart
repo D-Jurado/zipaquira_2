@@ -16,14 +16,14 @@ String first_name = "";
 String last_name = "";
 String correo = "";
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+class ReportsPage extends StatefulWidget {
+  const ReportsPage({Key? key}) : super(key: key);
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  State<ReportsPage> createState() => _ReportsPageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ReportsPageState extends State<ReportsPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -136,8 +136,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   borderRadius: BorderRadius.circular(26),
                   color: Colors.white,
                 ),
-                child:
-                    _buildNavigationList(), // Llama a la función para construir la lista de opciones
+                  
+                // Llama a la función para construir la lista de opciones
               ),
             ],
           ),
@@ -329,86 +329,6 @@ class _ProfilePageState extends State<ProfilePage> {
       );
     }
   }
-
-  Widget _buildNavigationList() {
-    final List<Widget> navigationOptions = [
-      _buildNavigationItem(Icons.person, 'Mi perfil', Colors.grey),
-      _buildNavigationItem(Icons.lock, 'Cambiar contraseña', Colors.grey),
-      _buildNavigationItem(Icons.article, 'Noticias', Colors.grey),
-      _buildNavigationItem(Icons.tour, 'Turismo', Colors.grey),
-      _buildNavigationItem(Icons.notifications, 'Reportes', Colors.grey),
-      _buildNavigationItem(Icons.report, 'Enlaces', Colors.grey),
-      _buildNavigationItem(Icons.logout, 'Cerrar sesión', Colors.red),
-    ];
-
-    return ListView(
-      children: navigationOptions,
-    );
-  }
-
-  Widget _buildNavigationItem(IconData icon, String text, Color iconColor) {
-    print("linea 347 $token");
-    return Column(
-      children: [
-        ListTile(
-          contentPadding: EdgeInsets.symmetric(horizontal: 16),
-          leading: Icon(
-            icon,
-            color: iconColor,
-          ),
-          title: Text(
-            text,
-            style: TextStyle(fontSize: 16, color: iconColor),
-          ),
-          trailing: Icon(Icons.arrow_forward_ios, color: iconColor),
-          onTap: () {
-            if (text == 'Cerrar sesión') {
-              setState(() {
-                isLoggedIn = false; // Cierra la sesión
-              });
-            } else if (text == 'Mi perfil') {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ProfileData(
-                  correo: correo,
-                  first_name: first_name,
-                  last_name: last_name,
-                ),
-              ));
-            } else if (text == 'Cambiar contraseña') {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ChangePassword(
-                  token: token,
-                ),
-              ));
-            } else if (text == 'Noticias') {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => HomePage(),
-              ));
-            } else if (text == 'Turismo') {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => HomePage(),
-              ));
-            } else if (text == 'Reportes') {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ReportsPage(),
-              ));
-            } else if (text == 'Enlaces') {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => BumfPage(),
-              ));
-            } else {
-              // Implementa acciones específicas según la opción seleccionada
-              // Puedes usar un switch o if para manejar diferentes acciones
-              // ...
-            }
-          },
-        ),
-        Divider(
-          thickness: 1,
-          indent: 14,
-          endIndent: 14,
-        ),
-      ],
-    );
-  }
 }
+
+
