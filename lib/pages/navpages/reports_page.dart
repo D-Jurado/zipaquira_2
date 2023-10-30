@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zipaquira_2/infrastructure/models/camera_gallery_impl.dart';
 import 'package:zipaquira_2/pages/navpages/bumf_page.dart';
 import 'package:zipaquira_2/pages/navpages/home_page.dart';
 import 'package:zipaquira_2/pages/navpages/main_page.dart';
@@ -7,6 +8,10 @@ import 'package:zipaquira_2/pages/profile_pages/forgot_password/change_password.
 import 'package:zipaquira_2/pages/profile_pages/forgot_password/forgot_password.dart';
 import 'package:zipaquira_2/pages/profile_pages/profile_data_page.dart';
 import 'package:zipaquira_2/pages/profile_pages/signup_pages/sign_up_document_page.dart';
+import 'package:zipaquira_2/infrastructure/models/camera_gallery.dart';
+import 'package:zipaquira_2/infrastructure/models/camera_gallery_impl.dart';
+import 'package:image_picker/image_picker.dart';
+
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -106,6 +111,7 @@ class _ReportsPageState extends State<ReportsPage> {
     // Si el usuario está conectado, muestra un contenido diferente.
     if (isLoggedIn) {
       return Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -117,29 +123,175 @@ class _ReportsPageState extends State<ReportsPage> {
               ],
             ),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // Imagen
-              Image.asset(
-                'assets/logo_profile.png',
-                width: double.infinity,
-                height: 200,
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Container(
-                width: 400,
-                height: 540,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(26),
-                  color: Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  padding: EdgeInsets.all(10),
+                  width: 400,
+                  height: 740,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(26),
+                    color: Colors.white,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Reportes',
+                        style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      // Cuadro de alerta
+                      Container(
+                        width: 340,
+                        height: 70,
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: Color.fromARGB(255, 183, 207, 248),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.crisis_alert, // Icono de alerta
+                              color: Colors.blueAccent, // Color del icono
+                            ),
+                            SizedBox(
+                                width: 8), // Espacio entre el icono y el texto
+                            Text(
+                              'Recuerda agregar tu barrio y dirección en el cuadro de descripción',
+                              style:
+                                  TextStyle(color: Colors.black, fontSize: 10),
+                              /* maxLines: 2,
+                      overflow: TextOverflow.ellipsis, */
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 20),
+
+                      // Campos de título y descripción
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Título',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                            SizedBox(height: 16),
+                            TextField(
+                              decoration: InputDecoration(
+                                hintText: 'Escribe un título',
+                                filled:
+                                    true, // Rellena el fondo del cuadro de entrada de texto
+                                fillColor: Colors
+                                    .white, // Color de fondo del cuadro de entrada de texto
+                                border: OutlineInputBorder(
+                                  // Agrega un borde al cuadro de entrada de texto
+                                  borderSide: BorderSide(
+                                    color: Colors.black,
+                                  ), // Quita los bordes predeterminados
+                                  borderRadius: BorderRadius.circular(12),
+                                  // Añade esquinas redondeadas
+                                ),
+                              ),
+                              maxLines: 1,
+                            ),
+                            SizedBox(height: 16),
+                            Text(
+                              'Descripción',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                            SizedBox(height: 16),
+                            TextField(
+                              decoration: InputDecoration(
+                                  hintText: 'Escribe una descripción detallada',
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                  border: OutlineInputBorder(
+                                    // Agrega un borde al cuadro de entrada de texto
+                                    borderSide: BorderSide(
+                                      color: Colors.black,
+                                    ), // Quita los bordes predeterminados
+                                    borderRadius: BorderRadius.circular(12),
+                                  )),
+                              maxLines: 5,
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      SizedBox(height: 20),
+
+                      // Botón para tomar una foto
+                      Container(
+                        width: 325,
+                        height: 50,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            final photoPath =
+                                await CameraGalleryImpl().takePhoto();
+                            if (photoPath == null) return;
+
+                            photoPath;
+                            
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color.fromARGB(255, 50, 118,
+                                53), 
+                          ),
+                          child: Icon(
+                            Icons.camera_alt_rounded,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+
+                      SizedBox(height: 20),
+
+                      // Botón para enviar
+                      Container(
+                        width: 325,
+                        height: 50,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            // Agrega la lógica para enviar el reporte aquí
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color.fromARGB(255, 50, 118,
+                                53), // Cambia el color del botón a rojo
+                          ),
+                          child: Text(
+                            'Enviar',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                  
-                // Llama a la función para construir la lista de opciones
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       );
@@ -168,12 +320,12 @@ class _ReportsPageState extends State<ReportsPage> {
                 height: 200,
               ),
               SizedBox(
-                height: 40,
+                height: 10,
               ),
               // Cuadro de fondo blanco
               Container(
                 width: 316,
-                height: 500,
+                height: 550,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(26),
                   color: Colors.white,
@@ -330,5 +482,3 @@ class _ReportsPageState extends State<ReportsPage> {
     }
   }
 }
-
-

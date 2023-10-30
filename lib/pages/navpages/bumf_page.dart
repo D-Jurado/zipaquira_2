@@ -10,6 +10,7 @@ class BumfPage extends StatelessWidget {
     Color colorbumf = Color.fromARGB(255, 2, 77, 6);
     const double borderRadiusValue = 10.0;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Padding(
         padding: const EdgeInsets.fromLTRB(32, 71, 32, 42),
         child: Column(
@@ -47,6 +48,7 @@ class BumfPage extends StatelessWidget {
 
   Widget _buildButtonWithUrl(String text, IconData iconData, Color color, double borderRadius, String url) {
     return Padding(
+      
       padding: const EdgeInsets.only(left: 30, right: 30),
       child: InkWell(
         onTap: () {
