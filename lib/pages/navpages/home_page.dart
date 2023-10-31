@@ -103,7 +103,7 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(
               label: "Enlaces", icon: Icon(Icons.date_range_sharp)),
           BottomNavigationBarItem(
-              label: "Reportes", icon: Icon(Icons.notification_add_rounded)),
+              label: "Reportes", icon: Icon(Icons.notifications)),
           BottomNavigationBarItem(
               label: "Perfil", icon: Icon(Icons.person_2_sharp)),
         ],

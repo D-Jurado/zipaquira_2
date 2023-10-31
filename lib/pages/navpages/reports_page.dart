@@ -11,6 +11,9 @@ import 'package:zipaquira_2/pages/profile_pages/signup_pages/sign_up_document_pa
 import 'package:zipaquira_2/infrastructure/models/camera_gallery.dart';
 import 'package:zipaquira_2/infrastructure/models/camera_gallery_impl.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server/gmail.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -20,6 +23,8 @@ String token = "";
 String first_name = "";
 String last_name = "";
 String correo = "";
+late Position geolocalizacion;
+bool isLocationAvailable = false;
 
 class ReportsPage extends StatefulWidget {
   const ReportsPage({Key? key}) : super(key: key);
@@ -31,6 +36,33 @@ class ReportsPage extends StatefulWidget {
 class _ReportsPageState extends State<ReportsPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+
+  String titulo = "";
+  String descripcion = "";
+
+  bool isPhotoTaken = false;
+
+  // geolocalizacion
+
+  Future<Position> determinePosition() async {
+    LocationPermission permission;
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error(
+            'Error: los permisos de ubicación son obligatorios para enviar el reporte');
+      }
+    }
+    return await Geolocator.getCurrentPosition();
+  }
+
+  void getCurrentLocation() async {
+    isLocationAvailable = false;
+    Position position = await determinePosition();
+    print(position.altitude);
+    print(position.longitude);
+  }
 
   Future<void> login() async {
     final email = emailController.text;
@@ -46,7 +78,7 @@ class _ReportsPageState extends State<ReportsPage> {
           'password': password,
         },
       );
-      print("linea 44 ${response.statusCode}");
+
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);
         token = responseBody["access"];
@@ -58,10 +90,6 @@ class _ReportsPageState extends State<ReportsPage> {
           isLoggedIn =
               true; // Cambia el estado de inicio de sesión a verdadero.
         });
-
-        /* Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ChangePassword(token: token,),
-              )); */
       } else {
         // El inicio de sesión falló. Muestra un mensaje de error.
         showDialog(
@@ -212,6 +240,12 @@ class _ReportsPageState extends State<ReportsPage> {
                                 ),
                               ),
                               maxLines: 1,
+                              onChanged: (value) {
+                                // Actualiza la variable 'titulo' cuando cambia el campo de título
+                                setState(() {
+                                  titulo = value;
+                                });
+                              },
                             ),
                             SizedBox(height: 16),
                             Text(
@@ -236,6 +270,12 @@ class _ReportsPageState extends State<ReportsPage> {
                                     borderRadius: BorderRadius.circular(12),
                                   )),
                               maxLines: 5,
+                              onChanged: (value) {
+                                // Actualiza la variable 'descripcion' cuando cambia el campo de descripción
+                                setState(() {
+                                  descripcion = value;
+                                });
+                              },
                             ),
                           ],
                         ),
@@ -253,13 +293,19 @@ class _ReportsPageState extends State<ReportsPage> {
                                 await CameraGalleryImpl().takePhoto();
                             if (photoPath == null) return;
 
+                            // Actualiza el estado para indicar que se ha tomado una foto
+                            setState(() {
+                              isPhotoTaken = true;
+                            });
+
                             photoPath;
-                            
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color.fromARGB(255, 50, 118,
-                                53), 
-                          ),
+                              backgroundColor:
+                                  const Color.fromARGB(255, 50, 118, 53),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              )),
                           child: Icon(
                             Icons.camera_alt_rounded,
                             color: Colors.white,
@@ -275,18 +321,24 @@ class _ReportsPageState extends State<ReportsPage> {
                         height: 50,
                         child: ElevatedButton(
                           onPressed: () {
-                            // Agrega la lógica para enviar el reporte aquí
+                            
+                              getCurrentLocation();
+                              
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color.fromARGB(255, 50, 118,
-                                53), // Cambia el color del botón a rojo
+                            backgroundColor: isPhotoTaken
+                                ? const Color.fromARGB(255, 50, 118, 53)
+                                : Colors.grey,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
                           ),
                           child: Text(
                             'Enviar',
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
-                      ),
+                      )
                     ],
                   ),
                 ),
