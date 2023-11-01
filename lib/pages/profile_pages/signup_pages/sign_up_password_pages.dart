@@ -193,7 +193,7 @@ class _SignUpPasswordPageState extends State<SignUpPasswordPage> {
                           print(userData);
                           // URL de tu API
                           String apiUrl =
-                              'http://192.168.1.2:8000/users/register';
+                              'http://192.168.1.6:8000/users/register';
 
                           // Realizar la solicitud HTTP POST a la API
                           try {

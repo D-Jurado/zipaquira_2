@@ -14,8 +14,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server/gmail.dart';
-
+import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
+
 import 'dart:convert';
 
 bool isLoggedIn = false;
@@ -23,7 +25,8 @@ String token = "";
 String first_name = "";
 String last_name = "";
 String correo = "";
-late Position geolocalizacion;
+double? altitude;
+double? longitude;
 bool isLocationAvailable = false;
 
 class ReportsPage extends StatefulWidget {
@@ -60,15 +63,66 @@ class _ReportsPageState extends State<ReportsPage> {
   void getCurrentLocation() async {
     isLocationAvailable = false;
     Position position = await determinePosition();
-    print(position.altitude);
-    print(position.longitude);
+    altitude = position.altitude;
+    longitude = position.longitude;
+    isLocationAvailable = true;
+  }
+
+  Future<void> report(String photoPath) async {
+    getCurrentLocation();
+
+    final url = 'http://192.168.1.6:8000/report/';
+
+    try {
+      // Crea una instancia de Dio
+      Dio dio = Dio();
+
+      // Crea un objeto FormData para adjuntar la imagen
+      FormData formData = FormData.fromMap({
+        'title': titulo,
+        'description': descripcion,
+        'location': 'Longitud: $longitude, Altitud: $altitude',
+        'correo': correo,
+        'image': await MultipartFile.fromFile(
+          photoPath,
+          filename: 'image.jpg',
+        ),
+      });
+
+      // Envía la solicitud
+      final response = await dio.post(
+        url,
+        data: formData,
+      );
+
+      if (response.statusCode == 200) {
+        // Procesa la respuesta del servidor según tus necesidades
+      }
+    } catch (error) {
+      print('Error al enviar el informe: $error');
+      // Maneja el error adecuadamente
+    }
+  }
+
+  void enviarReporte() async {
+    // Obtén la geolocalización
+    getCurrentLocation();
+
+    // Verifica si la geolocalización está disponible
+    if (isLocationAvailable) {
+      // Ahora puedes llamar a la función 'report' con los datos requeridos
+      await report(titulo);
+    } else {
+      // Maneja el caso en el que la geolocalización no esté disponible
+      print('La geolocalización no está disponible.');
+    }
   }
 
   Future<void> login() async {
     final email = emailController.text;
     final password = passwordController.text;
 
-    final url = Uri.parse('http://192.168.1.2:8000/login');
+    final url = Uri.parse('http://192.168.1.6:8000/login');
 
     try {
       final response = await http.post(
@@ -298,7 +352,7 @@ class _ReportsPageState extends State<ReportsPage> {
                               isPhotoTaken = true;
                             });
 
-                            photoPath;
+                            report(photoPath);
                           },
                           style: ElevatedButton.styleFrom(
                               backgroundColor:
@@ -321,9 +375,7 @@ class _ReportsPageState extends State<ReportsPage> {
                         height: 50,
                         child: ElevatedButton(
                           onPressed: () {
-                            
-                              getCurrentLocation();
-                              
+                            enviarReporte();
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: isPhotoTaken
