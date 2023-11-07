@@ -96,7 +96,12 @@ class _ReportsPageState extends State<ReportsPage> {
       );
 
       if (response.statusCode == 200) {
-        // Procesa la respuesta del servidor según tus necesidades
+        // El reporte se ha enviado con éxito, muestra un mensaje
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('El reporte se ha enviado con éxito.'),
+          ),
+        );
       }
     } catch (error) {
       print('Error al enviar el informe: $error');
@@ -122,7 +127,8 @@ class _ReportsPageState extends State<ReportsPage> {
     final email = emailController.text;
     final password = passwordController.text;
 
-    final url = Uri.parse('http://192.168.1.6:8000/login');
+    final url = Uri.parse(
+        'http://ec2-3-18-225-15.us-east-2.compute.amazonaws.com/login');
 
     try {
       final response = await http.post(

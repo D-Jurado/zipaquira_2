@@ -9,6 +9,8 @@ class SearchNewsDelegate extends SearchDelegate<LocalNewsModel> {
   SearchNewsDelegate(this.resultList);
 
   @override
+  String get searchFieldLabel => 'Buscar Noticia';
+  @override
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
@@ -25,7 +27,8 @@ class SearchNewsDelegate extends SearchDelegate<LocalNewsModel> {
     return IconButton(
       icon: Icon(Icons.arrow_back),
       onPressed: () {
-        close(context, LocalNewsModel()); // No pasa ningún valor si no se ha seleccionado un resultado
+        close(context,
+            LocalNewsModel()); // No pasa ningún valor si no se ha seleccionado un resultado
       },
     );
   }
@@ -62,7 +65,7 @@ class SearchNewsDelegate extends SearchDelegate<LocalNewsModel> {
           onTap: () {
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => FullNews(resultList[index]),
+                builder: (context) => FullNews(news),
               ),
             );
           },
@@ -71,6 +74,3 @@ class SearchNewsDelegate extends SearchDelegate<LocalNewsModel> {
     );
   }
 }
-
-
-

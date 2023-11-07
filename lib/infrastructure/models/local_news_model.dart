@@ -11,7 +11,7 @@ class LocalNewsModel {
   String? description;
   String? body;
   String? author;
-  String? imageUrl; // Nueva propiedad para la URL de la imagen
+  String? imageUrl; 
 
   LocalNewsModel({this.id, this.meta, this.title});
 

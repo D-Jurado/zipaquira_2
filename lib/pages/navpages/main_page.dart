@@ -48,7 +48,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         resultList[i].type = jsonData['meta']['parent']['title'];
         resultList[i].description = jsonData['description'];
         resultList[i].body = utf8.decode(jsonData['body'].codeUnits);
-        resultList[i].author = jsonData['author'];
+        resultList[i].author = utf8.decode(jsonData['author'].codeUnits);
 
         String imageId = extractImageIdFromHtml(jsonData['body']);
 
@@ -433,8 +433,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                             .encode(resultList[index].title!)),
                                         style: const TextStyle(
                                             color: Colors.black,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w400),
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w500),
                                       ),
                                     ),
                                   ),
