@@ -17,7 +17,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
-  TextEditingController _searchController = TextEditingController();
+  TextEditingController searchController = TextEditingController();
 
   late List newsObjectJson = jsonDecode(newsLocalPost) as List;
   late List<LocalNewsModel> newsList = newsObjectJson
@@ -197,23 +197,26 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                         children: [
                           Expanded(
                             child: TextField(
-                              controller: _searchController,
+                              controller: searchController,
                               decoration: InputDecoration(
                                 hintText: 'Buscar...',
                                 border: InputBorder.none,
                               ),
                               onChanged: (query) {
+                                
                                 // Aquí puedes manejar la lógica de búsqueda cuando el texto cambia.
                                 // Puedes usar el valor de 'query' para buscar y actualizar los resultados si es necesario.
                               },
                             ),
                           ),
+                          
                           InkWell(
                             onTap: () {
                               showSearch(
-                                context: context,
-                                delegate: SearchNewsDelegate(resultList),
-                              );
+                              context: context,
+                              delegate: SearchNewsDelegate(resultList, searchController.text),
+                            );
+                              
                             },
                             child: Container(
                               padding: EdgeInsets.all(8),
@@ -430,7 +433,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                           left: 20, top: 100),
                                       child: Text(
                                         utf8.decode(utf8
-                                            .encode(resultList[index].title!)),
+                                            .encode(tourismList[index].title!)),
                                         style: const TextStyle(
                                             color: Colors.black,
                                             fontSize: 10,
