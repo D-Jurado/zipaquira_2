@@ -49,7 +49,7 @@ class SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    Future.delayed(Duration(seconds: 3), () {
+    Future.delayed(Duration(seconds: 4), () {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (context) => HomePage()),
       );

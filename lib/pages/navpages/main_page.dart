@@ -4,7 +4,7 @@ import 'package:zipaquira_2/infrastructure/models/local_news_model.dart';
 import 'package:zipaquira_2/pages/news/full_news.dart';
 import 'package:html_unescape/html_unescape.dart';
 import 'package:zipaquira_2/presentation/blocs/notifications/delegates/search_news_delegate.dart';
-
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:zipaquira_2/shared/data/news_local_post.dart';
 import 'package:zipaquira_2/shared/data/news_tourism_local_post.dart';
 import 'package:http/http.dart' as http;
@@ -150,20 +150,33 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         child: isLoading
             ? Container(
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
+                  color: Colors.white
+                 /*  gradient: LinearGradient(
                     begin: Alignment.topRight,
                     end: Alignment.bottomLeft,
                     colors: [
-                      Color.fromARGB(255, 2, 54, 4),
-                      Color.fromRGBO(184, 212, 50, 1),
+                     /*  Color.fromARGB(255, 2, 54, 4),
+                      Color.fromRGBO(184, 212, 50, 1), */
+                      
                     ],
-                  ),
+                  ), */
                 ),
                 child: Center(
-                  child: Image.asset(
-                    'assets/logo_profile.png',
-                    width: double.infinity,
-                    height: MediaQuery.of(context).size.height / 2,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      // Agrega la imagen
+                      Image.asset(
+                        'assets/escudo.jpg',
+                        width: 400,
+                        height: MediaQuery.of(context).size.height / 2,
+                      ),
+                      // Agrega el indicador de carga circular
+                      SpinKitCircle(
+                        color: Colors.green, // Color del círculo de carga
+                        size: 400.0, // Tamaño del círculo de carga
+                      ),
+                    ],
                   ),
                 ),
               )

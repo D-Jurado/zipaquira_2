@@ -128,7 +128,7 @@ class _ReportsPageState extends State<ReportsPage> {
     final password = passwordController.text;
 
     final url = Uri.parse(
-        'http://ec2-3-18-225-15.us-east-2.compute.amazonaws.com/login');
+        'http://192.168.1.6:8000/login');
 
     try {
       final response = await http.post(
@@ -200,49 +200,38 @@ class _ReportsPageState extends State<ReportsPage> {
     if (isLoggedIn) {
       return Scaffold(
         resizeToAvoidBottomInset: false,
-        body: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topRight,
-              end: Alignment.bottomLeft,
-              colors: [
-                Color.fromARGB(255, 2, 54, 4),
-                Color.fromRGBO(184, 212, 50, 1),
-              ],
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  padding: EdgeInsets.all(10),
-                  width: 400,
-                  height: 740,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(26),
-                    color: Colors.white,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Reportes',
-                        style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      // Cuadro de alerta
-                      Container(
+        body: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                padding: EdgeInsets.all(10),
+                width: 400,
+                height: 740,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(26),
+                  color: Colors.white,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Reportes',
+                      style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    // Cuadro de alerta
+                    Container(
                         width: 340,
-                        height: 70,
+                        height: 80,
                         padding: EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
@@ -255,153 +244,155 @@ class _ReportsPageState extends State<ReportsPage> {
                               color: Colors.blueAccent, // Color del icono
                             ),
                             SizedBox(
-                                width: 8), // Espacio entre el icono y el texto
-                            Text(
-                              'Recuerda agregar tu barrio y dirección en el cuadro de descripción',
-                              style:
-                                  TextStyle(color: Colors.black, fontSize: 10),
-                              /* maxLines: 2,
-                      overflow: TextOverflow.ellipsis, */
+                              width: 8), // Espacio entre el icono y el texto
+                            Expanded(
+                              child: Text(
+                                'Recuerda agregar tu barrio y dirección en el cuadro de descripción',
+                                style: TextStyle(color: Colors.black, fontSize: 17),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                softWrap: true, 
+                              ),
                             ),
                           ],
                         ),
                       ),
-                      SizedBox(height: 20),
 
-                      // Campos de título y descripción
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Título',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
+                    SizedBox(height: 20),
+
+                    // Campos de título y descripción
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Título',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                          SizedBox(height: 16),
+                          TextField(
+                            decoration: InputDecoration(
+                              hintText: 'Escribe un título',
+                              filled:
+                                  true, // Rellena el fondo del cuadro de entrada de texto
+                              fillColor: Colors
+                                  .white, // Color de fondo del cuadro de entrada de texto
+                              border: OutlineInputBorder(
+                                // Agrega un borde al cuadro de entrada de texto
+                                borderSide: BorderSide(
+                                  color: Colors.black,
+                                ), // Quita los bordes predeterminados
+                                borderRadius: BorderRadius.circular(12),
+                                // Añade esquinas redondeadas
                               ),
                             ),
-                            SizedBox(height: 16),
-                            TextField(
-                              decoration: InputDecoration(
-                                hintText: 'Escribe un título',
-                                filled:
-                                    true, // Rellena el fondo del cuadro de entrada de texto
-                                fillColor: Colors
-                                    .white, // Color de fondo del cuadro de entrada de texto
+                            maxLines: 1,
+                            onChanged: (value) {
+                              // Actualiza la variable 'titulo' cuando cambia el campo de título
+                              setState(() {
+                                titulo = value;
+                              });
+                            },
+                          ),
+                          SizedBox(height: 16),
+                          Text(
+                            'Descripción',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                          SizedBox(height: 16),
+                          TextField(
+                            decoration: InputDecoration(
+                                hintText: 'Escribe una descripción detallada',
+                                filled: true,
+                                fillColor: Colors.white,
                                 border: OutlineInputBorder(
                                   // Agrega un borde al cuadro de entrada de texto
                                   borderSide: BorderSide(
                                     color: Colors.black,
                                   ), // Quita los bordes predeterminados
                                   borderRadius: BorderRadius.circular(12),
-                                  // Añade esquinas redondeadas
-                                ),
-                              ),
-                              maxLines: 1,
-                              onChanged: (value) {
-                                // Actualiza la variable 'titulo' cuando cambia el campo de título
-                                setState(() {
-                                  titulo = value;
-                                });
-                              },
-                            ),
-                            SizedBox(height: 16),
-                            Text(
-                              'Descripción',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                            SizedBox(height: 16),
-                            TextField(
-                              decoration: InputDecoration(
-                                  hintText: 'Escribe una descripción detallada',
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                  border: OutlineInputBorder(
-                                    // Agrega un borde al cuadro de entrada de texto
-                                    borderSide: BorderSide(
-                                      color: Colors.black,
-                                    ), // Quita los bordes predeterminados
-                                    borderRadius: BorderRadius.circular(12),
-                                  )),
-                              maxLines: 5,
-                              onChanged: (value) {
-                                // Actualiza la variable 'descripcion' cuando cambia el campo de descripción
-                                setState(() {
-                                  descripcion = value;
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      SizedBox(height: 20),
-
-                      // Botón para tomar una foto
-                      Container(
-                        width: 325,
-                        height: 50,
-                        child: ElevatedButton(
-                          onPressed: () async {
-                            final photoPath =
-                                await CameraGalleryImpl().takePhoto();
-                            if (photoPath == null) return;
-
-                            // Actualiza el estado para indicar que se ha tomado una foto
-                            setState(() {
-                              isPhotoTaken = true;
-                            });
-
-                            report(photoPath);
-                          },
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  const Color.fromARGB(255, 50, 118, 53),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
-                              )),
-                          child: Icon(
-                            Icons.camera_alt_rounded,
-                            color: Colors.white,
+                                )),
+                            maxLines: 5,
+                            onChanged: (value) {
+                              // Actualiza la variable 'descripcion' cuando cambia el campo de descripción
+                              setState(() {
+                                descripcion = value;
+                              });
+                            },
                           ),
-                        ),
+                        ],
                       ),
+                    ),
 
-                      SizedBox(height: 20),
+                    SizedBox(height: 20),
 
-                      // Botón para enviar
-                      Container(
-                        width: 325,
-                        height: 50,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            enviarReporte();
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: isPhotoTaken
-                                ? const Color.fromARGB(255, 50, 118, 53)
-                                : Colors.grey,
+                    // Botón para tomar una foto
+                    Container(
+                      width: 325,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () async {
+                          final photoPath =
+                              await CameraGalleryImpl().takePhoto();
+                          if (photoPath == null) return;
+
+                          // Actualiza el estado para indicar que se ha tomado una foto
+                          setState(() {
+                            isPhotoTaken = true;
+                          });
+
+                          report(photoPath);
+                        },
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                const Color.fromARGB(255, 50, 118, 53),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          child: Text(
-                            'Enviar',
-                            style: TextStyle(color: Colors.white),
+                            )),
+                        child: Icon(
+                          Icons.camera_alt_rounded,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(height: 20),
+
+                    // Botón para enviar
+                    Container(
+                      width: 325,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          enviarReporte();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: isPhotoTaken
+                              ? const Color.fromARGB(255, 50, 118, 53)
+                              : Colors.grey,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                      )
-                    ],
-                  ),
+                        child: Text(
+                          'Enviar',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    )
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       );
