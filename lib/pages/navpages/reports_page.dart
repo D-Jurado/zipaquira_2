@@ -15,6 +15,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server/gmail.dart';
 import 'dart:io';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
 
@@ -96,13 +97,25 @@ class _ReportsPageState extends State<ReportsPage> {
       );
 
       if (response.statusCode == 200) {
-        // El reporte se ha enviado con éxito, muestra un mensaje
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('El reporte se ha enviado con éxito.'),
-          ),
-        );
-      }
+      // El reporte se ha enviado con éxito, muestra un mensaje emergente
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Reporte enviado con éxito'),
+          content: Text('Tu reporte se ha enviado correctamente.'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Aceptar'),
+              onPressed: () {
+                Navigator.of(context).pop(); 
+                
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
+              },
+            ),
+          ],
+        ),
+      );
+    }
     } catch (error) {
       print('Error al enviar el informe: $error');
       // Maneja el error adecuadamente
@@ -244,11 +257,11 @@ class _ReportsPageState extends State<ReportsPage> {
                               color: Colors.blueAccent, // Color del icono
                             ),
                             SizedBox(
-                              width: 8), // Espacio entre el icono y el texto
+                              width: 12), // Espacio entre el icono y el texto
                             Expanded(
                               child: Text(
                                 'Recuerda agregar tu barrio y dirección en el cuadro de descripción',
-                                style: TextStyle(color: Colors.black, fontSize: 17),
+                                style: TextStyle(color: Colors.black, fontSize: 14),
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                                 softWrap: true, 
@@ -337,33 +350,44 @@ class _ReportsPageState extends State<ReportsPage> {
 
                     // Botón para tomar una foto
                     Container(
-                      width: 325,
-                      height: 50,
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          final photoPath =
-                              await CameraGalleryImpl().takePhoto();
-                          if (photoPath == null) return;
+  width: 325,
+  height: 50,
+  child: ElevatedButton(
+    onPressed: () async {
+      final cameraStatus = await Permission.camera.request();
+      if (cameraStatus.isGranted) {
+        final photoPath = await CameraGalleryImpl().takePhoto();
+        if (photoPath == null) return;
 
-                          // Actualiza el estado para indicar que se ha tomado una foto
-                          setState(() {
-                            isPhotoTaken = true;
-                          });
+        // Actualiza el estado para indicar que se ha tomado una foto
+        setState(() {
+          isPhotoTaken = true;
+        });
 
-                          report(photoPath);
-                        },
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor:
-                                const Color.fromARGB(255, 50, 118, 53),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            )),
-                        child: Icon(
-                          Icons.camera_alt_rounded,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
+        report(photoPath);
+      } else {
+        // El usuario no otorgó permiso para acceder a la cámara
+        // Puedes mostrar un mensaje de error o realizar una acción alternativa
+        // Por ejemplo, mostrar un SnackBar o AlertDialog
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('El acceso a la cámara ha sido denegado.'),
+          ),
+        );
+      }
+    },
+    style: ElevatedButton.styleFrom(
+      backgroundColor: const Color.fromARGB(255, 50, 118, 53),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+    ),
+    child: Icon(
+      Icons.camera_alt_rounded,
+      color: Colors.white,
+    ),
+  ),
+),
 
                     SizedBox(height: 20),
 

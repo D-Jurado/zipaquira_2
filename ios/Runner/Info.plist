@@ -9,6 +9,10 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>Necesitamos poder tomar fotos de los reportes con la camara</string>
 
+	<key>NSCameraUsageDescription</key>
+	<string>Se requiere acceso a la cámara para tomar fotos.</string>
+
+
 	
 
 	<key>CFBundleDevelopmentRegion</key>
