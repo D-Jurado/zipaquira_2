@@ -10,7 +10,7 @@
     
     
     <application
-        android:label="zipaquira_2"
+        android:label="Alcaldia Municipal de Zipaquirá"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity
