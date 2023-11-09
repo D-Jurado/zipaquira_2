@@ -52,7 +52,8 @@ class BumfPage extends StatelessWidget {
       padding: const EdgeInsets.only(left: 30, right: 30),
       child: InkWell(
         onTap: () {
-          launchUrlString(url); // Lanza la URL cuando se toca el botón
+          launchUrlString(url,mode: LaunchMode.externalApplication)
+          ; // Lanza la URL cuando se toca el botón
         },
         child: Container(
           decoration: BoxDecoration(

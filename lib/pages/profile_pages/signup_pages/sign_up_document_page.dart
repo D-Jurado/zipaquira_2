@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import 'package:zipaquira_2/pages/profile_pages/signup_pages/sign_up_name_page.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import 'package:flutter/gestures.dart';
 
 class SignUpPageID extends StatefulWidget {
   const SignUpPageID({Key? key}) : super(key: key);
@@ -12,6 +16,8 @@ class _SignUpPageIDState extends State<SignUpPageID> {
   String? documentNumber;
   String? documentType;
   List<String> options = ['CC', 'TI', 'CE'];
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +48,7 @@ class _SignUpPageIDState extends State<SignUpPageID> {
               // Cuadro de fondo blanco
               Container(
                 width: 316,
-                height: 500,
+                height: 570,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(26),
                   color: Colors.white,
@@ -149,8 +155,7 @@ class _SignUpPageIDState extends State<SignUpPageID> {
                         }
                       },
                       style: ButtonStyle(
-                        minimumSize:
-                            MaterialStateProperty.all(Size(250, 48)),
+                        minimumSize: MaterialStateProperty.all(Size(250, 48)),
                         backgroundColor: MaterialStateProperty.all(
                             Color.fromARGB(255, 2, 82, 4)),
                         shape: MaterialStateProperty.all(
@@ -164,6 +169,60 @@ class _SignUpPageIDState extends State<SignUpPageID> {
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Container(
+                      width: 340,
+                      height: 100,
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: Color.fromARGB(255, 183, 207, 248),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.description, // Icono de alerta
+                            color: Colors.blueAccent, // Color del icono
+                          ),
+                          SizedBox(
+                            width: 12, // Espacio entre el icono y el texto
+                          ),
+                          Expanded(
+                            child: Text.rich(
+                              TextSpan(
+                                text: 'Al registrarse acepta la ',
+                                children: [
+                                  TextSpan(
+                                    text: 'política de tratamiento de datos',
+                                    style: TextStyle(
+                                      color: Colors.blue,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                    recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    
+                                    launchUrlString("https://www.zipaquira-cundinamarca.gov.co/noticias",
+                                    mode: LaunchMode.externalApplication
+                                    );
+                                  },
+                                  ),
+                                  TextSpan(
+                                      text:
+                                          ' y el envío de notificaciones push y/o correos.'),
+                                ],
+                              ),
+                              style:
+                                  TextStyle(color: Colors.black, fontSize: 14),
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                              softWrap: true,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
                   ],
                 ),
               ),

@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:zipaquira_2/infrastructure/models/camera_gallery_impl.dart';
-import 'package:zipaquira_2/pages/navpages/bumf_page.dart';
+
 import 'package:zipaquira_2/pages/navpages/home_page.dart';
-import 'package:zipaquira_2/pages/navpages/main_page.dart';
-import 'package:zipaquira_2/pages/navpages/reports_page.dart';
-import 'package:zipaquira_2/pages/profile_pages/forgot_password/change_password.dart';
+
 import 'package:zipaquira_2/pages/profile_pages/forgot_password/forgot_password.dart';
-import 'package:zipaquira_2/pages/profile_pages/profile_data_page.dart';
+
 import 'package:zipaquira_2/pages/profile_pages/signup_pages/sign_up_document_page.dart';
-import 'package:zipaquira_2/infrastructure/models/camera_gallery.dart';
-import 'package:zipaquira_2/infrastructure/models/camera_gallery_impl.dart';
-import 'package:image_picker/image_picker.dart';
+
+
 import 'package:geolocator/geolocator.dart';
-import 'package:mailer/mailer.dart';
-import 'package:mailer/smtp_server/gmail.dart';
-import 'dart:io';
+
 import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';

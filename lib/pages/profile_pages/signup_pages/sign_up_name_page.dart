@@ -120,6 +120,7 @@ class _SignUpNamePageState extends State<SignUpNamePage> {
                             phone = value;
                           });
                         },
+                        isPhoneNumber: true,
                       ),
                       SizedBox(height: 20),
                       buildTextField(
@@ -130,6 +131,7 @@ class _SignUpNamePageState extends State<SignUpNamePage> {
                             email = value;
                           });
                         },
+                        isEmail: true,
                       ),
                       SizedBox(
                         height: 34,
@@ -161,7 +163,8 @@ class _SignUpNamePageState extends State<SignUpNamePage> {
                                 Color.fromARGB(255, 2, 82, 4)),
                             shape: MaterialStateProperty.all(
                                 RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12)))),
+                                    borderRadius: BorderRadius.circular(12))),
+                        ),
                         child: Text(
                           'Siguiente',
                           style: TextStyle(color: Colors.white),
@@ -182,6 +185,8 @@ class _SignUpNamePageState extends State<SignUpNamePage> {
     required String label,
     required String hintText,
     required ValueChanged<String?> onChanged,
+    bool isPhoneNumber = false,
+    bool isEmail = false,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -207,6 +212,10 @@ class _SignUpNamePageState extends State<SignUpNamePage> {
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Este campo es obligatorio';
+              } else if (isPhoneNumber && !isNumeric(value)) {
+                return 'Solo se permiten números';
+              } else if (isEmail && !isEmailValid(value)) {
+                return 'Formato de correo no válido';
               }
               return null;
             },
@@ -219,5 +228,17 @@ class _SignUpNamePageState extends State<SignUpNamePage> {
         ),
       ],
     );
+  }
+
+  bool isNumeric(String value) {
+    return int.tryParse(value) != null;
+  }
+
+  bool isEmailValid(String value) {
+    final RegExp regex = RegExp(
+      r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$',
+      caseSensitive: false,
+    );
+    return regex.hasMatch(value);
   }
 }
