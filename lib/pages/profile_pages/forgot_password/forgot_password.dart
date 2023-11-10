@@ -17,7 +17,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   String? message = ''; // Mensaje de éxito o error
 
   Future<void> sendPasswordResetEmail() async {
-    final url = Uri.parse('http://192.168.1.6:8000/users/reset-password');
+    final url = Uri.parse('http://192.168.1.5:8000/users/reset-password');
 
     try {
       final response = await http.post(

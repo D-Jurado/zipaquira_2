@@ -31,7 +31,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final email = emailController.text;
     final password = passwordController.text;
 
-    final url = Uri.parse('http://192.168.1.6:8000/login');
+    final url = Uri.parse('http://192.168.1.5:8000/login');
 
     try {
       final response = await http.post(

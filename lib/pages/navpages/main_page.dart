@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:zipaquira_2/infrastructure/models/local_news_model.dart';
 import 'package:zipaquira_2/pages/news/full_news.dart';
 import 'package:html_unescape/html_unescape.dart';
-import 'package:zipaquira_2/presentation/blocs/notifications/delegates/search_news_delegate.dart';
+import 'package:zipaquira_2/delegate/search_news_delegate.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:zipaquira_2/shared/data/news_local_post.dart';
 import 'package:zipaquira_2/shared/data/news_tourism_local_post.dart';
@@ -41,19 +41,22 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   Future<List<LocalNewsModel>> fetchDetails() async {
     for (int i = 0; i < resultList.length; i++) {
       var url =
-          Uri.parse("http://192.168.1.6:8000/api/v2/news/${resultList[i].id}");
+          Uri.parse("http://192.168.1.5:8000/api/v2/news/${resultList[i].id}");
       var response = await http.get(url);
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonData = json.decode(response.body);
         resultList[i].type = jsonData['meta']['parent']['title'];
         resultList[i].description = jsonData['description'];
         resultList[i].body = utf8.decode(jsonData['body'].codeUnits);
+
         resultList[i].author = utf8.decode(jsonData['author'].codeUnits);
+
+       
 
         String imageId = extractImageIdFromHtml(jsonData['body']);
 
         // Concatena la URL base con el ID de la imagen para obtener la URL completa
-        String baseUrl = "http://192.168.1.6:8000";
+        String baseUrl = "http://192.168.1.5:8000";
         String imageUrlApi = "/api/v2/images/$imageId";
         String fullImageUrl = baseUrl + imageUrlApi;
 
@@ -63,12 +66,24 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
               json.decode(imageUrlResponse.body);
           String imageUrl = baseUrl + imageJsonData['meta']['download_url'];
 
+          
+
           resultList[i].imageUrl = imageUrl;
         }
       }
     }
     return resultList;
   }
+
+  List<String> extractLinks(String text) {
+  RegExp linkRegExp = RegExp(
+    r"http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+",
+    multiLine: true,
+  );
+
+  List<String> links = linkRegExp.allMatches(text).map((match) => match.group(0)!).toList();
+  return links;
+}
 
 // Método para extraer el ID de la imagen del contenido HTML
   String extractImageIdFromHtml(String htmlContent) {
@@ -85,7 +100,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   }
 
   Future<List<dynamic>> fetchData() async {
-    var url = Uri.parse("http://192.168.1.6:8000/api/v2/news/?descendant_of=4");
+    var url = Uri.parse("http://192.168.1.5:8000/api/v2/news/?descendant_of=4");
     var response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -149,9 +164,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       body: Center(
         child: isLoading
             ? Container(
-                decoration: BoxDecoration(
-                  color: Colors.white
-                 /*  gradient: LinearGradient(
+                decoration: BoxDecoration(color: Colors.white
+                    /*  gradient: LinearGradient(
                     begin: Alignment.topRight,
                     end: Alignment.bottomLeft,
                     colors: [
@@ -160,7 +174,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                       
                     ],
                   ), */
-                ),
+                    ),
                 child: Center(
                   child: Stack(
                     alignment: Alignment.center,
@@ -216,20 +230,18 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                 border: InputBorder.none,
                               ),
                               onChanged: (query) {
-                                
                                 // Aquí puedes manejar la lógica de búsqueda cuando el texto cambia.
                                 // Puedes usar el valor de 'query' para buscar y actualizar los resultados si es necesario.
                               },
                             ),
                           ),
-                          
                           InkWell(
                             onTap: () {
                               showSearch(
-                              context: context,
-                              delegate: SearchNewsDelegate(resultList, searchController.text),
-                            );
-                              
+                                context: context,
+                                delegate: SearchNewsDelegate(
+                                    resultList, searchController.text),
+                              );
                             },
                             child: Container(
                               padding: EdgeInsets.all(8),

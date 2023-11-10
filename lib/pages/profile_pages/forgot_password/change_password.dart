@@ -40,7 +40,7 @@ class _ChangePasswordState extends State<ChangePassword> {
       };
 
       // URL de tu API
-      String apiUrl = 'http://192.168.1.6:8000/users/update-password';
+      String apiUrl = 'http://192.168.1.5:8000/users/update-password';
 
       try {
         /* final token = await widget.token; */

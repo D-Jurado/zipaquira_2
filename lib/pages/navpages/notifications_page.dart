@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:zipaquira_2/presentation/blocs/notifications/notifications_bloc.dart';
+import 'package:zipaquira_2/presentation/blocs/notifications_bloc.dart';
 
 class NotificationsPage extends StatelessWidget {
   const NotificationsPage({super.key});

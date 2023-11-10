@@ -5,7 +5,7 @@ import 'package:zipaquira_2/pages/navpages/bumf_page.dart';
 import 'package:zipaquira_2/pages/navpages/main_page.dart';
 import 'package:zipaquira_2/pages/navpages/reports_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:zipaquira_2/presentation/blocs/notifications/notifications_bloc.dart';
+import 'package:zipaquira_2/presentation/blocs/notifications_bloc.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _checkNotificationPermission() async {
     final settings = await FirebaseMessaging.instance.getNotificationSettings();
-    if (settings.authorizationStatus != AuthorizationStatus.authorized) {
+    if (settings.authorizationStatus != AuthorizationStatus.notDetermined) {
       // Si los permisos no están autorizados, muestra el cuadro de diálogo de solicitud
       _showPermissionsDialog();
       print(settings.authorizationStatus);
@@ -44,7 +44,8 @@ class _HomePageState extends State<HomePage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text("Solicitud de Permisos"),
+          title: context
+              .select((NotificationsBloc bloc) => Text('${bloc.state.status}')),
           content: Text(
               "Por favor, otorga los permisos necesarios para recibir notificaciones."),
           actions: <Widget>[
@@ -57,7 +58,7 @@ class _HomePageState extends State<HomePage> {
             TextButton(
               child: Text("Otorgar Permisos"),
               onPressed: () {
-                _requestNotificationPermission();
+                context.read<NotificationsBloc>().requestPermission();
                 Navigator.of(context).pop();
               },
             ),
@@ -67,21 +68,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _requestNotificationPermission() async {
-    final status = await FirebaseMessaging.instance.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: true,
-      provisional: false,
-      sound: true,
-    );
-    if (status == AuthorizationStatus.authorized) {
-      // Los permisos fueron otorgados, puedes continuar con la página principal
-    }
-  }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(

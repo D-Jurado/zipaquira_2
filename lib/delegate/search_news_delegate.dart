@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:zipaquira_2/infrastructure/models/local_news_model.dart';
 
-import '../../../../pages/news/full_news.dart';
+import '../pages/news/full_news.dart';
 
 class SearchNewsDelegate extends SearchDelegate<LocalNewsModel> {
   final List<LocalNewsModel> resultList;

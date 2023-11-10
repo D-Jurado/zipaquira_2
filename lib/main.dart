@@ -1,8 +1,9 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:zipaquira_2/config/local_notifications.dart';
 import 'package:zipaquira_2/pages/navpages/home_page.dart';
-import 'package:zipaquira_2/presentation/blocs/notifications/notifications_bloc.dart';
+import 'package:zipaquira_2/presentation/blocs/notifications_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() async {
@@ -10,6 +11,7 @@ void main() async {
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
   await NotificationsBloc.initializeFCM();
+  await LocalNotifications.initializeLocalNotifications();
 
   initializeDateFormatting('es');
   runApp(MultiBlocProvider(
@@ -34,7 +36,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.green,
       ),
       debugShowCheckedModeBanner: false,
-      home:  SplashScreen(),
+      home: SplashScreen(),
     );
   }
 }
