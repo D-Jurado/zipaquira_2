@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:zipaquira_2/infrastructure/models/local_news_model.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:zipaquira_2/infrastructure/models/local_news_model.dart';
 
 class FullNews extends StatefulWidget {
   final LocalNewsModel? localNewsInformation;
@@ -12,6 +13,37 @@ class FullNews extends StatefulWidget {
 }
 
 class _FullNewsState extends State<FullNews> {
+  late List<String> youtubeVideoIds;
+  late YoutubePlayerController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    youtubeVideoIds =
+        extractYoutubeVideoIds(widget.localNewsInformation?.body ?? '');
+    print('linea 24 $youtubeVideoIds');
+
+    // Seleccionar el primer video de la lista o establecer una cadena predeterminada
+    String initialVideoId = youtubeVideoIds.isNotEmpty ? youtubeVideoIds.first : 'TuVideoIdPredeterminado';
+
+    // Iniciar el controlador de Youtube player
+    _controller = YoutubePlayerController(
+      initialVideoId: initialVideoId,
+      flags: const YoutubePlayerFlags(
+        autoPlay: true,
+        mute: false,
+      ),
+    );
+  }
+
+  List<String> extractYoutubeVideoIds(String body) {
+    final RegExp regex = RegExp(
+      r'https?:\/\/(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([^\s/"]+)',
+    );
+    final Iterable<RegExpMatch> matches = regex.allMatches(body);
+    return matches.map((match) => match.group(1) ?? "").toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +58,8 @@ class _FullNewsState extends State<FullNews> {
             child: Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: NetworkImage(widget.localNewsInformation!.imageUrl!),
+                  image:
+                      NetworkImage(widget.localNewsInformation?.imageUrl ?? ''),
                   fit: BoxFit.scaleDown,
                 ),
               ),
@@ -56,7 +89,7 @@ class _FullNewsState extends State<FullNews> {
                       Padding(
                         padding: const EdgeInsets.only(left: 40, right: 40),
                         child: Text(
-                          widget.localNewsInformation!.title!,
+                          widget.localNewsInformation?.title ?? '',
                           textAlign: TextAlign.start,
                           style: TextStyle(
                             fontSize: 20,
@@ -89,7 +122,7 @@ class _FullNewsState extends State<FullNews> {
                             Row(
                               children: [
                                 Text(
-                                  widget.localNewsInformation!.author!,
+                                  widget.localNewsInformation?.author ?? '',
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w600,
@@ -100,8 +133,9 @@ class _FullNewsState extends State<FullNews> {
                                   width: 40,
                                 ),
                                 Text(
-                                  widget.localNewsInformation!
-                                      .getFormattedDate(),
+                                  widget.localNewsInformation
+                                          ?.getFormattedDate() ??
+                                      '',
                                   textAlign: TextAlign.right,
                                   style: TextStyle(
                                     fontSize: 14,
@@ -120,33 +154,36 @@ class _FullNewsState extends State<FullNews> {
                         padding:
                             EdgeInsets.symmetric(horizontal: 32, vertical: 5),
                         child: Html(
-                          data: widget.localNewsInformation!.body!,
+
+                          data: widget.localNewsInformation?.body ?? '',
                           style: {
                             "body": Style(
-                                fontSize: FontSize(20),
-                                fontWeight: FontWeight
-                                    .w400), // Asegura que las imágenes se muestren correctamente
+                              fontSize: FontSize(20),
+                              fontWeight: FontWeight.w400,
+                            ),
+                          },
+                          onLinkTap: (url, renderContext, attributes, element) {
+                            if (url != null && youtubeVideoIds.contains(url)) {
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  content: YoutubePlayer(
+                                    controller: _controller,
+                                  ),
+                                  actions: [
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text('Cerrar'),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
                           },
                         ),
-                      )
-
-                      /* customRender: (node, children) {
-                                if (node is dom.Element &&
-                                    node.localName == 'embed') {
-                                  // Extrae la URL de la etiqueta <embed>
-                                  final src = node.attributes['src'];
-                                  if (src != null) {
-                                    // Devuelve un widget de imagen para la URL
-                                    return Image.network(src);
-                                  }
-                                  tagsList:
-                                  Html.tags;
-                                }
-                              } */
-
-                      /*  style: Style(
-                                fontSize: 20, fontWeight: FontWeight.w400),
-                              ),  */
+                      ),
                     ],
                   ),
                 ),
@@ -172,10 +209,11 @@ class _FullNewsState extends State<FullNews> {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Icon(Icons.arrow_back_ios_new_rounded,
-                      color: Colors.white, size: 20
-                      // Color del ícono
-                      ),
+                  child: Icon(
+                    Icons.arrow_back_ios_new_rounded,
+                    color: Colors.white,
+                    size: 20,
+                  ),
                 ),
               ),
             ),
