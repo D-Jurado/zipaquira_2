@@ -13,39 +13,44 @@ class FullNews extends StatefulWidget {
 }
 
 class _FullNewsState extends State<FullNews> {
-  late List<String> youtubeVideoIds;
-  late YoutubePlayerController _controller;
+  YoutubePlayerController? _controller;
 
   @override
   void initState() {
     super.initState();
-    youtubeVideoIds =
-        extractYoutubeVideoIds(widget.localNewsInformation?.body ?? '');
+
+    String youtubeVideoIds =
+        extractYoutubeVideoId(widget.localNewsInformation?.body ?? '');
     print('linea 24 $youtubeVideoIds');
 
-    // Seleccionar el primer video de la lista o establecer una cadena predeterminada
-    String initialVideoId = youtubeVideoIds.isNotEmpty ? youtubeVideoIds.first : 'TuVideoIdPredeterminado';
-
-    // Iniciar el controlador de Youtube player
-    _controller = YoutubePlayerController(
-      initialVideoId: initialVideoId,
-      flags: const YoutubePlayerFlags(
-        autoPlay: true,
-        mute: false,
-      ),
-    );
+    if (youtubeVideoIds.isNotEmpty) {
+      _controller = YoutubePlayerController(
+        initialVideoId: youtubeVideoIds,
+        flags: const YoutubePlayerFlags(
+          mute: false,
+          autoPlay: false,
+          loop: false,
+        ),
+      );
+    } else {
+      // Si no se encuentra un ID de video de YouTube, puedes realizar alguna acción o simplemente dejar _controller como nulo.
+      print('No se encontró un ID de video de YouTube.');
+    }
   }
 
-  List<String> extractYoutubeVideoIds(String body) {
+  String extractYoutubeVideoId(String body) {
     final RegExp regex = RegExp(
       r'https?:\/\/(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([^\s/"]+)',
     );
     final Iterable<RegExpMatch> matches = regex.allMatches(body);
-    return matches.map((match) => match.group(1) ?? "").toList();
+    return matches.isNotEmpty ? matches.first.group(1) ?? '' : '';
   }
 
   @override
   Widget build(BuildContext context) {
+    String youtubeVideoIds =
+        extractYoutubeVideoId(widget.localNewsInformation?.body ?? '');
+
     return Scaffold(
       body: Stack(
         children: [
@@ -58,8 +63,7 @@ class _FullNewsState extends State<FullNews> {
             child: Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image:
-                      NetworkImage(widget.localNewsInformation?.imageUrl ?? ''),
+                  image: NetworkImage(widget.localNewsInformation?.imageUrl ?? ''),
                   fit: BoxFit.scaleDown,
                 ),
               ),
@@ -133,9 +137,7 @@ class _FullNewsState extends State<FullNews> {
                                   width: 40,
                                 ),
                                 Text(
-                                  widget.localNewsInformation
-                                          ?.getFormattedDate() ??
-                                      '',
+                                  widget.localNewsInformation?.getFormattedDate() ?? '',
                                   textAlign: TextAlign.right,
                                   style: TextStyle(
                                     fontSize: 14,
@@ -151,10 +153,8 @@ class _FullNewsState extends State<FullNews> {
                       SizedBox(height: 10),
                       // Texto de la noticia con margen
                       Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 32, vertical: 5),
+                        padding: EdgeInsets.symmetric(horizontal: 32, vertical: 5),
                         child: Html(
-
                           data: widget.localNewsInformation?.body ?? '',
                           style: {
                             "body": Style(
@@ -162,28 +162,32 @@ class _FullNewsState extends State<FullNews> {
                               fontWeight: FontWeight.w400,
                             ),
                           },
-                          onLinkTap: (url, renderContext, attributes, element) {
-                            if (url != null && youtubeVideoIds.contains(url)) {
-                              showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  content: YoutubePlayer(
-                                    controller: _controller,
-                                  ),
-                                  actions: [
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text('Cerrar'),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }
-                          },
                         ),
                       ),
+                      SizedBox(height: 10),
+                      // Sección del video de Youtube (con condición)
+                      if (youtubeVideoIds.isNotEmpty)
+                        Positioned(
+                          top: 10,
+                          left: 0,
+                          right: 0,
+                          child: YoutubePlayerBuilder(
+                            player: YoutubePlayer(
+                              controller: _controller!,
+                              showVideoProgressIndicator: true,
+                              progressIndicatorColor: Colors.amber,
+                              progressColors: ProgressBarColors(
+                                playedColor: Colors.amber,
+                                handleColor: Colors.amberAccent,
+                              ),
+                            ),
+                            builder: (context, player) {
+                              return Container(
+                                child: player,
+                              );
+                            },
+                          ),
+                        ),
                     ],
                   ),
                 ),

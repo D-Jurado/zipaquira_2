@@ -24,6 +24,7 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
   int pushNumberId = 0;
+  
 
   NotificationsBloc() : super(const NotificationsState()) {
     on<NotificationStatusChanged>(_notificationStatusChanged);
@@ -34,6 +35,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
 
     // Listener para notificaciones en Foreground
     _onForegroundMessage();
+    
   }
 
   static Future<void> initializeFCM() async {
@@ -45,13 +47,16 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   void _notificationStatusChanged(
       NotificationStatusChanged event, Emitter<NotificationsState> emit) {
     emit(state.copyWith(status: event.status));
+     _getFCMToken();
   }
 
   void _onPushMessageReceived(
       NotificationReceived event, Emitter<NotificationsState> emit) {
     emit(state.copyWith(
         notifications: [event.pushNotification, ...state.notifications]));
+        
     _getFCMToken();
+    
   }
 
   void _initialStatusCheck() async {
@@ -107,6 +112,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
 
     add(NotificationStatusChanged(settings.authorizationStatus));
     _getFCMToken();
+    
   }
 
   PushNotification? getMessageById(String pushMessageId) {

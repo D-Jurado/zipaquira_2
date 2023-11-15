@@ -334,10 +334,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final List<Widget> navigationOptions = [
       _buildNavigationItem(Icons.person, 'Mi perfil', Colors.grey),
       _buildNavigationItem(Icons.lock, 'Cambiar contraseña', Colors.grey),
-      _buildNavigationItem(Icons.article, 'Noticias', Colors.grey),
-      _buildNavigationItem(Icons.tour, 'Turismo', Colors.grey),
-      _buildNavigationItem(Icons.notifications, 'Reportes', Colors.grey),
-      _buildNavigationItem(Icons.report, 'Enlaces', Colors.grey),
+     
       _buildNavigationItem(Icons.logout, 'Cerrar sesión', Colors.red),
     ];
 
@@ -380,22 +377,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   token: token,
                 ),
               ));
-            } else if (text == 'Noticias') {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => HomePage(),
-              ));
-            } else if (text == 'Turismo') {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => HomePage(),
-              ));
-            } else if (text == 'Reportes') {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => ReportsPage(),
-              ));
-            } else if (text == 'Enlaces') {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => BumfPage(),
-              ));
+       
             } else {
               // Implementa acciones específicas según la opción seleccionada
               // Puedes usar un switch o if para manejar diferentes acciones

@@ -32,7 +32,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _checkNotificationPermission() async {
     final settings = await FirebaseMessaging.instance.getNotificationSettings();
-    if (settings.authorizationStatus != AuthorizationStatus.notDetermined) {
+    if (settings.authorizationStatus != AuthorizationStatus.authorized) {
       // Si los permisos no están autorizados, muestra el cuadro de diálogo de solicitud
       _showPermissionsDialog();
       print(settings.authorizationStatus);
@@ -44,13 +44,12 @@ class _HomePageState extends State<HomePage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: context
-              .select((NotificationsBloc bloc) => Text('${bloc.state.status}')),
-          content: Text(
+          title:  const Text('Notificaciones'),
+          content: const Text(
               "Por favor, otorga los permisos necesarios para recibir notificaciones."),
           actions: <Widget>[
             TextButton(
-              child: Text("Cancelar"),
+              child: const Text("Cancelar"),
               onPressed: () {
                 Navigator.of(context).pop();
               },

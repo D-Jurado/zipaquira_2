@@ -5,6 +5,7 @@ import 'package:zipaquira_2/pages/news/full_news.dart';
 import 'package:html_unescape/html_unescape.dart';
 import 'package:zipaquira_2/delegate/search_news_delegate.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:zipaquira_2/pages/news/youtube.dart';
 import 'package:zipaquira_2/shared/data/news_local_post.dart';
 import 'package:zipaquira_2/shared/data/news_tourism_local_post.dart';
 import 'package:http/http.dart' as http;
@@ -316,7 +317,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          FullNews(resultList[index])),
+                                          FullNews(resultList[index]))
+                                     
                                 );
                               },
                               child: Container(
