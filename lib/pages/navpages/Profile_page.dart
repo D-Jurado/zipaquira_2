@@ -31,7 +31,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final email = emailController.text;
     final password = passwordController.text;
 
-    final url = Uri.parse('http://192.168.1.5:8000/login');
+    final url = Uri.parse('http://20.114.138.246/login');
 
     try {
       final response = await http.post(
@@ -334,7 +334,6 @@ class _ProfilePageState extends State<ProfilePage> {
     final List<Widget> navigationOptions = [
       _buildNavigationItem(Icons.person, 'Mi perfil', Colors.grey),
       _buildNavigationItem(Icons.lock, 'Cambiar contraseña', Colors.grey),
-     
       _buildNavigationItem(Icons.logout, 'Cerrar sesión', Colors.red),
     ];
 
@@ -377,7 +376,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   token: token,
                 ),
               ));
-       
             } else {
               // Implementa acciones específicas según la opción seleccionada
               // Puedes usar un switch o if para manejar diferentes acciones

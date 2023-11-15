@@ -26,10 +26,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -53,10 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCDpCjIF3l4dQmok6FAYCeqDQP3T4uEn4w',
-    appId: '1:84969607265:android:24ec2815c3cebf5e2e1a20',
-    messagingSenderId: '84969607265',
-    projectId: 'zipaquira-app-ec6e6',
-    storageBucket: 'zipaquira-app-ec6e6.appspot.com',
+    apiKey: 'AIzaSyAGA3WqvLx1u5fkDrpFJMlUGQ1wg6YwAFw',
+    appId: '1:100833704097:android:afae8c10d622c252ae58e0',
+    messagingSenderId: '100833704097',
+    projectId: 'zipaquira-noticias-cff06',
+    storageBucket: 'zipaquira-noticias-cff06.appspot.com',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyC3oqZ28g153bHZcn6NMa4-nmQ0-n-GJpk',
+    appId: '1:100833704097:ios:637bd6a5ed884797ae58e0',
+    messagingSenderId: '100833704097',
+    projectId: 'zipaquira-noticias-cff06',
+    storageBucket: 'zipaquira-noticias-cff06.appspot.com',
+    iosBundleId: 'com.example.zipaquira2',
   );
 }

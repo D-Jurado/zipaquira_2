@@ -42,7 +42,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   Future<List<LocalNewsModel>> fetchDetails() async {
     for (int i = 0; i < resultList.length; i++) {
       var url =
-          Uri.parse("http://192.168.1.5:8000/api/v2/news/${resultList[i].id}");
+          Uri.parse("http://20.114.138.246/api/v2/news/${resultList[i].id}");
       var response = await http.get(url);
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonData = json.decode(response.body);
@@ -52,12 +52,10 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
         resultList[i].author = utf8.decode(jsonData['author'].codeUnits);
 
-       
-
         String imageId = extractImageIdFromHtml(jsonData['body']);
 
         // Concatena la URL base con el ID de la imagen para obtener la URL completa
-        String baseUrl = "http://192.168.1.5:8000";
+        String baseUrl = "http://20.114.138.246";
         String imageUrlApi = "/api/v2/images/$imageId";
         String fullImageUrl = baseUrl + imageUrlApi;
 
@@ -67,8 +65,6 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
               json.decode(imageUrlResponse.body);
           String imageUrl = baseUrl + imageJsonData['meta']['download_url'];
 
-          
-
           resultList[i].imageUrl = imageUrl;
         }
       }
@@ -77,14 +73,15 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   }
 
   List<String> extractLinks(String text) {
-  RegExp linkRegExp = RegExp(
-    r"http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+",
-    multiLine: true,
-  );
+    RegExp linkRegExp = RegExp(
+      r"http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+",
+      multiLine: true,
+    );
 
-  List<String> links = linkRegExp.allMatches(text).map((match) => match.group(0)!).toList();
-  return links;
-}
+    List<String> links =
+        linkRegExp.allMatches(text).map((match) => match.group(0)!).toList();
+    return links;
+  }
 
 // Método para extraer el ID de la imagen del contenido HTML
   String extractImageIdFromHtml(String htmlContent) {
@@ -101,7 +98,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   }
 
   Future<List<dynamic>> fetchData() async {
-    var url = Uri.parse("http://192.168.1.5:8000/api/v2/news/?descendant_of=4");
+    var url = Uri.parse("http://20.114.138.246/api/v2/news/?descendant_of=4");
     var response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -314,12 +311,9 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                             );
                             return InkWell(
                               onTap: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          FullNews(resultList[index]))
-                                     
-                                );
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) =>
+                                        FullNews(resultList[index])));
                               },
                               child: Container(
                                 margin:

@@ -19,7 +19,7 @@ class _ApiNewsState extends State<ApiNews> {
   }
 
   Future<void> fetchData() async {
-    var url = Uri.parse("http://192.168.1.5:8000/api/v2/news/?descendant_of=4");
+    var url = Uri.parse("http://20.114.138.246/api/v2/news/?descendant_of=4");
     var response = await http.get(url);
 
     if (response.statusCode == 200) {

@@ -66,7 +66,7 @@ class _ReportsPageState extends State<ReportsPage> {
   Future<void> report(String photoPath) async {
     getCurrentLocation();
 
-    final url = 'http://192.168.1.5:8000/report/';
+    final url = 'http://20.114.138.246/report/';
 
     try {
       // Crea una instancia de Dio
@@ -135,7 +135,7 @@ class _ReportsPageState extends State<ReportsPage> {
     final email = emailController.text;
     final password = passwordController.text;
 
-    final url = Uri.parse('http://192.168.1.5:8000/login');
+    final url = Uri.parse('http://20.114.138.246/login');
 
     try {
       final response = await http.post(
