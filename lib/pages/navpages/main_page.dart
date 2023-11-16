@@ -98,7 +98,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   }
 
   Future<List<dynamic>> fetchData() async {
-    var url = Uri.parse("http://20.114.138.246/api/v2/news/?descendant_of=4");
+    var url = Uri.parse("http://20.114.138.246/api/v2/news/?descendant_of=2");
     var response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -890,8 +890,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                 );
                               },
                               child: Container(
-                                width: 220,
-                                height: 105,
+                                width: 250,
+                                height: 115,
                                 margin: EdgeInsets.only(
                                     right: 10), // Espacio entre elementos
                                 decoration: BoxDecoration(
@@ -904,7 +904,11 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(10),
                                         child: Image.network(
-                                            tourismList[index].imageUrl!),
+                                            tourismList[index].imageUrl!,
+                                            fit: BoxFit.cover,
+                                            width: 140,
+                                            height: 180,
+                                            ),
                                       ),
                                     ),
                                     SizedBox(width: 5),
