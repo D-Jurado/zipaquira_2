@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:zipaquira_2/infrastructure/models/local_news_model.dart';
 import 'package:http/http.dart' as http;
@@ -22,7 +23,7 @@ class _FullNewsState extends State<FullNews> {
   bool isLoading = true;
   String baseUrl = "http://192.168.1.5:8000";
 
-  int currentImageIndex = 0; // Índice de la imagen actualmente visible
+  int currentImageIndex = 0;
 
   @override
   void initState() {
@@ -30,7 +31,6 @@ class _FullNewsState extends State<FullNews> {
 
     String youtubeVideoIds =
         extractYoutubeVideoId(widget.localNewsInformation?.body ?? '');
-    print('linea 24 $youtubeVideoIds');
 
     if (youtubeVideoIds.isNotEmpty) {
       _controller = YoutubePlayerController(
@@ -45,17 +45,14 @@ class _FullNewsState extends State<FullNews> {
       print('No se encontró un ID de video de YouTube.');
     }
 
-    // Extraer los IDs de las imágenes del cuerpo del texto HTML
     List<String> imageUrlsAndIds =
         extractImageUrlsAndIdsFromHtml(widget.localNewsInformation?.body ?? '');
 
-    // Extraer solo los IDs de las imágenes
     List<String> imageIds = imageUrlsAndIds
         .map((imageUrlAndId) =>
             RegExp(r'id="(\d+)"').firstMatch(imageUrlAndId)?.group(1) ?? '')
         .toList();
 
-    // Llamar a la API para obtener información adicional sobre las imágenes
     fetchImageInfo(imageIds);
   }
 
@@ -79,24 +76,19 @@ class _FullNewsState extends State<FullNews> {
   }
 
   Future<void> fetchImageInfo(List<String> imageIds) async {
-    // Lógica para llamar a la API y obtener las URLs de descarga de las imágenes
-
     for (String imageId in imageIds) {
       try {
-        var imageUrlResponse = await http.get(
-            Uri.parse("$baseUrl/api/v2/images/$imageId"));
+        var imageUrlResponse = await http
+            .get(Uri.parse("$baseUrl/api/v2/images/$imageId"));
 
         if (imageUrlResponse.statusCode == 200) {
           Map<String, dynamic> imageJsonData =
               json.decode(imageUrlResponse.body);
 
-          // Obtén la URL de descarga desde la propiedad 'download_url'
           String downloadUrl = imageJsonData['meta']['download_url'];
 
-          // Añade la URL de descarga a la lista
           downloadUrls.add('$baseUrl$downloadUrl');
 
-          // Imprime información adicional sobre la imagen
           print('Image Info for $imageId: $downloadUrl');
         } else {
           print(
@@ -107,7 +99,6 @@ class _FullNewsState extends State<FullNews> {
       }
     }
 
-    // Actualiza el estado para indicar que la carga ha finalizado
     setState(() {
       isLoading = false;
     });
@@ -115,7 +106,6 @@ class _FullNewsState extends State<FullNews> {
 
   @override
   Widget build(BuildContext context) {
-    // Muestra un indicador de carga mientras se descargan las imágenes
     if (isLoading) {
       return Scaffold(
         body: Center(
@@ -146,8 +136,6 @@ class _FullNewsState extends State<FullNews> {
               ),
             ),
           ),
-          // Carrusel de imágenes (solo si hay más de una)
-          
           Positioned(
             top: 330,
             left: 0,
@@ -228,44 +216,44 @@ class _FullNewsState extends State<FullNews> {
                       ),
                       SizedBox(height: 15),
                       if (downloadUrls.length > 1)
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              height: 420,
-              child: CarouselSlider(
-                items: downloadUrls
-                    .map(
-                      (downloadUrl) => Image.network(
-                        downloadUrl,
-                        fit: BoxFit.cover,
-                      ),
-                    )
-                    .toList(),
-                options: CarouselOptions(
-                  height: 100.0,
-                  enlargeCenterPage: true,
-                  autoPlay: false,
-                  aspectRatio: 16 / 9,
-                  autoPlayCurve: Curves.fastOutSlowIn,
-                  enableInfiniteScroll: true,
-                  autoPlayAnimationDuration: Duration(milliseconds: 800),
-                  viewportFraction: 0.5,
-                  onPageChanged: (index, reason) {
-                    setState(() {
-                      // Actualiza el índice de la imagen actualmente visible
-                      currentImageIndex = index;
-                    });
-                  },
-                ),
-              ),
-            ),
-           SizedBox(height: 15,),
+                        Positioned(
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          height: 420,
+                          child: CarouselSlider(
+                            items: downloadUrls
+                                .map(
+                                  (downloadUrl) => Image.network(
+                                    downloadUrl,
+                                    fit: BoxFit.cover,
+                                  ),
+                                )
+                                .toList(),
+                            options: CarouselOptions(
+                              height: 100.0,
+                              enlargeCenterPage: true,
+                              autoPlay: false,
+                              aspectRatio: 16 / 9,
+                              autoPlayCurve: Curves.fastOutSlowIn,
+                              enableInfiniteScroll: true,
+                              autoPlayAnimationDuration: Duration(milliseconds: 800),
+                              viewportFraction: 0.5,
+                              onPageChanged: (index, reason) {
+                                setState(() {
+                                  currentImageIndex = index;
+                                });
+                              },
+                            ),
+                          ),
+                        ),
                       Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 20),
+                        padding: EdgeInsets.symmetric(horizontal: 20),
                         child: Html(
                           data: widget.localNewsInformation?.body ?? '',
+                          onLinkTap: (url, context, attributes, element) {
+                            _launchUrl(url);
+                          },
                           style: {
                             "body": Style(
                               fontSize: FontSize(20),
@@ -334,4 +322,14 @@ class _FullNewsState extends State<FullNews> {
       ),
     );
   }
+
+  Future<void> _launchUrl(String? url) async {
+  if (url != null) {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      print('No se pudo abrir el enlace: $url');
+    }
+  }
+}
 }
