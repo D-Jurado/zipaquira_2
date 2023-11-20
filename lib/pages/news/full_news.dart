@@ -17,10 +17,12 @@ class FullNews extends StatefulWidget {
 
 class _FullNewsState extends State<FullNews> {
   YoutubePlayerController? _controller;
-  
+
   List<String> downloadUrls = [];
   bool isLoading = true;
   String baseUrl = "http://192.168.1.5:8000";
+
+  int currentImageIndex = 0; // Índice de la imagen actualmente visible
 
   @override
   void initState() {
@@ -43,13 +45,9 @@ class _FullNewsState extends State<FullNews> {
       print('No se encontró un ID de video de YouTube.');
     }
 
-    
-
     // Extraer los IDs de las imágenes del cuerpo del texto HTML
     List<String> imageUrlsAndIds =
         extractImageUrlsAndIdsFromHtml(widget.localNewsInformation?.body ?? '');
-
-       
 
     // Extraer solo los IDs de las imágenes
     List<String> imageIds = imageUrlsAndIds
@@ -69,8 +67,6 @@ class _FullNewsState extends State<FullNews> {
     return matches.isNotEmpty ? matches.first.group(1) ?? '' : '';
   }
 
- 
-
   List<String> extractImageUrlsAndIdsFromHtml(String htmlContent) {
     List<String> imageUrlsAndIds = [];
     RegExp regex = RegExp(r'<embed[^>]+id="(\d+)"[^>]+>');
@@ -84,11 +80,11 @@ class _FullNewsState extends State<FullNews> {
 
   Future<void> fetchImageInfo(List<String> imageIds) async {
     // Lógica para llamar a la API y obtener las URLs de descarga de las imágenes
-     
+
     for (String imageId in imageIds) {
       try {
-        var imageUrlResponse = await http
-            .get(Uri.parse("http://192.168.1.5:8000/api/v2/images/$imageId"));
+        var imageUrlResponse = await http.get(
+            Uri.parse("$baseUrl/api/v2/images/$imageId"));
 
         if (imageUrlResponse.statusCode == 200) {
           Map<String, dynamic> imageJsonData =
@@ -143,13 +139,15 @@ class _FullNewsState extends State<FullNews> {
               decoration: BoxDecoration(
                 image: downloadUrls.isNotEmpty
                     ? DecorationImage(
-                        image: Image.network(downloadUrls.first).image,
+                        image: Image.network(downloadUrls[currentImageIndex]).image,
                         fit: BoxFit.scaleDown,
                       )
                     : null,
               ),
             ),
           ),
+          // Carrusel de imágenes (solo si hay más de una)
+          
           Positioned(
             top: 330,
             left: 0,
@@ -230,30 +228,42 @@ class _FullNewsState extends State<FullNews> {
                       ),
                       SizedBox(height: 15),
                       if (downloadUrls.length > 1)
-                        CarouselSlider(
-                          items: downloadUrls
-                              .map(
-                                (downloadUrls) => Image.network(
-                                  downloadUrls,
-                                  fit: BoxFit.cover,
-                                ),
-                              )
-                              .toList(),
-                          options: CarouselOptions(
-                            height: 200.0,
-                            enlargeCenterPage: true,
-                            autoPlay: false,
-                            aspectRatio: 16 / 9,
-                            autoPlayCurve: Curves.fastOutSlowIn,
-                            enableInfiniteScroll: true,
-                            autoPlayAnimationDuration:
-                                Duration(milliseconds: 800),
-                            viewportFraction: 0.8,
-                          ),
-                        ),
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              height: 420,
+              child: CarouselSlider(
+                items: downloadUrls
+                    .map(
+                      (downloadUrl) => Image.network(
+                        downloadUrl,
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                    .toList(),
+                options: CarouselOptions(
+                  height: 100.0,
+                  enlargeCenterPage: true,
+                  autoPlay: false,
+                  aspectRatio: 16 / 9,
+                  autoPlayCurve: Curves.fastOutSlowIn,
+                  enableInfiniteScroll: true,
+                  autoPlayAnimationDuration: Duration(milliseconds: 800),
+                  viewportFraction: 0.5,
+                  onPageChanged: (index, reason) {
+                    setState(() {
+                      // Actualiza el índice de la imagen actualmente visible
+                      currentImageIndex = index;
+                    });
+                  },
+                ),
+              ),
+            ),
+           SizedBox(height: 15,),
                       Padding(
                         padding:
-                            EdgeInsets.symmetric(horizontal: 32, vertical: 0),
+                            EdgeInsets.symmetric(horizontal: 20),
                         child: Html(
                           data: widget.localNewsInformation?.body ?? '',
                           style: {
@@ -264,8 +274,7 @@ class _FullNewsState extends State<FullNews> {
                           },
                         ),
                       ),
-                      SizedBox(height: 10),
-                      
+                      SizedBox(height: 30),
                       if (youtubeVideoIds.isNotEmpty)
                         Positioned(
                           top: 10,
