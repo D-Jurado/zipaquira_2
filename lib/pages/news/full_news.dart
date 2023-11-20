@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:zipaquira_2/infrastructure/models/local_news_model.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:carousel_slider/carousel_slider.dart';
 
 class FullNews extends StatefulWidget {
   final LocalNewsModel? localNewsInformation;
@@ -14,6 +17,10 @@ class FullNews extends StatefulWidget {
 
 class _FullNewsState extends State<FullNews> {
   YoutubePlayerController? _controller;
+  
+  List<String> downloadUrls = [];
+  bool isLoading = true;
+  String baseUrl = "http://192.168.1.5:8000";
 
   @override
   void initState() {
@@ -33,9 +40,25 @@ class _FullNewsState extends State<FullNews> {
         ),
       );
     } else {
-      // Si no se encuentra un ID de video de YouTube, puedes realizar alguna acción o simplemente dejar _controller como nulo.
       print('No se encontró un ID de video de YouTube.');
     }
+
+    
+
+    // Extraer los IDs de las imágenes del cuerpo del texto HTML
+    List<String> imageUrlsAndIds =
+        extractImageUrlsAndIdsFromHtml(widget.localNewsInformation?.body ?? '');
+
+       
+
+    // Extraer solo los IDs de las imágenes
+    List<String> imageIds = imageUrlsAndIds
+        .map((imageUrlAndId) =>
+            RegExp(r'id="(\d+)"').firstMatch(imageUrlAndId)?.group(1) ?? '')
+        .toList();
+
+    // Llamar a la API para obtener información adicional sobre las imágenes
+    fetchImageInfo(imageIds);
   }
 
   String extractYoutubeVideoId(String body) {
@@ -46,15 +69,71 @@ class _FullNewsState extends State<FullNews> {
     return matches.isNotEmpty ? matches.first.group(1) ?? '' : '';
   }
 
+ 
+
+  List<String> extractImageUrlsAndIdsFromHtml(String htmlContent) {
+    List<String> imageUrlsAndIds = [];
+    RegExp regex = RegExp(r'<embed[^>]+id="(\d+)"[^>]+>');
+    Iterable<Match> matches = regex.allMatches(htmlContent);
+    for (Match match in matches) {
+      String imageUrlAndId = match.group(0) ?? '';
+      imageUrlsAndIds.add(imageUrlAndId);
+    }
+    return imageUrlsAndIds;
+  }
+
+  Future<void> fetchImageInfo(List<String> imageIds) async {
+    // Lógica para llamar a la API y obtener las URLs de descarga de las imágenes
+     
+    for (String imageId in imageIds) {
+      try {
+        var imageUrlResponse = await http
+            .get(Uri.parse("http://192.168.1.5:8000/api/v2/images/$imageId"));
+
+        if (imageUrlResponse.statusCode == 200) {
+          Map<String, dynamic> imageJsonData =
+              json.decode(imageUrlResponse.body);
+
+          // Obtén la URL de descarga desde la propiedad 'download_url'
+          String downloadUrl = imageJsonData['meta']['download_url'];
+
+          // Añade la URL de descarga a la lista
+          downloadUrls.add('$baseUrl$downloadUrl');
+
+          // Imprime información adicional sobre la imagen
+          print('Image Info for $imageId: $downloadUrl');
+        } else {
+          print(
+              'Failed to fetch image info for $imageId. Status code: ${imageUrlResponse.statusCode}');
+        }
+      } catch (e) {
+        print('Error fetching image info for $imageId: $e');
+      }
+    }
+
+    // Actualiza el estado para indicar que la carga ha finalizado
+    setState(() {
+      isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    // Muestra un indicador de carga mientras se descargan las imágenes
+    if (isLoading) {
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
     String youtubeVideoIds =
         extractYoutubeVideoId(widget.localNewsInformation?.body ?? '');
 
     return Scaffold(
       body: Stack(
         children: [
-          // Imagen de la noticia (40% superior)
           Positioned(
             top: 0,
             left: 0,
@@ -62,14 +141,15 @@ class _FullNewsState extends State<FullNews> {
             height: 420,
             child: Container(
               decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage(widget.localNewsInformation?.imageUrl ?? ''),
-                  fit: BoxFit.scaleDown,
-                ),
+                image: downloadUrls.isNotEmpty
+                    ? DecorationImage(
+                        image: Image.network(downloadUrls.first).image,
+                        fit: BoxFit.scaleDown,
+                      )
+                    : null,
               ),
             ),
           ),
-          // Contenedor blanco con detalles de la noticia (60% inferior)
           Positioned(
             top: 330,
             left: 0,
@@ -89,7 +169,6 @@ class _FullNewsState extends State<FullNews> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // Título de la noticia
                       Padding(
                         padding: const EdgeInsets.only(left: 40, right: 40),
                         child: Text(
@@ -102,7 +181,6 @@ class _FullNewsState extends State<FullNews> {
                         ),
                       ),
                       SizedBox(height: 20),
-                      // Rectángulo con logo, ciudad y fecha
                       Container(
                         width: 320,
                         padding: EdgeInsets.symmetric(horizontal: 5),
@@ -115,14 +193,12 @@ class _FullNewsState extends State<FullNews> {
                         ),
                         child: Row(
                           children: [
-                            // Logo pequeño
                             Image.asset(
                               "assets/logo.jpg",
                               width: 40,
                               height: 30,
                             ),
                             SizedBox(width: 10),
-                            // Ciudad y fecha (mes abreviado y número del día)
                             Row(
                               children: [
                                 Text(
@@ -137,7 +213,9 @@ class _FullNewsState extends State<FullNews> {
                                   width: 40,
                                 ),
                                 Text(
-                                  widget.localNewsInformation?.getFormattedDate() ?? '',
+                                  widget.localNewsInformation
+                                          ?.getFormattedDate() ??
+                                      '',
                                   textAlign: TextAlign.right,
                                   style: TextStyle(
                                     fontSize: 14,
@@ -150,10 +228,32 @@ class _FullNewsState extends State<FullNews> {
                           ],
                         ),
                       ),
-                      SizedBox(height: 10),
-                      // Texto de la noticia con margen
+                      SizedBox(height: 15),
+                      if (downloadUrls.length > 1)
+                        CarouselSlider(
+                          items: downloadUrls
+                              .map(
+                                (downloadUrls) => Image.network(
+                                  downloadUrls,
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                              .toList(),
+                          options: CarouselOptions(
+                            height: 200.0,
+                            enlargeCenterPage: true,
+                            autoPlay: false,
+                            aspectRatio: 16 / 9,
+                            autoPlayCurve: Curves.fastOutSlowIn,
+                            enableInfiniteScroll: true,
+                            autoPlayAnimationDuration:
+                                Duration(milliseconds: 800),
+                            viewportFraction: 0.8,
+                          ),
+                        ),
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 32, vertical: 5),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 32, vertical: 0),
                         child: Html(
                           data: widget.localNewsInformation?.body ?? '',
                           style: {
@@ -165,7 +265,7 @@ class _FullNewsState extends State<FullNews> {
                         ),
                       ),
                       SizedBox(height: 10),
-                      // Sección del video de Youtube (con condición)
+                      
                       if (youtubeVideoIds.isNotEmpty)
                         Positioned(
                           top: 10,
@@ -194,7 +294,6 @@ class _FullNewsState extends State<FullNews> {
               ),
             ),
           ),
-          // Floating Action Button en la esquina superior izquierda con bordes blancos
           Positioned(
             top: 0,
             left: 0,
