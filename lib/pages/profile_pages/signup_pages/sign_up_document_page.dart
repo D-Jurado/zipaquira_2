@@ -210,12 +210,12 @@ class _SignUpPageIDState extends State<SignUpPageID> {
                                   ),
                                   TextSpan(
                                       text:
-                                          ' y el envío de notificaciones push y/o correos.'),
+                                          ' y el envío de notificaciones push y/o correos electrónicos.'),
                                 ],
                               ),
                               style:
                                   TextStyle(color: Colors.black, fontSize: 14),
-                              maxLines: 3,
+                              maxLines: 4,
                               overflow: TextOverflow.ellipsis,
                               softWrap: true,
                             ),
