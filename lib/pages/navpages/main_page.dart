@@ -98,7 +98,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   }
 
   Future<List<dynamic>> fetchData() async {
-    var url = Uri.parse("http://20.114.138.246/api/v2/news/?descendant_of=2");
+    var url = Uri.parse("http://20.114.138.246/api/v2/news/?descendant_of=3");
     var response = await http.get(url);
 
     if (response.statusCode == 200) {

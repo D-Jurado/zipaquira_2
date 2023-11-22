@@ -24,6 +24,7 @@ class _FullNewsState extends State<FullNews> {
   String baseUrl = "http://20.114.138.246";
 
   int currentImageIndex = 0;
+  bool contentLoaded = false;
 
   @override
   void initState() {
@@ -101,12 +102,24 @@ class _FullNewsState extends State<FullNews> {
 
     setState(() {
       isLoading = false;
+      contentLoaded = true;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(
+            color: Colors.green,
+          ),
+        ),
+      );
+    }
+
+    if (!contentLoaded) {
+      // Mostrar un indicador de carga mientras se carga el contenido
       return Scaffold(
         body: Center(
           child: CircularProgressIndicator(
