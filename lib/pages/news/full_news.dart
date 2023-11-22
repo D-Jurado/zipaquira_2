@@ -21,7 +21,7 @@ class _FullNewsState extends State<FullNews> {
 
   List<String> downloadUrls = [];
   bool isLoading = true;
-  String baseUrl = "http://192.168.1.5:8000";
+  String baseUrl = "http://20.114.138.246";
 
   int currentImageIndex = 0;
 
@@ -78,8 +78,8 @@ class _FullNewsState extends State<FullNews> {
   Future<void> fetchImageInfo(List<String> imageIds) async {
     for (String imageId in imageIds) {
       try {
-        var imageUrlResponse = await http
-            .get(Uri.parse("$baseUrl/api/v2/images/$imageId"));
+        var imageUrlResponse =
+            await http.get(Uri.parse("$baseUrl/api/v2/images/$imageId"));
 
         if (imageUrlResponse.statusCode == 200) {
           Map<String, dynamic> imageJsonData =
@@ -129,7 +129,8 @@ class _FullNewsState extends State<FullNews> {
               decoration: BoxDecoration(
                 image: downloadUrls.isNotEmpty
                     ? DecorationImage(
-                        image: Image.network(downloadUrls[currentImageIndex]).image,
+                        image: Image.network(downloadUrls[currentImageIndex])
+                            .image,
                         fit: BoxFit.scaleDown,
                       )
                     : null,
@@ -237,7 +238,8 @@ class _FullNewsState extends State<FullNews> {
                               aspectRatio: 16 / 9,
                               autoPlayCurve: Curves.fastOutSlowIn,
                               enableInfiniteScroll: true,
-                              autoPlayAnimationDuration: Duration(milliseconds: 800),
+                              autoPlayAnimationDuration:
+                                  Duration(milliseconds: 800),
                               viewportFraction: 0.5,
                               onPageChanged: (index, reason) {
                                 setState(() {
@@ -324,12 +326,12 @@ class _FullNewsState extends State<FullNews> {
   }
 
   Future<void> _launchUrl(String? url) async {
-  if (url != null) {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      print('No se pudo abrir el enlace: $url');
+    if (url != null) {
+      if (await canLaunch(url)) {
+        await launch(url);
+      } else {
+        print('No se pudo abrir el enlace: $url');
+      }
     }
   }
-}
 }

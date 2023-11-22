@@ -42,7 +42,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   Future<List<LocalNewsModel>> fetchDetails() async {
     for (int i = 0; i < resultList.length; i++) {
       var url =
-          Uri.parse("http://192.168.1.5:8000/api/v2/news/${resultList[i].id}");
+          Uri.parse("http://20.114.138.246/api/v2/news/${resultList[i].id}");
       var response = await http.get(url);
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonData = json.decode(response.body);
@@ -55,7 +55,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
         String imageId = extractImageIdFromHtml(jsonData['body']);
 
         // Concatena la URL base con el ID de la imagen para obtener la URL completa
-        String baseUrl = "http://192.168.1.5:8000";
+        String baseUrl = "http://20.114.138.246";
         String imageUrlApi = "/api/v2/images/$imageId";
         String fullImageUrl = baseUrl + imageUrlApi;
 
@@ -98,7 +98,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   }
 
   Future<List<dynamic>> fetchData() async {
-    var url = Uri.parse("http://192.168.1.5:8000/api/v2/news/?descendant_of=4");
+    var url = Uri.parse("http://20.114.138.246/api/v2/news/?descendant_of=2");
     var response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -555,7 +555,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                         sportList[index].imageUrl!,
                                         width: double.infinity,
                                         height: double.infinity,
-                                        fit: BoxFit.cover,
+                                        fit: BoxFit.scaleDown,
                                       ),
                                     ),
                                   ),
@@ -664,7 +664,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                         trafficList[index].imageUrl!,
                                         width: double.infinity,
                                         height: double.infinity,
-                                        fit: BoxFit.cover,
+                                        fit: BoxFit.scaleDown,
                                       ),
                                     ),
                                   ),
@@ -905,7 +905,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                                         borderRadius: BorderRadius.circular(10),
                                         child: Image.network(
                                           tourismList[index].imageUrl!,
-                                          fit: BoxFit.cover,
+                                          fit: BoxFit.scaleDown,
                                           width: 140,
                                           height: 180,
                                         ),
