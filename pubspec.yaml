@@ -33,7 +33,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   dio: ^5.3.3
   equatable: ^2.0.5
-  firebase_core: ^2.17.0
+  firebase_core: ^2.23.0
   firebase_messaging: ^14.6.9
   flutter:
     sdk: flutter
@@ -56,6 +56,7 @@ dependencies:
   youtube_player_flutter: ^8.1.2
 
 dev_dependencies:
+  change_app_package_name: ^1.1.0
   flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter

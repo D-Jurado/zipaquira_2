@@ -18,7 +18,8 @@ class SearchNewsDelegate extends SearchDelegate<LocalNewsModel> {
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
-        icon: Icon(Icons.clear),
+        icon: Icon(Icons.clear,
+        color: Colors.green,),
         onPressed: () {
           query = '';
         },
@@ -29,7 +30,8 @@ class SearchNewsDelegate extends SearchDelegate<LocalNewsModel> {
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.arrow_back),
+      icon: Icon(Icons.arrow_back,
+      color: Colors.green),
       onPressed: () {
         close(context, LocalNewsModel()); // No pasa ningún valor si no se ha seleccionado un resultado
       },

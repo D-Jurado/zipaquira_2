@@ -33,7 +33,7 @@ class BumfPage extends StatelessWidget {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            SizedBox(height: 38),
+            SizedBox(height: 20),
             // Botones con URLs
             _buildButtonWithUrl('Procedimientos', Icons.document_scanner, colorbumf, borderRadiusValue, 'https://www.zipaquira-cundinamarca.gov.co/tema/tramites-y-servicios'),
             SizedBox(height: 38),

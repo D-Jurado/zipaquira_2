@@ -251,6 +251,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                               child: Icon(
                                 Icons.search_sharp,
                                 color: Colors.white,
+                                size: 35,
                               ),
                             ),
                           ),

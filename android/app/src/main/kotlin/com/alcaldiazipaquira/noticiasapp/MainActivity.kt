@@ -1,4 +1,4 @@
-package com.example.zipaquira_2
+package com.alcaldiazipaquira.noticiasapp
 
 import io.flutter.embedding.android.FlutterActivity
 
