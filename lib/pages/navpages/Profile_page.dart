@@ -127,11 +127,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 height: 200,
               ),
               SizedBox(
-                height: 20,
+                height: 10,
               ),
               Container(
                 width: 400,
-                height: 540,
+                height: 520,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(26),
                   color: Colors.white,
@@ -168,7 +168,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 height: 200,
               ),
               SizedBox(
-                height: 40,
+                height: 5,
               ),
               // Cuadro de fondo blanco
               Container(

@@ -443,9 +443,7 @@ class _ReportsPageState extends State<ReportsPage> {
                 width: double.infinity,
                 height: 200,
               ),
-              SizedBox(
-                height: 10,
-              ),
+              
               // Cuadro de fondo blanco
               Container(
                 width: 316,

@@ -158,21 +158,12 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     Color mygreen = Color(0xFFB8D432);
     late TabController _tabController = TabController(length: 5, vsync: this);
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 225, 225, 225),
       resizeToAvoidBottomInset: false,
       body: Center(
         child: isLoading
             ? Container(
-                decoration: BoxDecoration(color: Colors.white
-                    /*  gradient: LinearGradient(
-                    begin: Alignment.topRight,
-                    end: Alignment.bottomLeft,
-                    colors: [
-                     /*  Color.fromARGB(255, 2, 54, 4),
-                      Color.fromRGBO(184, 212, 50, 1), */
-                      
-                    ],
-                  ), */
-                    ),
+                decoration: BoxDecoration(color: Colors.white),
                 child: Center(
                   child: Stack(
                     alignment: Alignment.center,
@@ -265,8 +256,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                       child: TabBar(
                         isScrollable: true,
                         controller: _tabController,
-                        labelColor: Colors.grey,
-                        unselectedLabelColor: Colors.grey.withOpacity(0.8),
+                        labelColor: Colors.black,
+                        unselectedLabelColor: Colors.black.withOpacity(0.8),
                         tabs: const [
                           Tab(
                             text: '#Todo',

@@ -81,7 +81,7 @@ class _HomePageState extends State<HomePage> {
         onTap: onTap,
         currentIndex: currentIndex,
         selectedItemColor: Colors.green,
-        unselectedItemColor: Colors.grey.withOpacity(0.5),
+        unselectedItemColor: const Color.fromARGB(255, 118, 117, 117).withOpacity(0.5),
         showSelectedLabels: true,
         showUnselectedLabels: true,
         items: const [

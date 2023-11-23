@@ -23,7 +23,7 @@ class BumfPage extends StatelessWidget {
               height: 300,
               fit: BoxFit.cover,
             ),
-            SizedBox(height: 38),
+            SizedBox(height: 28),
 
             // Título
             Text(
